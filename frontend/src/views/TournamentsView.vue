@@ -1,15 +1,44 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { useTournamentStore } from '../stores/tournamentStore';
+import PageHeader from '@/components/PageHeader.vue';
+
+const tournamentStore = useTournamentStore();
+
+// Fetch tournaments when the component is mounted
+onMounted(() => {
+    tournamentStore.fetchTournaments();
+});
+</script>
 
 <template>
-    <main class="container">
-        <div class="pt-4 mb-8 relative">
-            <h1>Tournaments</h1>
-            <p>
-                View all tournaments here. Add your own if you cant find the one
-                you're looking for.
-            </p>
+    <main class="container mx-auto p-4">
+        <PageHeader 
+            title="Tournaments"
+            description="Explore a comprehensive list of tournaments submitted by the community. Can’t find a tournament? Add it yourself! Share your experience by leaving a review and help others make informed choices."
+        />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
+            <div
+                v-for="tournament in tournamentStore.tournaments"
+                :key="tournament.id"
+                class="bg-gray-600 shadow-lg rounded-lg p-4 flex flex-col"
+            >
+                <h2 class="text-xl font-bold mb-2">{{ tournament.name }}</h2>
+                <p class="text-gray-700 mb-4">{{ tournament.description }}</p>
+                <div class="mt-auto">
+                    <router-link
+                        :to="`/tournaments/${tournament.id}`"
+                        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                        View Details
+                    </router-link>
+                </div>
+            </div>
         </div>
     </main>
 </template>
 
-<style scoped></style>
+<style>
+/* You can remove scoped styles as needed since you are using Tailwind CSS */
+</style>
+

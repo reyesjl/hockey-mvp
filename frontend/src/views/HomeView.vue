@@ -1,12 +1,16 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import FeatureHeader from '../components/FeatureHeader.vue'
+import landingBg from '../assets/landingBg.jpg'
+
+</script>
 
 <template>
-    <main class="container">
-        <div class="pt-4 mb-8 relative">
-            <h1>YHT Reviews</h1>
-            <p>Welcome message or summary for the home page goes here.</p>
-        </div>
-    </main>
+    <FeatureHeader
+        title="YHT Reviews"
+        description="Welcome to the hectic world of hockey tournaments."
+        :imageSrc="landingBg"
+        imageAlt="ice hockey"
+    />
 </template>
 
 <style scoped></style>

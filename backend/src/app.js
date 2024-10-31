@@ -1,6 +1,7 @@
 // backend/app.js
 
 const express = require('express');
+const cors = require('cors');
 const dotenv = require('dotenv');
 
 // Load environment variables
@@ -12,6 +13,9 @@ connectDB();
 
 // Create the express application
 const app = express();
+
+// CORS middleware
+app.use(cors());
 
 // Middleware to parse JSON
 app.use(express.json());
