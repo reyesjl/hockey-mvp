@@ -4,6 +4,11 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
+
+// Import routes
+const tournamentRoutes = require('./routes/tournamentRoutes');
+const tournamentSubmissionRoutes = require('./routes/tournamentSubmissionRoutes');
+
 // Load environment variables
 dotenv.config({ path: '../.env' });
 
@@ -25,9 +30,9 @@ app.get('/', (req, res) => {
     res.send('Welcome to the YHT Reviews API v1.0 (MVP)');
 });
 
-// Import routes
-const tournamentRoutes = require('./routes/tournamentRoutes');
+// Use routes
 app.use('/api/v1/tournaments/', tournamentRoutes);
+app.use('/api/v1/tournament-submissions/', tournamentSubmissionRoutes);
 
 // Error handling middleware
 const { errorHandler } = require('./utils/errorHandler');
