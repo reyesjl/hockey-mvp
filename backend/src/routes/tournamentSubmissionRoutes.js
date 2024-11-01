@@ -7,7 +7,6 @@ const tournamentSubmissionController = require('../controllers/tournamentSubmiss
 // Tournament submission routes
 router.post('/', tournamentSubmissionController.createTournamentSubmission);
 router.get('/', tournamentSubmissionController.getAllTournamentSubmissions);
-router.get('/by-email', tournamentSubmissionController.getTournamentSubmissionsByEmail);
 router.get('/:id', tournamentSubmissionController.getTournamentSubmissionById);
 router.patch('/:id', tournamentSubmissionController.updateTournamentSubmission);
 router.delete('/:id', tournamentSubmissionController.deleteTournamentSubmission);

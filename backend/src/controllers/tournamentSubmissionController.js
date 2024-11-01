@@ -50,8 +50,16 @@ exports.createTournamentSubmission = async (req, res, next) => {
 
 // Get all tournament submissions
 exports.getAllTournamentSubmissions = async (req, res, next) => {
+    const { submittedBy } = req.query;
+
+    // Build the query object
+    let query = {};
+    if (submittedBy) {
+        query.submittedBy = submittedBy; // Add filter for submittedBy email
+    }
+
     try {
-        const submissions = await TournamentSubmission.find();
+        const submissions = await TournamentSubmission.find(query);
         res.status(200).json(submissions);
     } catch (error) {
         next(new ErrorResponse('Failed to fetch tournament submissions. Please try again.', 500));
@@ -87,31 +95,6 @@ exports.updateTournamentSubmission = async (req, res, next) => {
         next(new ErrorResponse('Failed to update tournament submission. Please check your input.', 400));
     }
 };
-
-// Get tournament submissions by submittedBy email
-exports.getTournamentSubmissionsByEmail = async (req, res, next) => {
-    const { email } = req.query;
-
-    // Check if email is provided
-    if (!email) {
-        return next(new ErrorResponse('Please provide an email address.', 400));
-    }
-
-    try {
-        // Find all submissions with the specified submittedBy email
-        const submissions = await TournamentSubmission.find({ submittedBy: email });
-        
-        // Check if there are any submissions
-        if (submissions.length === 0) {
-            return next(new ErrorResponse('No tournament submissions found for this email.', 404));
-        }
-
-        res.status(200).json(submissions);
-    } catch (error) {
-        next(new ErrorResponse('Failed to fetch tournament submissions. Please try again.', 500));
-    }
-};
-
 
 // Delete a tournament submission by ID
 exports.deleteTournamentSubmission = async (req, res, next) => {
