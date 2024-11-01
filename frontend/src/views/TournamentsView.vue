@@ -13,18 +13,22 @@ onMounted(() => {
 
 <template>
     <main>
-        <PageHeader 
-            title="Tournaments"
-            description="Explore a comprehensive list of tournaments submitted by the community. Can’t find a tournament? Add it yourself! Share your experience by leaving a review and help others make informed choices."
-        />
+        <div class="w-auto mx-auto">
+            <div class="pt-4 mb-10 md:mb-20 text-center">
+                <p class="pb-4">YHT Reviews Beta</p>
+                <h1 class="text-4xl md:text-5xl pb-5 font-semibold">Find a tournament. <br /> Submit your own. <br /> Write a review.</h1>
+                <p class="md:w-1/2 px-4 mx-auto mt-2 md:text-lg text-gray-400">Explore a comprehensive list of tournaments submitted by the community. Can’t find a tournament? Add it yourself! Share your experience by leaving a review and help others make informed choices.</p>
+            </div>
+        </div>
+    
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 mx-auto w-[92%]">
             <div
                 v-for="tournament in tournamentStore.tournaments"
                 :key="tournament._id"
-                class="bg-gray-600 shadow-lg rounded-lg p-4 flex flex-col"
+                class="bg-gray-200  shadow-lg rounded-lg p-4 flex flex-col"
             >
-                <h2 class="text-white text-xl font-bold mb-2">{{ tournament.name }}</h2>
+                <h2 class="text-gray-800 text-xl font-bold mb-2">{{ tournament.name }}</h2>
                 <p class="text-gray-700 mb-4">{{ tournament.description }}</p>
                 <div class="mt-auto">
                     <router-link
