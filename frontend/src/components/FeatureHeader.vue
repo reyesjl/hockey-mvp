@@ -1,5 +1,5 @@
 <template>
-    <main class="container mx-auto p-4">
+    <main class="container mx-auto">
         <div class="flex flex-col md:flex-row gap-6">
             <!-- Text Section -->
             <div class="flex-1 text-center md:text-left">

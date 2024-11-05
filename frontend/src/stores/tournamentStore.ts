@@ -6,9 +6,10 @@ export const useTournamentStore = defineStore('tournament', {
         tournaments: [],
     }),
     actions: {
-        async fetchTournaments() {
+        async fetchTournaments(searchTerm = '') {
             try {
-                const response = await fetch('http://localhost:5000/api/v1/tournaments');
+                const url = `http://localhost:5000/api/v1/tournaments${searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ''}`;
+                const response = await fetch(url);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

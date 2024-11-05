@@ -60,8 +60,21 @@ exports.createTournament = async (req, res, next) => {
 
 // Get all tournaments
 exports.getAllTournaments = async (req, res, next) => {
+    const { search } = req.query;
+    let query = {}
+
+    // Build the query object
+    if (search) {
+        query = {
+            $or: [
+                { name: { $regex: search, $options: 'i' } },
+                { location: { $regex: search, $options: 'i' } }
+            ]
+        };
+    }
+
     try {
-        const tournaments = await Tournament.find();
+        const tournaments = await Tournament.find(query);
         res.status(200).json(tournaments);
     } catch (error) {
         next(new ErrorResponse('Failed to fetch tournaments. Please try again.', 500));
