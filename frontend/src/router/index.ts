@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue'
 import TournamentsView from '../views/TournamentsView.vue'
+import TournamentSubmissionView from '../views/TournamentSubmissionsView.vue'
 import CommunityView from '@/views/CommunityView.vue'
 import SupportView from '@/views/SupportView.vue'
 import LoginView from '@/views/LoginView.vue'
@@ -23,6 +24,11 @@ const router = createRouter({
             path: '/tournaments',
             name: 'tournaments',
             component: TournamentsView,
+        },
+        {
+            path: '/tournaments/submit',
+            name: 'tournamentSubmission',
+            component: TournamentSubmissionView,
         },
         {
             path: '/community',

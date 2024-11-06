@@ -26,7 +26,7 @@ watch(searchQuery, (newQuery) => {
                 <input v-model="searchQuery" type="text" placeholder="Enter location or tournament name"
                     class="rounded-full w-full text-black px-4 py-2 outline-none border-none" />
             </div>
-            <RouterLink v-if="tournamentStore.tournaments.length > 0" to="/" class="bg-sky-700 md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-sky-500 duration-200">
+            <RouterLink v-if="tournamentStore.tournaments.length > 0" to="/tournaments/submit" class="bg-sky-700 md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-sky-500 duration-200">
                 + New Tournament
             </RouterLink>
         </div>
@@ -35,7 +35,7 @@ watch(searchQuery, (newQuery) => {
         <div v-if="tournamentStore.tournaments.length === 0" class="text-center mt-6">
             <p class="text-gray-500">No tournaments found. Try a different search term.</p>
             <div class="mt-5">
-                <RouterLink to="/" class="bg-sky-700 md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-sky-500 duration-200">
+                <RouterLink to="/tournaments/submit" class="bg-sky-700 md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-sky-500 duration-200">
                     + New Tournament
                 </RouterLink>
             </div>
