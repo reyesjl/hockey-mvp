@@ -1,10 +1,10 @@
-// backend/models/Tournament.js
+// backend/models/TournamentSubmission.js
 
 const mongoose = require('mongoose');
 const { VALID_AGE_GROUPS, VALID_LEVELS_OF_PLAY } = require('./values/tournamentConstants');
 
-// Tournament model
-const tournamentSchema = new mongoose.Schema({
+// TournamentSubmission model
+const tournamentSubmissionSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -33,10 +33,7 @@ const tournamentSchema = new mongoose.Schema({
         }
     },
     notes: { type: String, default: '' },
-    company: { type: String, required: true },
-    overallRating: { type: Number, default: 0.0, min: 0, max: 5 },
-    refereeRating: { type: Number, default: 0.0, min: 0, max: 5 },
-    tournamentCommunicationRating: { type: Number, default: 0.0, min: 0, max: 5 },
+    company: { type: String, default: '' }, // Optional
     gamesMinimum: { type: Number, required: true, min: 1 },
     levelOfPlay: {
         type: [String],
@@ -58,17 +55,24 @@ const tournamentSchema = new mongoose.Schema({
             message: 'Invalid age group.'
         }
     },
-    usaHockeySanctioned: { type: Boolean, default: false },
-    firstPlaceHardware: { type: [String], default: [] }, // Example: ['Team Banner', 'Players Medals']
-    secondPlaceHardware: { type: [String], default: [] }, // Example: ['Team Banner']
-    stayAndPlay: { type: Boolean, default: false },
-    extendedCheckout: { type: Boolean, default: false },
-    multiTeamDiscounts: { type: Boolean, default: false },
-    earlyBirdDiscounts: { type: String, default: '' }, // Description of early bird discounts
-    otherDiscounts: { type: String, default: '' } // Description of other discounts
+    approvalStatus: {
+        type: String,
+        enum: ['pending', 'approved', 'denied'],
+        default: 'pending'
+    },
+    submittedBy: {
+        type: String,
+        required: true,
+        validate: {
+            validator: function (value) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            },
+            message: 'Submitted by must be a valid email address.'
+        }
+    }
 }, {
-    timestamps: true // Automatically manage createdAt and updatedAt fields
+    timestamps: true
 });
 
 // Export the model
-module.exports = mongoose.model('Tournament', tournamentSchema, 'tournaments');
+module.exports = mongoose.model('TournamentSubmission', tournamentSubmissionSchema, 'tournament_submissions');

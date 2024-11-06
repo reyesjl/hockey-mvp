@@ -1,15 +1,60 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, watch, onMounted } from 'vue';
+import { useTournamentStore } from '../stores/tournamentStore';
+import TournamentCard from '@/components/TournamentCard.vue';
+
+const tournamentStore = useTournamentStore();
+const searchQuery = ref('');
+
+// Fetch tournaments when the component is mounted
+onMounted(() => {
+    tournamentStore.fetchTournaments();
+});
+
+// Watch the searchQuery and update the tournaments based on the search term
+watch(searchQuery, (newQuery) => {
+    tournamentStore.fetchTournaments(newQuery);
+});
+</script>
 
 <template>
     <main class="container">
-        <div class="pt-4 mb-8 relative">
-            <h1>Tournaments</h1>
-            <p>
-                View all tournaments here. Add your own if you cant find the one
-                you're looking for.
-            </p>
+        <div class="search-wrapper flex flex-col items-center pt-5 pb-10 gap-4">
+            <h1 class="md:text-5xl text-2xl font-bold">Tournaments</h1>
+            <div class="search-bar md:w-1/2 w-full">
+                <!-- Bind searchQuery to the input using v-model -->
+                <input v-model="searchQuery" type="text" placeholder="Enter location or tournament name"
+                    class="rounded-full w-full text-black px-4 py-2 outline-none border-none" />
+            </div>
+            <RouterLink v-if="tournamentStore.tournaments.length > 0" to="/tournaments/submit" class="bg-sky-700 md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-sky-500 duration-200">
+                + New Tournament
+            </RouterLink>
+        </div>
+
+        <!-- Conditional rendering for no results -->
+        <div v-if="tournamentStore.tournaments.length === 0" class="text-center mt-6">
+            <p class="text-gray-500">No tournaments found. Try a different search term.</p>
+            <div class="mt-5">
+                <RouterLink to="/tournaments/submit" class="bg-sky-700 md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-sky-500 duration-200">
+                    + New Tournament
+                </RouterLink>
+            </div>
+        </div>
+
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 pb-20">
+            <TournamentCard 
+                v-for="tournament in tournamentStore.tournaments" 
+                :key="tournament._id"
+                :id="tournament._id"
+                :name="tournament.name"
+                :location="tournament.location"
+                :company="tournament.company"
+                :overallRating="tournament.overallRating"
+            />
         </div>
     </main>
 </template>
 
-<style scoped></style>
+<style>
+/* You can remove scoped styles as needed since you are using Tailwind CSS */
+</style>

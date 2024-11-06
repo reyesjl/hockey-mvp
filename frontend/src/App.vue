@@ -6,7 +6,7 @@ import Navigation from './components/Navigation.vue'
 <template>
     <Navigation />
 
-    <RouterView />
+    <RouterView class="text-white" />
 </template>
 
 <style scoped></style>
