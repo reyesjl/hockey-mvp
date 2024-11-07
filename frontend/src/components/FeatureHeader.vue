@@ -20,8 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
 // Define props for title, description, and image source
 const props = defineProps<{
     title: string;

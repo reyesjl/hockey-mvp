@@ -17,8 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
-
 // Define props for the TournamentCard component
 const props = defineProps<{
     id: string;
