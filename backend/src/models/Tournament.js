@@ -9,9 +9,13 @@ const tournamentSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        index: true
+        index: true,
     },
-    location: { type: String, required: true },
+    location: { 
+        type: String,
+        required: true,
+        index: true,
+    },
     dates: {
         type: [Date],
         required: true,
@@ -69,6 +73,9 @@ const tournamentSchema = new mongoose.Schema({
 }, {
     timestamps: true // Automatically manage createdAt and updatedAt fields
 });
+
+// Indexes
+tournamentSchema.index({ name: 'text', location: 'text' });
 
 // Export the model
 module.exports = mongoose.model('Tournament', tournamentSchema, 'tournaments');

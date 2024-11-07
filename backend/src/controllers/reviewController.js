@@ -36,6 +36,11 @@ exports.createReview = async (req, res, next) => {
 
         res.status(201).json(review);
     } catch (error) {
+        // Handle duplicate key error
+        if (error.code === 11000) {
+            return next(new ErrorResponse('You have already submitted a review for this tournament.', 400));
+        }
+
         // Handle error during creation
         next(new ErrorResponse('Failed to create review. Please try again.', 500));
     }

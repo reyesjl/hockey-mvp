@@ -54,5 +54,7 @@ const reviewSchema = new mongoose.Schema({
     timestamps: true
 });
 
+reviewSchema.index({ tournamentId: 1, submittedBy: 1 }, { unique: true });
+
 // Export the model
 module.exports = mongoose.model('Review', reviewSchema, 'reviews');
