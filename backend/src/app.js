@@ -4,10 +4,10 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 
-
 // Import routes
 const tournamentRoutes = require('./routes/tournamentRoutes');
 const tournamentSubmissionRoutes = require('./routes/tournamentSubmissionRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 // Load environment variables
 dotenv.config({ path: '../.env' });
@@ -33,6 +33,7 @@ app.get('/', (req, res) => {
 // Use routes
 app.use('/api/v1/tournaments/', tournamentRoutes);
 app.use('/api/v1/tournament-submissions/', tournamentSubmissionRoutes);
+app.use('/api/v1/reviews/', reviewRoutes);
 
 // Error handling middleware
 const { errorHandler } = require('./utils/errorHandler');

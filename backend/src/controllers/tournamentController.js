@@ -63,12 +63,13 @@ exports.getAllTournaments = async (req, res, next) => {
     const { search } = req.query;
     let query = {}
 
-    // Build the query object
+    // Use text search if a search term is provided
     if (search) {
         query = {
             $or: [
-                { name: { $regex: search, $options: 'i' } },
-                { location: { $regex: search, $options: 'i' } }
+                { $text: { $search: search } },  // Text search for exact matches
+                { name: { $regex: search, $options: 'i' } },  // Regex for partial matches
+                { location: { $regex: search, $options: 'i' } }  // Regex for partial matches
             ]
         };
     }

@@ -8,8 +8,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-
 // Define props for title and description
 const props = defineProps<{
     title: string;
