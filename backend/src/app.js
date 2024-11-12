@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 const tournamentRoutes = require('./routes/tournamentRoutes');
 const tournamentSubmissionRoutes = require('./routes/tournamentSubmissionRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 // Load environment variables
 dotenv.config({ path: '../.env' });
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 app.use('/api/v1/tournaments/', tournamentRoutes);
 app.use('/api/v1/tournament-submissions/', tournamentSubmissionRoutes);
 app.use('/api/v1/reviews/', reviewRoutes);
+app.use('/api/v1/admin/', adminRoutes);
 
 // Error handling middleware
 const { errorHandler } = require('./utils/errorHandler');
