@@ -1,13 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import AboutView from '../views/AboutView.vue'
-import TournamentsView from '../views/TournamentsView.vue'
-import TournamentSubmissionView from '../views/TournamentSubmissionsView.vue'
+import AboutView from '@/views/AboutView.vue'
 import CommunityView from '@/views/CommunityView.vue'
-import SupportView from '@/views/SupportView.vue'
-import LoginView from '@/views/LoginView.vue'
 import CreateReviewView from '@/views/CreateReviewView.vue'
+import HomeView from '@/views/HomeView.vue'
+import LoginView from '@/views/LoginView.vue'
+import SupportView from '@/views/SupportView.vue'
 import TournamentDetailView from '@/views/TournamentDetailView.vue'
+import TournamentSubmissionView from '@/views/TournamentSubmissionsView.vue'
+import TournamentsView from '@/views/TournamentsView.vue'
+import AdminDashboardView from '@/views/AdminDashboardView.vue'
+import AdminSubmissionView from '@/views/AdminSubmissionView.vue'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +59,16 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: LoginView,
+        },
+        {
+            path: '/admin/dashboard',
+            name: 'adminDashboard',
+            component: AdminDashboardView,
+        },
+        {
+            path: '/admin/dashboard/submissions',
+            name: 'adminSubmissions',
+            component: AdminSubmissionView,
         },
     ],
 })
