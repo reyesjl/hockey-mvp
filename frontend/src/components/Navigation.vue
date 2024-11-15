@@ -40,10 +40,10 @@
                 </ul>
             </div>
             <div class="actions md:hidden flex align-center gap-2">
-                <button @click="onToggleMenu(this)" class="bg-sky-700 px-5 py-2 rounded-full hover:bg-sky-500">
+                <button @click="onToggleMenu(this)" class="bg-black text-white border-solid border-2 border-white hover:bg-white hover:text-black px-3 py-1 rounded-full">
                     {{ isMenuOpen ? 'Close' : 'Menu' }}
                 </button>
-                <RouterLink to="/admin/dashboard" class="bg-sky-700 px-5 py-2 rounded-full hover:bg-sky-500" @onclick="onCloseMenu(this)">
+                <RouterLink to="/admin/dashboard" class="bg-black text-white border-solid border-2 border-white hover:bg-white hover:text-black px-3 py-1 rounded-full" @onclick="onCloseMenu(this)">
                     <i class="fa-solid fa-user"></i>
                 </RouterLink>
             </div>

@@ -30,21 +30,21 @@
                 <!-- Overall Rating -->
                 <div>
                     <label for="overallRating" class="block text-sm font-medium text-gray-700">Overall Rating (1-5)</label>
-                    <input type="number" id="overallRating" v-model="form.overallRating" min="1" max="5" required
+                    <input type="number" id="overallRating" v-model="form.overallRating" min="1" max="5" step="0.1" required
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
                 </div>
 
                 <!-- Referee Rating -->
                 <div>
                     <label for="refereeRating" class="block text-sm font-medium text-gray-700">Referee Rating (1-5)</label>
-                    <input type="number" id="refereeRating" v-model="form.refereeRating" min="1" max="5" required
+                    <input type="number" id="refereeRating" v-model="form.refereeRating" min="1" max="5" step="0.1" required
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
                 </div>
 
                 <!-- Communication Rating -->
                 <div>
                     <label for="communicationRating" class="block text-sm font-medium text-gray-700">Communication Rating (1-5)</label>
-                    <input type="number" id="communicationRating" v-model="form.communicationRating" min="1" max="5" required
+                    <input type="number" id="communicationRating" v-model="form.communicationRating" min="1" max="5" step="0.1" required
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
                 </div>
 
@@ -97,9 +97,9 @@ export default {
                 submittedBy: '',
                 comment: '',
                 parkingNotes: '',
-                overallRating: 1,
-                refereeRating: 1,
-                communicationRating: 1
+                overallRating: 4.5,
+                refereeRating: 4.5,
+                communicationRating: 4.5
             },
             errorMessage: '',
             showModal: false,
@@ -109,6 +109,12 @@ export default {
     methods: {
         async handleSubmit() {
             this.loading = true;
+
+            // Trim all ratings to one decimal place
+            this.form.overallRating = parseFloat(this.form.overallRating).toFixed(1);
+            this.form.refereeRating = parseFloat(this.form.refereeRating).toFixed(1);
+            this.form.communicationRating = parseFloat(this.form.communicationRating).toFixed(1);
+
             try {
                 const response = await fetch('http://localhost:5000/api/v1/reviews', {
                     method: 'POST',
@@ -144,9 +150,9 @@ export default {
                 submittedBy: '',
                 comment: '',
                 parkingNotes: '',
-                overallRating: 1,
-                refereeRating: 1,
-                communicationRating: 1
+                overallRating: 4.5,
+                refereeRating: 4.5,
+                communicationRating: 4.5
             };
         }
     }

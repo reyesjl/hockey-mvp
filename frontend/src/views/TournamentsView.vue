@@ -19,14 +19,14 @@ watch(searchQuery, (newQuery) => {
 
 <template>
     <main class="container">
-        <div class="search-wrapper flex flex-col items-center pt-5 pb-10 gap-4">
+        <div class="search-wrapper flex flex-col items-center pt-5 pb-8 gap-4">
             <h1 class="md:text-5xl text-2xl font-bold">Tournaments</h1>
-            <div class="search-bar md:w-1/2 w-full">
+            <div class="search-bar md:w-1/2 w-full mb-2">
                 <!-- Bind searchQuery to the input using v-model -->
                 <input v-model="searchQuery" type="text" placeholder="Enter location or tournament name"
                     class="rounded-full w-full text-black px-4 py-2 outline-none border-none" />
             </div>
-            <RouterLink v-if="tournamentStore.tournaments.length > 0" to="/tournaments/submit" class="bg-sky-700 md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-sky-500 duration-200">
+            <RouterLink v-if="tournamentStore.tournaments.length > 0" to="/tournaments/submit" class="bg-black text-white md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-white border-solid border-2 border-white hover:text-black duration-200">
                 + New Tournament
             </RouterLink>
         </div>
