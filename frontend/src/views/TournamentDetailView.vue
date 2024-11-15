@@ -1,36 +1,38 @@
 <template>
 	<div class="max-w-4xl mx-auto px-4 py-6" v-if="tournament">
 		<!-- Tournament Header Section -->
-		<div class="flex justify-between items-center mb-6">
-			<!-- Location and Rating -->
-			<div class="flex justify-between w-full">
-				<p class="text-gray-500"><i class="fa-solid fa-location-dot"></i> {{ tournament.location }}</p>
-				<p class="text-gray-500">{{ tournament.overallRating }} <i class="fa-solid fa-star"></i></p>
+		<div class="bg-gradient-to-b from-sky-300 to-sky-100 py-4 px-3 rounded-xl text-black">
+			<div class="flex justify-between items-center mb-6">
+				<!-- Location and Rating -->
+				<div class="flex justify-between align-middle w-full">
+					<p class="py-1 px-2 bg-black text-white rounded-full shadow-lg"><i class="fa-solid fa-location-arrow"></i> {{ tournament.location }}</p>
+					<p><i class="fa-solid fa-heart"></i> {{ tournament.overallRating }}</p>
+				</div>
 			</div>
-		</div>
 
-		<!-- Tournament Title -->
-		<h1 class="text-3xl font-bold text-white mb-4">{{ tournament.name }}</h1>
+			<!-- Tournament Title -->
+			<h1 class="text-3xl font-bold mb-4">{{ tournament.name }}</h1>
 
-		<!-- Company Name and Review Button -->
-		<div class="flex justify-between items-center">
-			<p class="text-lg text-gray-500">{{ tournament.company }}</p>
-			<!-- Leave a Review Button -->
-			<a class=" bg-gray-500 cursor-not-allowed text-white px-4 py-2 rounded-full duration-200 ml-2" href="">
-			<i class="fa-solid fa-flag"></i>
-			</a>
-			<!-- <RouterLink 
-				:to="`/reviews/create/${tournamentId}`" 
-				class=" bg-gray-500 cursor-not-allowed text-white px-4 py-2 rounded-full duration-200 ml-2">
+			<!-- Company Name and Review Button -->
+			<div class="flex justify-between items-end">
+				<p class="text-lg italic"><i class="fa-regular fa-building"></i> {{ tournament.company }}</p>
+				<!-- Leave a Review Button -->
+				<a class="bg-gray-500 cursor-not-allowed text-white px-4 py-2 rounded-full duration-200 ml-2" href="">
 				<i class="fa-solid fa-flag"></i>
-			</RouterLink> -->
+				</a>
+				<!-- <RouterLink 
+					:to="`/reviews/create/${tournamentId}`" 
+					class=" bg-gray-500 cursor-not-allowed text-white px-4 py-2 rounded-full duration-200 ml-2">
+					<i class="fa-solid fa-flag"></i>
+				</RouterLink> -->
+			</div>
 		</div>
 
 		<!-- Tournament Information Collapsible Section -->
 		<div class="w-full mx-auto mt-10">
 			<!-- Toggle Button -->
 			<button @click="toggleCollapse"
-				class="flex justify-between items-center w-full px-4 py-2 text-left bg-gray-800 text-white font-semibold rounded-t-lg hover:bg-gray-700 focus:outline-none">
+				class="flex justify-between items-center w-full px-4 py-2 text-left text-white font-semibold rounded-t-lg hover:bg-white hover:text-black focus:outline-none">
 				<span>Tournament Information</span>
 				<svg :class="{'rotate-180': !collapsed}" class="w-5 h-5 transform transition-transform" fill="none" stroke="currentColor"
 					viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
