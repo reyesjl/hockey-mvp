@@ -1,4 +1,4 @@
-// backend/models/tournamentConstants.js
+// backend/models/values/tournamentConstants.js
 
 // Validation arrays
 const VALID_AGE_GROUPS = ['8U', '10U', '12U', '14U', '16U', '18U', 'Midget', 'Junior', 'Varsity', 'Adult/Rec'];
