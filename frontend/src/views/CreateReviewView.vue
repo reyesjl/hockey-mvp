@@ -13,6 +13,13 @@
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
                 </div>
 
+                <!-- Attended Date -->
+                <div>
+                    <label for="attendedDate" class="block text-sm font-medium text-gray-700">Date You Attended</label>
+                    <input type="date" id="attendedDate" v-model="form.attendedDate" required
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" />
+                </div>
+
                 <!-- Comment -->
                 <div>
                     <label for="comment" class="block text-sm font-medium text-gray-700">Your Comment</label>
@@ -95,6 +102,7 @@ export default {
             form: {
                 tournamentId: this.tournamentId,
                 submittedBy: '',
+                attendedDate: '',
                 comment: '',
                 parkingNotes: '',
                 overallRating: 4.5,
@@ -148,6 +156,7 @@ export default {
             this.form = {
                 tournamentId: this.tournamentId,
                 submittedBy: '',
+                attendedDate: '',
                 comment: '',
                 parkingNotes: '',
                 overallRating: 4.5,
