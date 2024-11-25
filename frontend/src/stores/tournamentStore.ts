@@ -1,9 +1,10 @@
-// src/store/tournamentStore.js
+// src/store/tournamentStore.ts
 import { defineStore } from 'pinia';
+import type { Tournament } from '@/types';
 
 export const useTournamentStore = defineStore('tournament', {
     state: () => ({
-        tournaments: [],
+        tournaments: [] as Tournament[],
         loading: false,
         error: null as string | null,
     }),
@@ -20,7 +21,7 @@ export const useTournamentStore = defineStore('tournament', {
                     throw new Error(errorData.message || 'Failed to fetch tournaments');
                 }
 
-                const data = await response.json();
+                const data: Tournament[] = await response.json();
                 this.tournaments = data;
             } catch (error) {
                 this.error = 'An error occured while fetching tournaments';

@@ -20,8 +20,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-
 // Define props for the TournamentCard component
 const props = defineProps<{
     id: string;
@@ -30,16 +28,6 @@ const props = defineProps<{
     company: string;
     overallRating: Number;
 }>();
-
-const bgClass = ref('');
-
-// Set a random background color when the component is mounted
-onMounted(() => {
-    const colors = ['bg-yellow-400', 'bg-green-600', 'bg-orange-600'];
-    const randomIndex = Math.floor(Math.random() * colors.length);
-    bgClass.value = colors[randomIndex];
-});
-
 </script>
 
 <style scoped>
