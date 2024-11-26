@@ -2,9 +2,9 @@
 
 const express = require('express');
 const router = express.Router();
-const adminController = require('../controllers/adminController');
+const ac = require('../controllers/adminController');
 
 // Admin routes
-router.get('/metrics', adminController.getAdminMetrics);
+router.get('/metrics', ac.getAdminMetrics);
 
 module.exports = router;

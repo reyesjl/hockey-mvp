@@ -2,20 +2,21 @@
 
 const Tournament = require('../models/Tournament');
 const TournamentSubmission = require('../models/TournamentSubmission');
-const { ErrorResponse } = require('../utils/errorHandler');
+const { InternalServerError } = require('../utils/AppError');
+const { wrapResponse } = require('../utils/responseHandler');
 
-exports.getAdminMetrics = async (req, res) => {
+exports.getAdminMetrics = async (req, res, next) => {
     try {
         // Fetch counts
         const tournamentCount = await Tournament.countDocuments();
         const tournamentSubmissionCount = await TournamentSubmission.countDocuments();
 
-        return res.status(200).json({
+        // Send success response with metrics data
+        wrapResponse(res, 200, 'Admin metrics fetched successfully', {
             tournamentCount,
             tournamentSubmissionCount
         });
     } catch (error) {
-        const errorResponse = new ErrorResponse(`Failed to fetch admin metrics: ${error.message}`, 500);
-        return res.status(500).json({ message: errorResponse.message });
+        next(new InternalServerError(`Failed to fetch admin metrics: ${error.message}`));
     }
-}
+};

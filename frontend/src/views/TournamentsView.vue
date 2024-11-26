@@ -15,12 +15,17 @@
         </div>
 
         <!-- Loading spinner state -->
-        <div v-if="isLoading" class="text-center mt-6">
+        <div v-if="tournamentStore.loading" class="text-center mt-6">
             <i class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"></i>
         </div>
 
+        <!-- Error message -->
+        <div v-if="tournamentStore.error" class="text-center mt-6">
+            <p class="text-red-500">{{ tournamentStore.error }}</p>
+        </div>
+
         <!-- No results found message -->
-        <div v-else-if="!isLoading && tournamentStore.tournaments.length === 0" class="text-center mt-6">
+        <div v-else-if="!tournamentStore.loading && tournamentStore.tournaments.length === 0" class="text-center mt-6">
             <p class="text-gray-500">No tournaments found. Try a different search term.</p>
             <div class="mt-5">
                 <RouterLink to="/tournaments/submit"
@@ -31,7 +36,7 @@
         </div>
 
         <!-- Tournament cards -->
-        <div v-else-if="!isLoading && tournamentStore.tournaments.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 pb-20">
+        <div v-else-if="!tournamentStore.loading && tournamentStore.tournaments.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 pb-20">
             <TournamentCard v-for="tournament in tournamentStore.tournaments" :key="tournament._id" :id="tournament._id"
                 :name="tournament.name" :location="tournament.location" :company="tournament.company"
                 :overallRating="tournament.overallRating" />
@@ -47,25 +52,20 @@ import { debounce } from 'lodash';
 
 const tournamentStore = useTournamentStore();
 const searchQuery = ref('');
-const isLoading = ref(false);
 
 // Fetch tournaments when the component is mounted
 onMounted(async () => {
-    isLoading.value = true;
     await tournamentStore.fetchTournaments();
-    isLoading.value = false;
 });
 
 // Debounced function to fetch tournaments with search query
 const fetchTournamentsDebounced = debounce(async (newQuery: string) => {
     await tournamentStore.fetchTournaments(newQuery);
-    isLoading.value = false;  // Hide loading after fetching
 }, 800);
 
 // Watch the searchQuery and apply debounce for search input
 watch(searchQuery, (newQuery) => {
-    isLoading.value = true;  // Show loading immediately on search change
-    fetchTournamentsDebounced(newQuery);  // Trigger debounced fetch
+    fetchTournamentsDebounced(newQuery);
 });
 </script>
 

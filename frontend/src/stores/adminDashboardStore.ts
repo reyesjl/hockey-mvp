@@ -1,4 +1,4 @@
-// src/store/adminDashboardStore.js
+// src/store/adminDashboardStore.ts
 import { defineStore } from 'pinia';
 
 export const useAdminDashboardStore = defineStore('adminDashboard', {
@@ -21,11 +21,17 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
                     throw new Error(errorData.message || 'Failed to fetch admin metrics');
                 }
 
-                const data = await response.json();
-                this.tournamentCount = data.tournamentCount;
-                this.tournamentSubmissionCount = data.tournamentSubmissionCount;
+                const { success, message, data } = await response.json(); // Destructure success, message, and data
+
+                if (success) {
+                    this.tournamentCount = data.tournamentCount;
+                    this.tournamentSubmissionCount = data.tournamentSubmissionCount;
+                } else {
+                    this.error = message || 'Failed to fetch metrics';
+                }
+
             } catch (error) {
-                this.error = 'An error occured while fetching metrics';
+                this.error = 'An error occurred while fetching metrics';
                 console.error('Error fetching admin metrics:', error);
             } finally {
                 this.loading = false;

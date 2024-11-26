@@ -20,10 +20,16 @@ export const useTournamentSubmissionStore = defineStore('tournamentSubmissionSto
                     throw new Error(errorData.message || 'Failed to fetch tournament submissions');
                 }
 
-                const data = await response.json();
-                this.submissions = data;
+                const { success, message, data } = await response.json(); // Destructure the response to match the new format
+
+                if (success) {
+                    this.submissions = data; // Assuming the data contains the tournament submissions
+                } else {
+                    this.error = message || 'Failed to fetch tournament submissions';
+                }
+
             } catch (error) {
-                this.error = 'An error occured while fetching submissions';
+                this.error = 'An error occurred while fetching submissions';
                 console.log('Error fetching submissions:', error);
             } finally {
                 this.loading = false;

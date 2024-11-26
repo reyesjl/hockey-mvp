@@ -2,14 +2,14 @@
 
 const express = require('express');
 const router = express.Router();
-const flagController = require('../controllers/flagController');
+const fc = require('../controllers/flagController');
 
 // Flag routes
-router.post('/', flagController.createFlag);
-router.get('/', flagController.getAllFlags);
-router.get('/:id', flagController.getFlagById);
-router.patch('/:id', flagController.updateFlag);
-router.delete('/:id', flagController.deleteFlag);
+router.post('/', fc.createFlag);
+router.get('/', fc.getAllFlags);
+router.get('/:id', fc.getFlagById);
+router.patch('/:id', fc.updateFlag);
+router.delete('/:id', fc.deleteFlag);
 
 // Export the router
 module.exports = router;

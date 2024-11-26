@@ -57,7 +57,7 @@
 
                 <button type="submit"
                         :disabled="loading"
-                        class="w-full bg-sky-700 hover:bg-sky-500 text-white font-semibold py-2 rounded-full shadow-sm">
+                        class="w-full border-solid border-2 border-black text-black hover:bg-black hover:text-white font-semibold py-2 rounded-full shadow-sm">
                     Submit Review
                 </button>
             </form>
@@ -69,7 +69,7 @@
                 <h3 class="text-xl font-semibold text-gray-700 mb-4">Review Submitted!</h3>
                 <p class="text-gray-600 mb-4">Your review has been submitted successfully.</p>
                 <div class="mt-4">
-                    <button @click="closeModal" class="bg-sky-700 hover:bg-sky-500 text-white py-2 px-4 rounded-full">
+                    <button @click="closeModal" class="border-solid border-2 border-black text-black hover:bg-black hover:text-white py-2 px-4 rounded-full">
                         Close
                     </button>
                 </div>

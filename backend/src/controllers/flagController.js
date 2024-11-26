@@ -2,7 +2,8 @@
 
 const Flag = require('../models/Flag');
 const Tournament = require('../models/Tournament');
-const { ErrorResponse } = require('../utils/errorHandler');
+const { wrapResponse } = require('../utils/responseHandler');
+const { ValidationError, NotFoundError, InternalServerError } = require('../utils/AppError');
 
 // Create a new flag for a tournament
 exports.createFlag = async (req, res, next) => {
@@ -10,14 +11,14 @@ exports.createFlag = async (req, res, next) => {
 
     // Basic check for required fields
     if (!tournament || !submittedBy || !fields || !reason) {
-        return next(new ErrorResponse('Please provide all required fields.', 400));
+        return next(new ValidationError('Please provide all required fields.'));
     }
 
     try {
         // Ensure tournament exists
         const tournamentExists = await Tournament.findById(tournament);
         if (!tournamentExists) {
-            return next(new ErrorResponse('Tournament not found.', 404));
+            return next(new NotFoundError('Tournament not found.'));
         }
 
         // Create the flag object
@@ -31,15 +32,16 @@ exports.createFlag = async (req, res, next) => {
         // Save the flag
         await flag.save();
 
-        res.status(201).json(flag);
+        // Respond with the created flag
+        return wrapResponse(res, 201, 'Flag created successfully', flag);
     } catch (error) {
         // Handle duplicate key error
         if (error.code === 11000) {
-            return next(new ErrorResponse('You have already submitted a flag for this tournament.', 400));
+            return next(new ValidationError('You have already submitted a flag for this tournament.'));
         }
 
         // Handle error during creation
-        next(new ErrorResponse('Failed to create flag. Please try again.', 500));
+        return next(new InternalServerError('Failed to create flag. Please try again.'));
     }
 };
 
@@ -55,9 +57,9 @@ exports.getAllFlags = async (req, res, next) => {
 
     try {
         const flags = await Flag.find(query);
-        res.status(200).json(flags);
+        return wrapResponse(res, 200, 'Flags fetched successfully', flags);
     } catch (error) {
-        next(new ErrorResponse('Failed to fetch flags. Please try again.', 500));
+        return next(new InternalServerError('Failed to fetch flags. Please try again.'));
     }
 };
 
@@ -68,11 +70,11 @@ exports.getFlagById = async (req, res, next) => {
     try {
         const flag = await Flag.findById(id);
         if (!flag) {
-            return next(new ErrorResponse('Flag not found.', 404));
+            return next(new NotFoundError('Flag not found.'));
         }
-        res.status(200).json(flag);
+        return wrapResponse(res, 200, 'Flag fetched successfully', flag);
     } catch (error) {
-        next(new ErrorResponse('Failed to fetch flag. Please try again.', 500));
+        return next(new InternalServerError('Failed to fetch flag. Please try again.'));
     }
 };
 
@@ -84,11 +86,11 @@ exports.updateFlag = async (req, res, next) => {
     try {
         const flag = await Flag.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
         if (!flag) {
-            return next(new ErrorResponse('Flag not found.', 404));
+            return next(new NotFoundError('Flag not found.'));
         }
-        res.status(200).json(flag);
+        return wrapResponse(res, 200, 'Flag updated successfully', flag);
     } catch (error) {
-        next(new ErrorResponse('Failed to update flag. Please check your input.', 400));
+        return next(new ValidationError('Failed to update flag. Please check your input.'));
     }
 };
 
@@ -99,10 +101,10 @@ exports.deleteFlag = async (req, res, next) => {
     try {
         const flag = await Flag.findByIdAndDelete(id);
         if (!flag) {
-            return next(new ErrorResponse('Flag not found.', 404));
+            return next(new NotFoundError('Flag not found.'));
         }
-        res.status(204).send(); // No content
+        return res.status(204).send(); // No content
     } catch (error) {
-        next(new ErrorResponse('Failed to delete flag. Please try again.', 500));
+        return next(new InternalServerError('Failed to delete flag. Please try again.'));
     }
 };
