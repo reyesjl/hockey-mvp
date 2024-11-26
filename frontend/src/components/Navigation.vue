@@ -32,12 +32,20 @@
                         <RouterLink to="/support" class="hover:text-gray-500 duration-200" @click="onCloseMenu(this)">
                             Support</RouterLink>
                     </li>
+                    <li>
+                        <RouterLink to="/admin/dashboard" class="hover:text-gray-500 duration-200 hidden md:block" @onclick="onCloseMenu(this)">
+                            <i class="fa-solid fa-user"></i>
+                        </RouterLink>
+                    </li>
                 </ul>
             </div>
-            <div class="actions md:hidden block">
-                <button @click="onToggleMenu(this)" class="bg-sky-700 px-5 py-2 rounded-full hover:bg-sky-500">
+            <div class="actions md:hidden flex align-center gap-2">
+                <button @click="onToggleMenu(this)" class="bg-black text-white border-solid border-2 border-white hover:bg-white hover:text-black px-3 py-1 rounded-full">
                     {{ isMenuOpen ? 'Close' : 'Menu' }}
                 </button>
+                <RouterLink to="/admin/dashboard" class="bg-black text-white border-solid border-2 border-white hover:bg-white hover:text-black px-3 py-1 rounded-full" @onclick="onCloseMenu(this)">
+                    <i class="fa-solid fa-user"></i>
+                </RouterLink>
             </div>
         </nav>
     </header>

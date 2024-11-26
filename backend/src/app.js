@@ -8,6 +8,12 @@ const dotenv = require('dotenv');
 const tournamentRoutes = require('./routes/tournamentRoutes');
 const tournamentSubmissionRoutes = require('./routes/tournamentSubmissionRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
+const adminRoutes = require('./routes/adminRoutes');
+const flagRoutes = require('./routes/flagRoutes');
+
+// Import error handler and AppError class
+const { errorHandler } = require('./utils/errorHandler');
+const { ValidationError, NotFoundError, UnauthorizedError, InternalServerError } = require('./utils/AppError');
 
 // Load environment variables
 dotenv.config({ path: '../.env' });
@@ -34,9 +40,10 @@ app.get('/', (req, res) => {
 app.use('/api/v1/tournaments/', tournamentRoutes);
 app.use('/api/v1/tournament-submissions/', tournamentSubmissionRoutes);
 app.use('/api/v1/reviews/', reviewRoutes);
+app.use('/api/v1/admin/', adminRoutes);
+app.use('/api/v1/flags/', flagRoutes);
 
-// Error handling middleware
-const { errorHandler } = require('./utils/errorHandler');
+// Use error handler middleware at the end
 app.use(errorHandler);
 
 // Start the server

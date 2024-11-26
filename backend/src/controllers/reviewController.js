@@ -2,7 +2,8 @@
 
 const Review = require('../models/Review');
 const Tournament = require('../models/Tournament');
-const { ErrorResponse } = require('../utils/errorHandler');
+const { wrapResponse } = require('../utils/responseHandler');
+const { ValidationError, NotFoundError, InternalServerError } = require('../utils/AppError');
 
 // Create a new review for a tournament
 exports.createReview = async (req, res, next) => {
@@ -10,14 +11,14 @@ exports.createReview = async (req, res, next) => {
 
     // Basic check for required fields
     if (!tournamentId || !submittedBy || !comment || !overallRating || !refereeRating || !communicationRating) {
-        return next(new ErrorResponse('Please provide all required fields.', 400));
+        return next(new ValidationError('Please provide all required fields.'));
     }
 
     try {
         // Ensure tournament exists
         const tournament = await Tournament.findById(tournamentId);
         if (!tournament) {
-            return next(new ErrorResponse('Tournament not found.', 404));
+            return next(new NotFoundError('Tournament not found.'));
         }
 
         // Create the review object
@@ -34,15 +35,16 @@ exports.createReview = async (req, res, next) => {
         // Save the review
         await review.save();
 
-        res.status(201).json(review);
+        // Use wrapResponse to return a consistent success response
+        wrapResponse(res, 201, 'Review created successfully', review);
     } catch (error) {
         // Handle duplicate key error
         if (error.code === 11000) {
-            return next(new ErrorResponse('You have already submitted a review for this tournament.', 400));
+            return next(new ValidationError('You have already submitted a review for this tournament.'));
         }
 
-        // Handle error during creation
-        next(new ErrorResponse('Failed to create review. Please try again.', 500));
+        // Handle other errors during creation
+        next(new InternalServerError('Failed to create review. Please try again.'));
     }
 };
 
@@ -58,9 +60,10 @@ exports.getAllReviews = async (req, res, next) => {
 
     try {
         const reviews = await Review.find(query);
-        res.status(200).json(reviews);
+        // Use wrapResponse for consistency
+        wrapResponse(res, 200, 'Reviews fetched successfully', reviews);
     } catch (error) {
-        next(new ErrorResponse('Failed to fetch reviews. Please try again.', 500));
+        next(new InternalServerError('Failed to fetch reviews. Please try again.'));
     }
 };
 
@@ -71,11 +74,27 @@ exports.getReviewById = async (req, res, next) => {
     try {
         const review = await Review.findById(id);
         if (!review) {
-            return next(new ErrorResponse('Review not found.', 404));
+            return next(new NotFoundError('Review not found.'));
         }
-        res.status(200).json(review);
+        // Use wrapResponse to return the review
+        wrapResponse(res, 200, 'Review fetched successfully', review);
     } catch (error) {
-        next(new ErrorResponse('Failed to fetch review. Please try again.', 500));
+        next(new InternalServerError('Failed to fetch review. Please try again.'));
+    }
+};
+
+// Get all reviews for a specific tournament
+exports.getReviewsByTournamentId = async (req, res, next) => {
+    const { tournamentId } = req.params;
+
+    try {
+        // Fetch reviews associated with the given tournament ID
+        const reviews = await Review.find({ tournamentId });
+
+        // If no reviews found, return an empty array (not an error)
+        wrapResponse(res, 200, 'Reviews fetched successfully', reviews);
+    } catch (error) {
+        next(new InternalServerError('Failed to fetch reviews for this tournament. Please try again.'));
     }
 };
 
@@ -87,11 +106,12 @@ exports.updateReview = async (req, res, next) => {
     try {
         const review = await Review.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
         if (!review) {
-            return next(new ErrorResponse('Review not found.', 404));
+            return next(new NotFoundError('Review not found.'));
         }
-        res.status(200).json(review);
+        // Use wrapResponse to return the updated review
+        wrapResponse(res, 200, 'Review updated successfully', review);
     } catch (error) {
-        next(new ErrorResponse('Failed to update review. Please check your input.', 400));
+        next(new InternalServerError('Failed to update review. Please check your input.'));
     }
 };
 
@@ -102,10 +122,11 @@ exports.deleteReview = async (req, res, next) => {
     try {
         const review = await Review.findByIdAndDelete(id);
         if (!review) {
-            return next(new ErrorResponse('Review not found.', 404));
+            return next(new NotFoundError('Review not found.'));
         }
+        // Use wrapResponse to confirm deletion
         res.status(204).send(); // No content
     } catch (error) {
-        next(new ErrorResponse('Failed to delete review. Please try again.', 500));
+        next(new InternalServerError('Failed to delete review. Please try again.'));
     }
 };
