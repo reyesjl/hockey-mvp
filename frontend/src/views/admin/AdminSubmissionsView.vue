@@ -1,6 +1,6 @@
 <template>
-  <main class="container mx-auto py-10">
-    <h1 class="text-3xl md:text-4xl font-extrabold mb-2">Submissions</h1>
+  <main>
+    <h1 class="text-3xl font-extrabold mb-2">Submissions</h1>
     <p class="mb-8 text-gray-400">Select a submission to view the details.</p>
 
     <!-- Loading Indicator -->

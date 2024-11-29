@@ -8,8 +8,7 @@ import SupportView from '@/views/SupportView.vue'
 import TournamentDetailView from '@/views/TournamentDetailView.vue'
 import TournamentSubmissionView from '@/views/TournamentSubmissionsView.vue'
 import TournamentsView from '@/views/TournamentsView.vue'
-import AdminDashboardView from '@/views/AdminDashboardView.vue'
-import AdminSubmissionView from '@/views/AdminSubmissionView.vue'
+import adminRoutes from './adminRoutes'
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,16 +59,7 @@ const router = createRouter({
             name: 'login',
             component: LoginView,
         },
-        {
-            path: '/admin/dashboard',
-            name: 'adminDashboard',
-            component: AdminDashboardView,
-        },
-        {
-            path: '/admin/dashboard/submissions',
-            name: 'adminSubmissions',
-            component: AdminSubmissionView,
-        },
+        adminRoutes
     ],
 })
 
