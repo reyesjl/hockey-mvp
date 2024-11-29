@@ -5,6 +5,7 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
     state: () => ({
         tournamentCount: 0,
         tournamentSubmissionCount: 0,
+        flagCount: 0,
         loading: false,
         error: null as string | null,
     }),
@@ -26,6 +27,7 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
                 if (success) {
                     this.tournamentCount = data.tournamentCount;
                     this.tournamentSubmissionCount = data.tournamentSubmissionCount;
+                    this.flagCount = data.flagCount;
                 } else {
                     this.error = message || 'Failed to fetch metrics';
                 }
