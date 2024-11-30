@@ -23,16 +23,11 @@
 						<div class="text-sm italic"><i class="fa-solid fa-envelope"></i> {{ tournament.contactEmail }}
 						</div>
 					</div>
-					<!-- Leave a Review Button -->
-					<a class="bg-amber-500 cursor-not-allowed text-white px-4 py-2 rounded-full hover:shadow-lg duration-200 ml-2"
-						href="">
+					<!-- Flag Button -->
+					<RouterLink :to="{ name: 'createTournamentFlag', params: { tournamentId: tournament._id } }"
+						class="bg-amber-500 text-white px-4 py-2 rounded-full hover:shadow-lg duration-200 ml-2">
 						<i class="fa-solid fa-flag"></i>
-					</a>
-					<!-- <RouterLink 
-						:to="`/reviews/create/${tournamentId}`" 
-						class=" bg-gray-500 cursor-not-allowed text-white px-4 py-2 rounded-full duration-200 ml-2">
-						<i class="fa-solid fa-flag"></i>
-					</RouterLink> -->
+					</RouterLink>
 				</div>
 				<div>
 					<p></p>
@@ -61,13 +56,15 @@
 				<!-- Referee Rating Widget -->
 				<div class="bg-black text-white py-1 px-2 rounded-full flex gap-2 shadow-lg w-fit">
 					<span class="whitespace-nowrap"><i class="fa-solid fa-person-skating"></i> Referee Rating</span>
-					<span class="font-semibold whitespace-nowrap">{{ tournament.refereeRating || 'Not available' }}</span>
+					<span class="font-semibold whitespace-nowrap">{{ tournament.refereeRating || 'Not available'
+						}}</span>
 				</div>
 
 				<!-- Communication Rating Widget -->
 				<div class="bg-black text-white py-1 px-2 rounded-full flex gap-2 shadow-lg w-fit">
 					<span class="whitespace-nowrap"><i class="fa-solid fa-bullhorn"></i> Communication Rating</span>
-					<span class="font-semibold whitespace-nowrap">{{ tournament.tournamentCommunicationRating || 'Not available' }}</span>
+					<span class="font-semibold whitespace-nowrap">
+						{{ tournament.tournamentCommunicationRating || 'Not available' }}</span>
 				</div>
 
 				<!-- Stay and Play Widget (only show if true) -->
@@ -163,7 +160,7 @@
 			<div v-if="reviews && reviews.length" class="max-w-4xl mx-auto reviews-section px-4 pb-6">
 				<div class="flex justify-between items-center mb-8">
 					<h2 class="text-2xl text-white">Reviews</h2>
-					<RouterLink :to="`/reviews/create/${tournament._id}`"
+					<RouterLink :to="{ name: 'createTournamentReview', params: { tournamentId: tournament._id } }"
 						class="bg-black border-solid border-white border-2 text-white px-3 py-1 rounded-full hover:bg-white hover:text-black duration-200 ml-2">
 						New Review <i class="fa-solid fa-comments"></i>
 					</RouterLink>
@@ -171,7 +168,8 @@
 
 				<!-- Reviews List -->
 				<div v-for="review in reviews" :key="review._id" class="flex flex-col">
-					<Review :email="review.submittedBy" :rating="review.overallRating" :comment="review.comment" :attendedDate="review.attendedDate"/>
+					<Review :email="review.submittedBy" :rating="review.overallRating" :comment="review.comment"
+						:attendedDate="review.attendedDate" />
 				</div>
 			</div>
 
@@ -189,10 +187,10 @@
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, ref } from 'vue';
-import { useTournament } from '../composables/useTournament';
-import { useReviews } from '../composables/useReviews';
+import { useTournament } from '@/composables/useTournament';
+import { useReviews } from '@/composables/useReviews';
 import { useRoute } from 'vue-router';
-import Review from '../components/Review.vue';
+import Review from '@/components/Review.vue';
 
 export default defineComponent({
 	components: {

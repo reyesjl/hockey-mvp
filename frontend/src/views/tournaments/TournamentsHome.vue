@@ -8,7 +8,8 @@
                 <input v-model="searchQuery" type="text" placeholder="Enter location or tournament name"
                     class="rounded-full w-full text-black px-4 py-2 outline-none border-none" />
             </div>
-            <RouterLink v-if="tournamentStore.tournaments.length > 0" to="/tournaments/submit"
+            <RouterLink v-if="tournamentStore.tournaments.length > 0" 
+                :to="{ name: 'createTournamentSubmission' }"
                 class="bg-black text-white md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-white border-solid border-2 border-white hover:text-black duration-200">
                 + New Tournament
             </RouterLink>
@@ -28,7 +29,7 @@
         <div v-else-if="!tournamentStore.loading && tournamentStore.tournaments.length === 0" class="text-center mt-6">
             <p class="text-gray-500">No tournaments found. Try a different search term.</p>
             <div class="mt-5">
-                <RouterLink to="/tournaments/submit"
+                <RouterLink :to="{ name: 'createTournamentSubmission' }"
                     class="bg-black text-white md:px-5 px-3 md:py-2 py-1 rounded-full hover:bg-white border-solid border-2 border-white hover:text-black duration-200">
                     + New Tournament
                 </RouterLink>
