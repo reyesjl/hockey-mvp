@@ -4,18 +4,17 @@
 			<!-- Tournament Header Section -->
 			<div class="bg-gradient-to-b from-sky-300 to-sky-100 py-4 px-3 rounded-xl text-black">
 				<div class="flex justify-between items-center mb-6">
-					<!-- Location and Rating -->
+					<!-- Location -->
 					<div class="flex justify-between align-middle w-full">
 						<p class="py-1 px-2 bg-black text-white rounded-full shadow-lg"><i
 								class="fa-solid fa-location-arrow"></i> {{ tournament.location }}</p>
-						<p><i class="fa-solid fa-heart"></i> {{ tournament.overallRating }}</p>
 					</div>
 				</div>
 
 				<!-- Tournament Title -->
 				<h1 class="text-3xl font-bold mb-4">{{ tournament.name }}</h1>
 
-				<!-- Company Name and Review Button -->
+				<!-- Company Name  -->
 				<div class="flex justify-between items-end">
 					<div>
 						<div class="text-lg italic"><i class="fa-regular fa-building"></i> {{ tournament.company }}
@@ -34,152 +33,229 @@
 				</div>
 			</div>
 
-			<!-- Button to toggle visibility -->
-			<div class="mt-4 cursor-pointer flex justify-end text-sm" @click="showContent = !showContent">
-				<div class="flex gap-1 items-center text-white">
-					<i v-if="showContent" class="fa-solid fa-eye text-sm"></i>
-					<i v-else class="fa-solid fa-eye-slash"></i>
-					<span v-if="showContent">Hide</span>
-					<span v-else>Show</span>
+			<!-- Main statistics drawer -->
+			<div class="stats-drawer flex md:justify-evenly gap-4 md:overflow-hidden overflow-x-scroll mt-4 py-4">
+				<div class="stats-block flex flex-col items-center min-w-fit">
+					<div class="text-gray-400 uppercase text-xs md:text-sm">overall</div>
+					<div class="text-gray-300 text-xl font-semibold">{{ tournament.overallRating }}</div>
+					<div class="text-gray-300 text-xs uppercase">out of 5</div>
+				</div>
+				<div class="stats-block flex flex-col items-center min-w-fit">
+					<div class="text-gray-400 uppercase text-xs md:text-sm">minimum games</div>
+					<div class="text-gray-300 text-xl font-semibold">{{ tournament.gamesMinimum }}</div>
+				</div>
+				<div class="stats-block flex flex-col items-center min-w-fit">
+					<div class="text-gray-400 uppercase text-xs md:text-sm">Referee</div>
+					<div class="text-gray-300 text-xl font-semibold">{{ tournament.refereeRating }}</div>
+					<div class="text-gray-300 text-xs uppercase">out of 5</div>
+				</div>
+				<div class="stats-block flex flex-col items-center min-w-fit">
+					<div class="text-gray-400 uppercase text-xs md:text-sm">Communication</div>
+					<div class="text-gray-300 text-xl font-semibold">{{ tournament.refereeRating }}</div>
+					<div class="text-gray-300 text-xs uppercase">out of 5</div>
 				</div>
 			</div>
 
-			<!-- Row Container with Games Minimum, Referee Rating, and Communication Rating -->
-			<div v-if="showContent"
-				class="mt-3 bg-white text-xs md:text-sm p-3 rounded-lg flex gap-2 overflow-x-auto items-center flex-wrap">
-				<!-- Games Minimum Widget -->
-				<div class="bg-black text-white py-1 px-2 rounded-full flex items-center gap-2 shadow-lg w-fit">
-					<span class="whitespace-nowrap"><i class="fa-solid fa-hockey-puck"></i> Games Minimum</span>
-					<span class="font-semibold whitespace-nowrap">{{ tournament.gamesMinimum }}</span>
-				</div>
+			<!-- Notes / Description -->
+			<div class="mt-5 py-3 border-gray-700 border-t-2 border-solid">
+				<p class="text-white md:text-base text-sm">
+					<span>
+						{{ displayedNotes }}
+					</span>
+					<span @click="toggleExpandNotes" class="text-sky-500 cursor-pointer ml-1">
+						{{ notesExpanded ? 'less' : 'more' }}
+					</span>
+				</p>
+			</div>
 
-				<!-- Referee Rating Widget -->
-				<div class="bg-black text-white py-1 px-2 rounded-full flex gap-2 shadow-lg w-fit">
-					<span class="whitespace-nowrap"><i class="fa-solid fa-person-skating"></i> Referee Rating</span>
-					<span class="font-semibold whitespace-nowrap">{{ tournament.refereeRating || 'Not available'
-						}}</span>
-				</div>
-
-				<!-- Communication Rating Widget -->
-				<div class="bg-black text-white py-1 px-2 rounded-full flex gap-2 shadow-lg w-fit">
-					<span class="whitespace-nowrap"><i class="fa-solid fa-bullhorn"></i> Communication Rating</span>
-					<span class="font-semibold whitespace-nowrap">
-						{{ tournament.tournamentCommunicationRating || 'Not available' }}</span>
-				</div>
-
-				<!-- Stay and Play Widget (only show if true) -->
-				<div v-if="tournament.stayAndPlay"
-					class="bg-black text-white py-1 px-2 rounded-full flex items-center gap-3 shadow-lg w-fit">
-					<span class="whitespace-nowrap"><i class="fa-solid fa-bed"></i> Stay and Play</span>
-				</div>
-
-				<!-- Extended Checkout Widget (only show if true) -->
-				<div v-if="tournament.extendedCheckout"
-					class="bg-black text-white py-1 px-2 rounded-full flex items-center gap-3 shadow-lg w-fit">
-					<span class="whitespace-nowrap"><i class="fa-solid fa-clock"></i> Extended Checkout</span>
-				</div>
-
-				<!-- Multi-Team Discounts Widget (only show if true) -->
-				<div v-if="tournament.multiTeamDiscounts"
-					class="bg-black text-white py-1 px-2 rounded-full flex items-center gap-3 shadow-lg w-fit">
-					<span class="whitespace-nowrap"><i class="fa-solid fa-users"></i> Multi-Team Discounts</span>
-				</div>
-
-				<!-- USA Hockey Sanctioned Widget (only show if true) -->
-				<div v-if="tournament.usaHockeySanctioned"
-					class="bg-black text-white py-1 px-2 rounded-full flex items-center gap-3 shadow-lg w-fit">
-					<span class="whitespace-nowrap"><i class="fa-solid fa-flag-usa"></i> USA Hockey Sanctioned</span>
+			<!-- Dates / Events -->
+			<div class="mt-5 py-3 border-gray-700 border-t-2 border-solid">
+				<h3 class="text-white font-semibold text-xl">Dates</h3>
+				<p v-if="formattedDates.length" class="text-sky-500 uppercase text-xs">happening now</p>
+				<p v-else class="text-gray-500 text-xs">No upcoming dates</p>
+				<div class="flex gap-2 mt-2">
+					<div v-for="(date, index) in formattedDates" :key="index"
+						class="flex flex-col min-w-fit items-center p-2 bg-white rounded-md">
+						<div class="text-xs text-black uppercase">{{ date.month }}</div>
+						<div class="text-3xl text-black font-semibold">{{ date.day }}</div>
+					</div>
 				</div>
 			</div>
 
-			<!-- Tournament Information Container -->
-			<div v-if="showContent" class="mt-5 bg-white p-6 rounded-lg shadow-lg space-y-6">
+			<!-- Tournament Details and Information Container -->
+			<div class="mt-5 rounded-lg shadow-lg space-y-6">
+				<div class="flex flex-col space-y-4">
+					<!-- Stay and Play -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">Stay and Play</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.stayAndPlay ? 'Available' : 'Not available'
+								}}</span>
+						</div>
+					</div>
 
-				<!-- Tournament Notes -->
-				<div>
-					<h2 class="font-semibold text-black">Notes</h2>
-					<p class="text-gray-700">{{ tournament.notes || 'No additional notes' }}</p>
+					<!-- Extended Checkout -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">Extended Checkout</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.extendedCheckout ? 'Available' : 'Not available'
+								}}</span>
+						</div>
+					</div>
+
+					<!-- Multi-Team Discounts -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">Multi-Team Discounts</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.multiTeamDiscounts ? 'Available' : 'Not available'
+								}}</span>
+						</div>
+					</div>
+
+					<!-- USA Hockey Sanctioned -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">USA Hockey Sanctioned</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.usaHockeySanctioned ? 'Yes' : 'No' }}</span>
+						</div>
+					</div>
+
+					<!-- Level of Play -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">Level of Play</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.levelOfPlay?.join(', ') || 
+							'No level of play specified' }}</span>
+						</div>
+					</div>
+
+					<!-- Age Groups -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">Age Groups</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.ageGroups?.join(', ') || 'No age groups specified'
+								}}</span>
+						</div>
+					</div>
+
+					<!-- Early Bird Discounts -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">Early Bird Discounts</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.earlyBirdDiscounts || 'No early bird discounts'
+								}}</span>
+						</div>
+					</div>
+
+					<!-- Other Discounts -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">Other Discounts</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.otherDiscounts || 'No other discounts' }}</span>
+						</div>
+					</div>
+
+					<!-- 1st Place Hardware -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">1st Place Hardware</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.firstPlaceHardware?.join(', ') || 'None' }}</span>
+						</div>
+					</div>
+
+					<!-- 2nd Place Hardware -->
+					<div class="widget">
+						<div class="flex justify-between items-center cursor-pointer toggle-header"
+							@click="toggleContent($event)">
+							<span class="text-white">2nd Place Hardware</span>
+							<i class="fa-solid fa-plus text-white toggle-icon"></i>
+						</div>
+						<div class="flex justify-end pt-2 toggle-content hidden">
+							<span class="text-gray-400">{{ tournament.secondPlaceHardware?.join(', ') || 'None'
+								}}</span>
+						</div>
+					</div>
 				</div>
-
-				<!-- Level of Play Widget -->
-				<div>
-					<h2 class="font-semibold text-black">Level of Play</h2>
-					<p class="text-gray-700">{{ tournament.levelOfPlay.join(', ') || 'No level of play specified' }}</p>
-				</div>
-
-				<!-- Age Groups Widget -->
-				<div>
-					<h2 class="font-semibold text-black">Age Groups</h2>
-					<p class="text-gray-700">{{ tournament.ageGroups.join(', ') || 'No age groups specified' }}</p>
-				</div>
-
-				<!-- Discounts Widget -->
-				<div>
-					<h2 class="font-semibold text-black">Discounts</h2>
-					<p class="text-gray-700">{{ tournament.earlyBirdDiscounts || 'No early bird discounts' }}</p>
-					<p class="text-gray-700">{{ tournament.otherDiscounts || 'No other discounts' }}</p>
-				</div>
-
-				<!-- Hardware Widget -->
-				<div>
-					<h2 class="font-semibold text-black">Hardware</h2>
-					<p class="text-gray-700">1st Place: {{ tournament.firstPlaceHardware.join(', ') || 'None' }}</p>
-					<p class="text-gray-700">2nd Place: {{ tournament.secondPlaceHardware.join(', ') || 'None' }}</p>
-				</div>
-
-				<!-- Dates Widget -->
-				<div>
-					<h2 class="font-semibold text-black">Dates</h2>
-					<p class="text-gray-700">{{ formattedDates || 'Dates not available' }}</p>
-				</div>
-
 			</div>
-		</div>
 
-		<!-- Separator Line -->
-		<hr class="my-5 border-gray-700" />
-
-		<!-- Show loading spinner for tournament and reviews -->
-		<div v-if="isTournamentLoading" class="text-center mt-6">
-			<div class="flex justify-center items-center space-x-2">
-				<i class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"></i>
+			<!-- Show loading spinner for tournament and reviews -->
+			<div v-if="isTournamentLoading" class="text-center mt-6">
+				<div class="flex justify-center items-center space-x-2">
+					<i class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"></i>
+				</div>
+				<p class="text-white">Loading tournament...</p>
 			</div>
-			<p class="text-white">Loading tournament...</p>
-		</div>
 
-		<div v-else-if="isReviewsLoading && tournament" class="text-center mt-6">
-			<div class="flex justify-center items-center space-x-2">
-				<i class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"></i>
+			<div v-else-if="isReviewsLoading && tournament" class="text-center mt-6">
+				<div class="flex justify-center items-center space-x-2">
+					<i class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"></i>
+				</div>
+				<p class="text-white">Loading reviews...</p>
 			</div>
-			<p class="text-white">Loading reviews...</p>
-		</div>
 
-		<!-- Once both tournament and reviews are loaded -->
-		<div v-else>
-			<!-- Reviews Section -->
-			<div v-if="reviews && reviews.length" class="max-w-4xl mx-auto reviews-section px-4 pb-6">
-				<div class="flex justify-between items-center mb-8">
-					<h2 class="text-2xl text-white">Reviews</h2>
-					<RouterLink :to="{ name: 'createTournamentReview', params: { tournamentId: tournament._id } }"
-						class="bg-black border-solid border-white border-2 text-white px-3 py-1 rounded-full hover:bg-white hover:text-black duration-200 ml-2">
+			<!-- Once both tournament and reviews are loaded -->
+			<div v-else>
+				<!-- Reviews Section -->
+				<div v-if="reviews && reviews.length" class="max-w-4xl mt-8 mx-auto reviews-section  pb-6">
+					<div class="flex justify-between items-center mb-8">
+						<h2 class="text-2xl text-white">Reviews</h2>
+						<RouterLink :to="{ name: 'createTournamentReview', params: { tournamentId: tournament._id } }"
+							class="bg-black border-solid border-white border-2 text-white px-3 py-1 rounded-full hover:bg-white hover:text-black duration-200 ml-2">
+							New Review <i class="fa-solid fa-comments"></i>
+						</RouterLink>
+					</div>
+
+					<!-- Reviews List -->
+					<div v-for="review in reviews" :key="review._id" class="flex flex-col">
+						<Review :email="review.submittedBy" :rating="review.overallRating" :comment="review.comment"
+							:attendedDate="review.attendedDate" />
+					</div>
+				</div>
+
+				<!-- No Reviews Found State -->
+				<div v-else class="flex flex-col items-center">
+					<p class="mb-4 text-center text-gray-300">No reviews exist yet. Be the first to leave a review!</p>
+					<RouterLink :to="`/reviews/create/${tournament._id}`"
+						class="mb-4 w-fit border-solid border-2 border-white text-white px-4 py-2 rounded-full hover:bg-white hover:text-black duration-200 ml-2">
 						New Review <i class="fa-solid fa-comments"></i>
 					</RouterLink>
 				</div>
-
-				<!-- Reviews List -->
-				<div v-for="review in reviews" :key="review._id" class="flex flex-col">
-					<Review :email="review.submittedBy" :rating="review.overallRating" :comment="review.comment"
-						:attendedDate="review.attendedDate" />
-				</div>
-			</div>
-
-			<!-- No Reviews Found State -->
-			<div v-else class="flex flex-col items-center">
-				<p class="mb-4 text-center text-gray-300">No reviews exist yet. Be the first to leave a review!</p>
-				<RouterLink :to="`/reviews/create/${tournament._id}`"
-					class="mb-4 w-fit border-solid border-2 border-white text-white px-4 py-2 rounded-full hover:bg-white hover:text-black duration-200 ml-2">
-					New Review <i class="fa-solid fa-comments"></i>
-				</RouterLink>
 			</div>
 		</div>
 	</main>
@@ -208,6 +284,32 @@ export default defineComponent({
 		const { tournament, isTournamentLoading, fetchTournamentById } = useTournament();
 		const { reviews, isReviewsLoading, fetchReviewsByTournamentId } = useReviews();
 
+		const notesExpanded = ref(false);
+		const maxNotesLength = 120; // Max characters before truncating
+
+		const displayedNotes = computed(() => {
+			if (!tournament.value?.notes) return 'No additional notes';
+			return notesExpanded.value
+				? tournament.value.notes
+				: `${tournament.value.notes.slice(0, maxNotesLength)}${tournament.value.notes.length > maxNotesLength ? '...' : ''}`;
+		});
+
+		const toggleExpandNotes = () => {
+			notesExpanded.value = !notesExpanded.value;
+		};
+
+		const toggleContent = (event) => {
+			// Access the clicked header and corresponding content and icon
+			const header = event.currentTarget;
+			const content = header.nextElementSibling;
+			const icon = header.querySelector('.toggle-icon');
+
+			// Toggle visibility
+			content.classList.toggle('hidden');
+			icon.classList.toggle('fa-plus');
+			icon.classList.toggle('fa-minus');
+		};
+
 		// Fetch tournament and reviews when the component is mounted
 		onMounted(async () => {
 			if (tournamentId) {
@@ -216,17 +318,15 @@ export default defineComponent({
 			}
 		});
 
-		// Computed property for formatted dates
 		const formattedDates = computed(() => {
-			return tournament.value?.dates
-				? tournament.value.dates
-					.map(date => new Date(date).toLocaleDateString('en-US', {
-						month: '2-digit',
-						day: '2-digit',
-						year: 'numeric',
-					}))
-					.join(', ')
-				: null;
+			if (!tournament.value?.dates?.length) return [];
+			return tournament.value.dates.map((date) => {
+				const eventDate = new Date(date);
+				return {
+					month: eventDate.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
+					day: eventDate.getDate(),
+				};
+			});
 		});
 
 		return {
@@ -235,7 +335,11 @@ export default defineComponent({
 			reviews,
 			isReviewsLoading,
 			formattedDates,
-			showContent
+			showContent,
+			notesExpanded,
+			displayedNotes,
+			toggleExpandNotes,
+			toggleContent,
 		};
 	},
 });

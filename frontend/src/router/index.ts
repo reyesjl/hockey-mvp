@@ -5,6 +5,7 @@ import CommunityView from '@/views/CommunityView.vue'
 import HomeView from '@/views/HomeView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SupportView from '@/views/SupportView.vue'
+import NotFoundView from '@/views/NotFoundView.vue'
 import submissionRoutes from './submissionRoutes'
 import tournamentRoutes from './tournamentRoutes'
 import adminRoutes from './adminRoutes'
@@ -38,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
     ...tournamentRoutes,
     ...submissionRoutes,
     ...adminRoutes,
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: NotFoundView,
+    },
 ]
 
 const router = createRouter({

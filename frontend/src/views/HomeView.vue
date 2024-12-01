@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import FeatureHeader from '../components/FeatureHeader.vue'
-import landingBg from '../assets/landingBg.jpg'
 
 </script>
 
