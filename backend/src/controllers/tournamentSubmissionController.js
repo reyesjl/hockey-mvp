@@ -5,7 +5,7 @@ const { ValidationError, NotFoundError, InternalServerError } = require('../util
 const { wrapResponse } = require('../utils/responseHandler');
 
 // Create a new tournament submission
-exports.createTournamentSubmission = async (req, res, next) => {
+exports.create = async (req, res, next) => {
     const { name, location, dates, contactEmail, notes, company, gamesMinimum, levelOfPlay, ageGroups, submittedBy } = req.body;
 
     // Basic check for required fields
@@ -50,7 +50,7 @@ exports.createTournamentSubmission = async (req, res, next) => {
 };
 
 // Get all tournament submissions
-exports.getAllTournamentSubmissions = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     const { submittedBy } = req.query;
 
     // Build the query object
@@ -68,7 +68,7 @@ exports.getAllTournamentSubmissions = async (req, res, next) => {
 };
 
 // Get a tournament submission by ID
-exports.getTournamentSubmissionById = async (req, res, next) => {
+exports.show = async (req, res, next) => {
     const { id } = req.params;
 
     try {
@@ -83,7 +83,7 @@ exports.getTournamentSubmissionById = async (req, res, next) => {
 };
 
 // Update a tournament submission by ID
-exports.updateTournamentSubmission = async (req, res, next) => {
+exports.update = async (req, res, next) => {
     const { id } = req.params;
 
     try {
@@ -98,7 +98,7 @@ exports.updateTournamentSubmission = async (req, res, next) => {
 };
 
 // Delete a tournament submission by ID
-exports.deleteTournamentSubmission = async (req, res, next) => {
+exports.destroy = async (req, res, next) => {
     const { id } = req.params;
 
     try {

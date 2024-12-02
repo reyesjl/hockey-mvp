@@ -6,7 +6,7 @@ const { wrapResponse } = require('../utils/responseHandler');
 const { ValidationError, NotFoundError, InternalServerError } = require('../utils/AppError');
 
 // Create a new review for a tournament
-exports.createReview = async (req, res, next) => {
+exports.create = async (req, res, next) => {
     const { tournamentId, submittedBy, comment, overallRating, refereeRating, communicationRating, parkingNotes } = req.body;
 
     // Basic check for required fields
@@ -49,7 +49,7 @@ exports.createReview = async (req, res, next) => {
 };
 
 // Get all reviews (with optional search/filter by tournamentId)
-exports.getAllReviews = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     const { tournamentId } = req.query;
     let query = {};
 
@@ -68,7 +68,7 @@ exports.getAllReviews = async (req, res, next) => {
 };
 
 // Get a specific review by ID
-exports.getReviewById = async (req, res, next) => {
+exports.show = async (req, res, next) => {
     const { id } = req.params;
 
     try {
@@ -84,7 +84,7 @@ exports.getReviewById = async (req, res, next) => {
 };
 
 // Get all reviews for a specific tournament
-exports.getReviewsByTournamentId = async (req, res, next) => {
+exports.showByTournament = async (req, res, next) => {
     const { tournamentId } = req.params;
 
     try {
@@ -99,7 +99,7 @@ exports.getReviewsByTournamentId = async (req, res, next) => {
 };
 
 // Update a review by ID
-exports.updateReview = async (req, res, next) => {
+exports.update = async (req, res, next) => {
     const { id } = req.params;
     const { comment, overallRating, refereeRating, communicationRating, parkingNotes } = req.body;
 
@@ -116,7 +116,7 @@ exports.updateReview = async (req, res, next) => {
 };
 
 // Delete a review by ID
-exports.deleteReview = async (req, res, next) => {
+exports.destroy = async (req, res, next) => {
     const { id } = req.params;
 
     try {

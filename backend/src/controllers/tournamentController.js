@@ -5,7 +5,7 @@ const { wrapResponse } = require('../utils/responseHandler');
 const { ValidationError, NotFoundError, InternalServerError } = require('../utils/AppError');
 
 // Create a new tournament
-exports.createTournament = async (req, res, next) => {
+exports.create = async (req, res, next) => {
     const { name, location, date, contactEmail, notes, company, overallRating, refereeRating, tournamentCommunicationRating, gamesMinimum, levelOfPlay, ageGroups, usaHockeySanctioned, firstPlaceHardware, secondPlaceHardware, stayAndPlay, extendedCheckout, multiTeamDiscounts, earlyBirdDiscounts, otherDiscounts } = req.body;
 
     // Basic check for required fields
@@ -60,7 +60,7 @@ exports.createTournament = async (req, res, next) => {
 };
 
 // Get all tournaments
-exports.getAllTournaments = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     const { search } = req.query;
     let query = {};
 
@@ -84,7 +84,7 @@ exports.getAllTournaments = async (req, res, next) => {
 };
 
 // Get a tournament by ID
-exports.getTournamentById = async (req, res, next) => {
+exports.show = async (req, res, next) => {
     const { id } = req.params;
 
     try {
@@ -99,7 +99,7 @@ exports.getTournamentById = async (req, res, next) => {
 };
 
 // Update a tournament by ID
-exports.updateTournament = async (req, res, next) => {
+exports.update = async (req, res, next) => {
     const { id } = req.params;
 
     try {
@@ -114,7 +114,7 @@ exports.updateTournament = async (req, res, next) => {
 };
 
 // Delete a tournament by ID
-exports.deleteTournament = async (req, res, next) => {
+exports.destroy = async (req, res, next) => {
     const { id } = req.params;
 
     try {

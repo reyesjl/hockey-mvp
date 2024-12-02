@@ -5,11 +5,11 @@ const router = express.Router();
 const fc = require('../controllers/flagController');
 
 // Flag routes
-router.post('/', fc.createFlag);
-router.get('/', fc.getAllFlags);
-router.get('/:id', fc.getFlagById);
-router.patch('/:id', fc.updateFlag);
-router.delete('/:id', fc.deleteFlag);
+router.get('/', fc.index);
+router.post('/', fc.create);
+router.get('/:id', fc.show);
+router.patch('/:id', fc.update);
+router.delete('/:id', fc.destroy);
 
 // Export the router
 module.exports = router;

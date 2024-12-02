@@ -6,7 +6,7 @@ const Flag = require('../models/Flag');
 const { InternalServerError } = require('../utils/AppError');
 const { wrapResponse } = require('../utils/responseHandler');
 
-exports.getAdminMetrics = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     try {
         // Fetch counts
         const tournamentCount = await Tournament.countDocuments();

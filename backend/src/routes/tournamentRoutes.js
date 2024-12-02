@@ -5,11 +5,11 @@ const router = express.Router();
 const tc = require('../controllers/tournamentController');
 
 // Tournament routes
-router.post('/', tc.createTournament);
-router.get('/', tc.getAllTournaments);
-router.get('/:id', tc.getTournamentById);
-router.patch('/:id', tc.updateTournament);
-router.delete('/:id', tc.deleteTournament);
+router.get('/', tc.index);
+router.post('/', tc.create);
+router.get('/:id', tc.show);
+router.patch('/:id', tc.update);
+router.delete('/:id', tc.destroy);
 
 // Export the router
 module.exports = router;
