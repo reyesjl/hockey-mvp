@@ -34,42 +34,10 @@
 			</div>
 
 			<!-- Main statistics drawer -->
-			<div class="stats-drawer flex md:justify-evenly gap-4 md:overflow-hidden overflow-x-scroll mt-4 py-4">
-				<div class="stats-block flex flex-col items-center min-w-fit">
-					<div class="text-gray-400 uppercase text-xs md:text-sm">overall</div>
-					<div class="text-gray-300 text-xl font-semibold">{{ tournament.overallRating }}</div>
-					<div class="text-gray-300 text-xs uppercase">out of 5</div>
-				</div>
-				<div class="stats-block flex flex-col items-center min-w-fit">
-					<div class="text-gray-400 uppercase text-xs md:text-sm">minimum games</div>
-					<div class="text-gray-300 text-xl font-semibold">{{ tournament.gamesMinimum }}</div>
-				</div>
-				<div class="stats-block flex flex-col items-center min-w-fit">
-					<div class="text-gray-400 uppercase text-xs md:text-sm">Referee</div>
-					<div class="text-gray-300 text-xl font-semibold">{{ tournament.refereeRating }}</div>
-					<div class="text-gray-300 text-xs uppercase">out of 5</div>
-				</div>
-				<div class="stats-block flex flex-col items-center min-w-fit">
-					<div class="text-gray-400 uppercase text-xs md:text-sm">Communication</div>
-					<div class="text-gray-300 text-xl font-semibold">{{ tournament.refereeRating }}</div>
-					<div class="text-gray-300 text-xs uppercase">out of 5</div>
-				</div>
-			</div>
-
-			<!-- Notes / Description -->
-			<div class="mt-5 py-3 border-gray-700 border-t-2 border-solid">
-				<p class="text-white md:text-base text-sm">
-					<span>
-						{{ displayedNotes }}
-					</span>
-					<span @click="toggleExpandNotes" class="text-sky-500 cursor-pointer ml-1">
-						{{ notesExpanded ? 'less' : 'more' }}
-					</span>
-				</p>
-			</div>
+			<TournamentStatsDrawer :tournament="tournament" />
 
 			<!-- Dates / Events -->
-			<div class="mt-5 py-3 border-gray-700 border-t-2 border-solid">
+			<div class="py-3 border-gray-700 border-t-2 border-solid">
 				<h3 class="text-white font-semibold text-xl">Dates</h3>
 				<p v-if="formattedDates.length" class="text-sky-500 uppercase text-xs">happening now</p>
 				<p v-else class="text-gray-500 text-xs">No upcoming dates</p>
@@ -78,138 +46,6 @@
 						class="flex flex-col min-w-fit items-center p-2 bg-white rounded-md">
 						<div class="text-xs text-black uppercase">{{ date.month }}</div>
 						<div class="text-3xl text-black font-semibold">{{ date.day }}</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Tournament Details and Information Container -->
-			<div class="mt-5 rounded-lg shadow-lg space-y-6">
-				<div class="flex flex-col space-y-4">
-					<!-- Stay and Play -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">Stay and Play</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.stayAndPlay ? 'Available' : 'Not available'
-								}}</span>
-						</div>
-					</div>
-
-					<!-- Extended Checkout -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">Extended Checkout</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.extendedCheckout ? 'Available' : 'Not available'
-								}}</span>
-						</div>
-					</div>
-
-					<!-- Multi-Team Discounts -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">Multi-Team Discounts</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.multiTeamDiscounts ? 'Available' : 'Not available'
-								}}</span>
-						</div>
-					</div>
-
-					<!-- USA Hockey Sanctioned -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">USA Hockey Sanctioned</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.usaHockeySanctioned ? 'Yes' : 'No' }}</span>
-						</div>
-					</div>
-
-					<!-- Level of Play -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">Level of Play</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.levelOfPlay?.join(', ') || 
-							'No level of play specified' }}</span>
-						</div>
-					</div>
-
-					<!-- Age Groups -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">Age Groups</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.ageGroups?.join(', ') || 'No age groups specified'
-								}}</span>
-						</div>
-					</div>
-
-					<!-- Early Bird Discounts -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">Early Bird Discounts</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.earlyBirdDiscounts || 'No early bird discounts'
-								}}</span>
-						</div>
-					</div>
-
-					<!-- Other Discounts -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">Other Discounts</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.otherDiscounts || 'No other discounts' }}</span>
-						</div>
-					</div>
-
-					<!-- 1st Place Hardware -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">1st Place Hardware</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.firstPlaceHardware?.join(', ') || 'None' }}</span>
-						</div>
-					</div>
-
-					<!-- 2nd Place Hardware -->
-					<div class="widget">
-						<div class="flex justify-between items-center cursor-pointer toggle-header"
-							@click="toggleContent($event)">
-							<span class="text-white">2nd Place Hardware</span>
-							<i class="fa-solid fa-plus text-white toggle-icon"></i>
-						</div>
-						<div class="flex justify-end pt-2 toggle-content hidden">
-							<span class="text-gray-400">{{ tournament.secondPlaceHardware?.join(', ') || 'None'
-								}}</span>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -233,16 +69,27 @@
 			<div v-else>
 				<!-- Reviews Section -->
 				<div v-if="reviews && reviews.length" class="max-w-4xl mt-8 mx-auto reviews-section  pb-6">
-					<div class="flex justify-between items-center mb-8">
-						<h2 class="text-2xl text-white">Reviews</h2>
-						<RouterLink :to="{ name: 'createTournamentReview', params: { tournamentId: tournament._id } }"
+					<div class="flex justify-between items-center">
+						<h2 class="text-2xl font-semibold text-white">Rating & Reviews</h2>
+						<!-- <RouterLink :to="{ name: 'createTournamentReview', params: { tournamentId: tournament._id } }"
 							class="bg-black border-solid border-white border-2 text-white px-3 py-1 rounded-full hover:bg-white hover:text-black duration-200 ml-2">
 							New Review <i class="fa-solid fa-comments"></i>
-						</RouterLink>
+						</RouterLink> -->
+					</div>
+
+					<div class="flex md:justify-normal justify-between items-center mt-4">
+						<div class="text-6xl text-white font-semibold md:mr-4">{{ tournament.overallRating }}</div>
+						<div class="text-sm text-gray-300 flex flex-col items-end gap-1">
+							<div class="flex gap-2">
+								<RatingStars :rating="tournament.overallRating" />
+							</div>
+							<div class="text-gray-500">100K Ratings</div>
+						</div>
 					</div>
 
 					<!-- Reviews List -->
-					<div v-for="review in reviews" :key="review._id" class="flex flex-col">
+					<div class="mt-4 mb-2 font-semibold">Most Recent Reviews</div>
+					<div v-for="review in reviews" :key="review._id" class="flex flex-col	">
 						<Review :email="review.submittedBy" :rating="review.overallRating" :comment="review.comment"
 							:attendedDate="review.attendedDate" />
 					</div>
@@ -267,10 +114,14 @@ import { useTournament } from '@/composables/useTournament';
 import { useReviews } from '@/composables/useReviews';
 import { useRoute } from 'vue-router';
 import Review from '@/components/Review.vue';
+import RatingStars from '@/components/Tournaments/RatingStars.vue';
+import TournamentStatsDrawer from '@/components/Tournaments/TournamentStatsDrawer.vue';
 
 export default defineComponent({
 	components: {
 		Review,
+		RatingStars,
+		TournamentStatsDrawer
 	},
 	setup() {
 		// Accessing the route params
@@ -298,7 +149,7 @@ export default defineComponent({
 			notesExpanded.value = !notesExpanded.value;
 		};
 
-		const toggleContent = (event) => {
+		const toggleContent = (event: { currentTarget: any; }) => {
 			// Access the clicked header and corresponding content and icon
 			const header = event.currentTarget;
 			const content = header.nextElementSibling;
