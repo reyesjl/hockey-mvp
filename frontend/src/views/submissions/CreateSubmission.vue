@@ -95,7 +95,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full bg-sky-700 hover:bg-sky-500 text-white font-semibold py-2 rounded-full shadow-sm">Submit
+                    class="w-full border-solid border-2 border-black text-black hover:bg-black hover:text-white font-semibold py-2 rounded-full shadow-sm">Submit
                     Tournament</button>
             </form>
         </div>

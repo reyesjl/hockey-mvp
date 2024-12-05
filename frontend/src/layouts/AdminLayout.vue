@@ -2,37 +2,37 @@
     <main class="flex h-screen">
         <!-- Sidebar Navigation -->
         <div class="sidebar w-1/5 p-4 mt-8 text-white">
-            <ul class="flex flex-col space-y-4">
+            <ul class="flex flex-col">
                 <!-- Dashboard Link with Exact Matching -->
                 <li class="w-full">
                     <router-link to="/admin/dashboard/"
-                        class="block w-full p-2 rounded-lg text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                        class="block w-full p-3 rounded-lg text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
                         exact-active-class="bg-gray-700 text-white">
-                        <i class="fa-solid fa-table-cells-large mr-2"></i> Dashboard
+                        <i class="fa-solid fa-table-cells-large mr-4"></i> Dashboard
                     </router-link>
                 </li>
                 <!-- Submissions Link -->
                 <li class="w-full">
                     <router-link to="/admin/dashboard/submissions"
-                        class="block w-full p-2 rounded-lg text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                        class="block w-full p-3 rounded-lg text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
                         active-class="bg-gray-700 text-white">
-                        <i class="fa-solid fa-envelope-open-text mr-2"></i> Submissions
+                        <i class="fa-solid fa-envelope-open-text mr-4"></i> Submissions
                     </router-link>
                 </li>
                 <!-- Tournaments Link -->
                 <li class="w-full">
                     <router-link to="/admin/dashboard/tournaments"
-                        class="block w-full p-2 rounded-lg text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                        class="block w-full p-3 rounded-lg text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
                         active-class="bg-gray-700 text-white">
-                        <i class="fa-solid fa-trophy mr-2"></i> Tournaments
+                        <i class="fa-solid fa-trophy mr-4"></i> Tournaments
                     </router-link>
                 </li>
                 <!-- Flags Link -->
                 <li class="w-full">
                     <router-link to="/admin/dashboard/flags"
-                        class="block w-full p-2 rounded-lg text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
+                        class="block w-full p-3 rounded-lg text-gray-500 duration-200 hover:bg-gray-500 hover:text-white"
                         active-class="bg-gray-700 text-white">
-                        <i class="fa-solid fa-flag mr-2"></i> Flags
+                        <i class="fa-solid fa-flag mr-4"></i> Flags
                     </router-link>
                 </li>
             </ul>

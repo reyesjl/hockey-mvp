@@ -6,7 +6,7 @@ const { wrapResponse } = require('../utils/responseHandler');
 const { ValidationError, NotFoundError, InternalServerError } = require('../utils/AppError');
 
 // Create a new flag for a tournament
-exports.createFlag = async (req, res, next) => {
+exports.create = async (req, res, next) => {
     const { tournament, submittedBy, fields, reason } = req.body;
 
     // Basic check for required fields
@@ -46,7 +46,7 @@ exports.createFlag = async (req, res, next) => {
 };
 
 // Get all flags (with optional search/filter by tournament)
-exports.getAllFlags = async (req, res, next) => {
+exports.index = async (req, res, next) => {
     const { tournamentId } = req.query;
     let query = {};
 
@@ -64,7 +64,7 @@ exports.getAllFlags = async (req, res, next) => {
 };
 
 // Get a specific flag by ID
-exports.getFlagById = async (req, res, next) => {
+exports.show = async (req, res, next) => {
     const { id } = req.params;
 
     try {
@@ -79,7 +79,7 @@ exports.getFlagById = async (req, res, next) => {
 };
 
 // Update a flag by ID
-exports.updateFlag = async (req, res, next) => {
+exports.update = async (req, res, next) => {
     const { id } = req.params;
     const { fields, reason } = req.body;
 
@@ -95,7 +95,7 @@ exports.updateFlag = async (req, res, next) => {
 };
 
 // Delete a flag by ID
-exports.deleteFlag = async (req, res, next) => {
+exports.destroy = async (req, res, next) => {
     const { id } = req.params;
 
     try {

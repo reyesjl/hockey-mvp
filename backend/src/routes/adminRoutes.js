@@ -5,6 +5,6 @@ const router = express.Router();
 const ac = require('../controllers/adminController');
 
 // Admin routes
-router.get('/metrics', ac.getAdminMetrics);
+router.get('/metrics', ac.index);
 
 module.exports = router;

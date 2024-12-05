@@ -5,12 +5,12 @@ const router = express.Router();
 const rc = require('../controllers/reviewController');
 
 // Review routes
-router.post('/', rc.createReview);
-router.get('/', rc.getAllReviews);
-router.get('/:id', rc.getReviewById);
-router.get('/tournament/:tournamentId', rc.getReviewsByTournamentId);
-router.patch('/:id', rc.updateReview);
-router.delete('/:id', rc.deleteReview);
+router.get('/', rc.index);
+router.post('/', rc.create);
+router.get('/:id', rc.show);
+router.get('/tournament/:tournamentId', rc.showByTournament);
+router.patch('/:id', rc.update);
+router.delete('/:id', rc.destroy);
 
 // Export the router
 module.exports = router;
