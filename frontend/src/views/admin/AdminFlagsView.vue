@@ -1,13 +1,7 @@
 <template lang="">
-    <div class="text-3xl font-extrabold">
-        Flags
-    </div>
+  <div class="text-3xl font-extrabold">Flags</div>
 </template>
 <script>
-export default {
-    
-}
+export default {}
 </script>
-<style lang="">
-    
-</style>
+<style lang=""></style>

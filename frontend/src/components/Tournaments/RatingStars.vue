@@ -11,22 +11,22 @@
 
 <script>
 export default {
-  name: "RatingStars",
+  name: 'RatingStars',
   props: {
     rating: {
       type: Number,
       required: true,
-      validator: (value) => value >= 1.0 && value <= 5.0,
+      validator: value => value >= 1.0 && value <= 5.0,
     },
   },
   methods: {
     getStarClass(index) {
       return index <= Math.round(this.rating)
-        ? "fa-solid fa-star"
-        : "fa-regular fa-star";
+        ? 'fa-solid fa-star'
+        : 'fa-regular fa-star'
     },
   },
-};
+}
 </script>
 
 <style scoped>

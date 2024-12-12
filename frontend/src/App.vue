@@ -4,9 +4,9 @@ import Navigation from './components/Navigation.vue'
 </script>
 
 <template>
-    <Navigation />
+  <Navigation />
 
-    <RouterView class="text-white" />
+  <RouterView class="text-white" />
 </template>
 
 <style scoped></style>

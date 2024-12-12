@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col mb-7">
+  <div class="flex flex-col">
     <div class="flex justify-between items-start">
       <!-- Email and Comment in a flex column -->
       <div class="flex flex-col">
@@ -24,22 +24,22 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 // Add relative time plugin
-dayjs.extend(relativeTime);
+dayjs.extend(relativeTime)
 
 // Define props for the Review component
 const props = defineProps<{
-  email: string;
-  rating: number;
-  comment: string;
-  attendedDate: string;
-}>();
+  email: string
+  rating: number
+  comment: string
+  attendedDate: string
+}>()
 
 // Calculate the time ago string
-const timeAgo = dayjs(props.attendedDate).fromNow();
+const timeAgo = dayjs(props.attendedDate).fromNow()
 </script>
 
 <style scoped>

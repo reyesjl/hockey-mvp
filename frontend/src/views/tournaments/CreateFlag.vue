@@ -8,7 +8,10 @@
 
         <!-- Submitted By -->
         <div>
-          <label for="submittedBy" class="block text-sm font-medium text-gray-700">
+          <label
+            for="submittedBy"
+            class="block text-sm font-medium text-gray-700"
+          >
             Your Email
           </label>
           <input
@@ -70,19 +73,19 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios'
 
 export default {
   data() {
     return {
       flag: {
-        tournament: "",
-        submittedBy: "",
+        tournament: '',
+        submittedBy: '',
         fields: [],
-        reason: "",
+        reason: '',
       },
-      validFields: ["name", "location", "date", "description"], // Replace with VALID_FIELDS from backend if dynamic
-    };
+      validFields: ['name', 'location', 'date', 'description'], // Replace with VALID_FIELDS from backend if dynamic
+    }
   },
   props: {
     tournamentId: {
@@ -92,24 +95,24 @@ export default {
   },
   mounted() {
     // Initialize tournament ID when component is loaded
-    this.flag.tournament = this.tournamentId;
+    this.flag.tournament = this.tournamentId
   },
   methods: {
     async handleSubmit() {
       try {
-        const response = await axios.post("/api/v1/flags", this.flag);
-        alert("Flag submitted successfully!");
-        console.log(response.data);
+        const response = await axios.post('/api/v1/flags', this.flag)
+        alert('Flag submitted successfully!')
+        console.log(response.data)
         // Optionally reset form
-        this.flag.fields = [];
-        this.flag.reason = "";
+        this.flag.fields = []
+        this.flag.reason = ''
       } catch (error) {
-        console.error(error.response.data);
-        alert("Failed to submit flag. Please try again.");
+        console.error(error.response.data)
+        alert('Failed to submit flag. Please try again.')
       }
     },
   },
-};
+}
 </script>
 
 <style scoped>
