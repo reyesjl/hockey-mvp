@@ -52,8 +52,8 @@
           <RouterLink :to="{ name: 'signup' }">
             <BaseButton label="Sign Up" variant="primary" />
           </RouterLink>
-          <RouterLink :to="{ name: 'tournaments' }">
-            <BaseButton label="Explore" variant="linkSecondary" />
+          <RouterLink :to="{ name: 'community' }">
+            <BaseButton label="Our Community" variant="linkSecondary" />
           </RouterLink>
         </div>
       </section>
