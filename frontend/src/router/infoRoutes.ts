@@ -40,7 +40,7 @@ const infoRoutes: Array<RouteRecordRaw> = [
     path: '/info/upcoming-releases',
     name: 'upcomingReleases',
     component: UpcomingReleasesView,
-  }
+  },
 ]
 
 export default infoRoutes

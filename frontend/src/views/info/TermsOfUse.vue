@@ -58,7 +58,8 @@
       <section class="mb-5">
         <h1 class="text-xl font-semibold">Need assistance?</h1>
         <p class="mb-5">
-          If you have any questions about these terms, please reach out to our support team.
+          If you have any questions about these terms, please reach out to our
+          support team.
         </p>
 
         <div class="flex gap-2">
