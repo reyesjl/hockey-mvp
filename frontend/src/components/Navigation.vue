@@ -1,16 +1,21 @@
 <template>
   <header
     :class="[
-      'fixed z-[105] w-full border-solid border-b-[1px] border-[#0000004b] transition-all duration-300',
-      isVisible ? 'top-0' : '-top-24'
+      'fixed z-[105] w-full border-solid border-b-[1px] border-[#0000002c] transition-all duration-300',
+      isVisible ? 'top-0' : '-top-24',
     ]"
     aria-label="Main navigation"
   >
     <nav aria-label="Main">
-      <div class="transform-gpu transition duration-300 h-[3.125rem] relative z-50 mx-auto w-full bg-navbar backdrop-blur-xl">
-        <div class="container h-full flex items-center justify-between">
+      <div
+        class="transform-gpu transition duration-300 h-[3.125rem] relative z-50 mx-auto w-full bg-navbar backdrop-blur-xl overflow-x-auto overflow-y-hidden"
+      >
+        <div class="container h-full flex items-center">
           <!-- Logo or Brand -->
-          <RouterLink :to="{ name: 'home' }" class="font-semibold pr-4 text-black">
+          <RouterLink
+            :to="{ name: 'home' }"
+            class="text-nowrap font-semibold pr-4 text-black"
+          >
             YHT Reviews
           </RouterLink>
 
@@ -19,7 +24,7 @@
             <li>
               <RouterLink
                 :to="{ name: 'home' }"
-                class="h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
+                class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
               >
                 Home
               </RouterLink>
@@ -27,7 +32,7 @@
             <li>
               <RouterLink
                 :to="{ name: 'about' }"
-                class="h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
+                class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
               >
                 About
               </RouterLink>
@@ -35,7 +40,7 @@
             <li>
               <RouterLink
                 :to="{ name: 'tournaments' }"
-                class="h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
+                class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
               >
                 Tournaments
               </RouterLink>
@@ -43,7 +48,7 @@
             <li>
               <RouterLink
                 :to="{ name: 'community' }"
-                class="h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
+                class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
               >
                 Community
               </RouterLink>
@@ -51,7 +56,7 @@
             <li>
               <RouterLink
                 :to="{ name: 'support' }"
-                class="h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
+                class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
               >
                 Support
               </RouterLink>
@@ -59,7 +64,7 @@
             <li>
               <RouterLink
                 :to="{ name: 'signup' }"
-                class="h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
+                class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
               >
                 Sign Up
               </RouterLink>
@@ -67,7 +72,7 @@
             <li>
               <RouterLink
                 :to="{ name: 'login' }"
-                class="h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
+                class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
               >
                 Login
               </RouterLink>

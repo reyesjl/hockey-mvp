@@ -1,14 +1,20 @@
 <template>
   <main class="pt-[3.125rem]">
     <!-- Full background -->
-    <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
+    <div
+      class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100"
+    >
       <!-- Invisible form wrapper -->
       <div class="container">
         <!-- Actual form element -->
-        <form class="my-10 md:my-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white">
+        <form
+          class="my-10 md:my-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white"
+        >
           <!-- Form logo -->
           <div class="flex justify-center mb-6">
-            <i class="fa-solid fa-pen text-black p-4 aspect-square bg-white rounded-xl shadow-xl"></i>
+            <i
+              class="fa-solid fa-pen text-black p-4 aspect-square bg-white rounded-xl shadow-xl"
+            ></i>
           </div>
 
           <!-- Form header -->

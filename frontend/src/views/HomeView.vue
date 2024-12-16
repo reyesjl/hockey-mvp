@@ -1,5 +1,5 @@
 <template>
-  <main class="h-full pt-[3.125rem]">
+  <main class="min-h-screen pt-[3.125rem]">
     <header
       class="mt-10 md:mt-16 grid grid-cols-12 justify-items-center text-center"
     >

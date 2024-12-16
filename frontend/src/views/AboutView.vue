@@ -13,10 +13,10 @@
           public, passion-driven project.
         </p>
         <p>
-          The Hockey Tournament Review Platform allows players, coaches, and
-          fans to review tournaments and share their experiences. Our goal is to
-          provide transparency, improve event quality, and give everyone a voice
-          in the hockey world.
+          The Hockey Tournament Review Platform allows parents, players,
+          coaches, and fans to review tournaments and share their experiences.
+          Our goal is to provide transparency, improve event quality, and give
+          everyone a voice in the hockey world.
         </p>
       </section>
 
@@ -61,6 +61,6 @@
   </main>
 </template>
 <script setup lang="ts">
-import BaseButton from '@/lib/ui/BaseButton.vue';
+import BaseButton from '@/lib/ui/BaseButton.vue'
 </script>
 <style scoped></style>

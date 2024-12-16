@@ -1,14 +1,20 @@
 <template>
   <main class="pt-[3.125rem]">
     <!-- Full background -->
-    <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
+    <div
+      class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100"
+    >
       <!-- Invisible form wrapper -->
       <div class="container">
         <!-- Actual form element -->
-        <form class="my-10 md:my-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white">
+        <form
+          class="my-10 md:my-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white"
+        >
           <!-- Form logo -->
           <div class="flex justify-center mb-6">
-            <i class="fa-solid fa-hockey-puck text-black p-4 aspect-square bg-white rounded-xl shadow-xl"></i>
+            <i
+              class="fa-solid fa-hockey-puck text-black p-4 aspect-square bg-white rounded-xl shadow-xl"
+            ></i>
           </div>
 
           <!-- Form header -->
@@ -17,7 +23,8 @@
               Submit a Tournament
             </h2>
             <p class="text-sm text-slate-500 text-center text-balance">
-              Add a new tournament to our directory. Once approved, it will be visible on our platform.
+              Add a new tournament to our directory. Once approved, it will be
+              visible on our platform.
             </p>
           </div>
 
@@ -31,7 +38,10 @@
               </span>
               <input
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Tournament Name" type="text" name="name" />
+                placeholder="Tournament Name"
+                type="text"
+                name="name"
+              />
             </label>
 
             <!-- Location -->
@@ -42,7 +52,10 @@
               </span>
               <input
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Location (e.g. Richmond, VA)" type="text" name="location" />
+                placeholder="Location (e.g. Richmond, VA)"
+                type="text"
+                name="location"
+              />
             </label>
 
             <!-- Dates -->
@@ -53,7 +66,9 @@
               </span>
               <input
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                type="date" name="dates" />
+                type="date"
+                name="dates"
+              />
             </label>
 
             <!-- Contact Email -->
@@ -64,7 +79,10 @@
               </span>
               <input
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Contact Email" type="email" name="contactEmail" />
+                placeholder="Contact Email"
+                type="email"
+                name="contactEmail"
+              />
             </label>
 
             <!-- Games Minimum -->
@@ -75,7 +93,11 @@
               </span>
               <input
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Minimum Games" type="number" name="gamesMinimum" min="1" />
+                placeholder="Minimum Games"
+                type="number"
+                name="gamesMinimum"
+                min="1"
+              />
             </label>
           </div>
 

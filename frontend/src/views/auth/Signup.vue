@@ -1,7 +1,9 @@
 <template>
   <main class="pt-[3.125rem]">
     <!-- Full background -->
-    <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
+    <div
+      class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100"
+    >
       <!-- Invisible form wrapper -->
       <div class="container">
         <!-- Actual form element -->
@@ -11,13 +13,18 @@
         >
           <!-- Form logo -->
           <div class="flex justify-center mb-6">
-            <i class="fa-solid fa-user text-black p-4 aspect-square bg-white rounded-xl shadow-xl"></i>
+            <i
+              class="fa-solid fa-user text-black p-4 aspect-square bg-white rounded-xl shadow-xl"
+            ></i>
           </div>
           <!-- Form header -->
           <div class="mb-6 flex flex-col gap-2">
-            <h2 class="font-semibold text-xl md:text-2xl text-center">Sign up with email</h2>
+            <h2 class="font-semibold text-xl md:text-2xl text-center">
+              Sign up with email
+            </h2>
             <p class="text-sm text-slate-500 text-center text-balance">
-              Contribute by adding new tournaments, writing reviews, & rating events.
+              Contribute by adding new tournaments, writing reviews, & rating
+              events.
             </p>
           </div>
 
@@ -54,12 +61,19 @@
           </div>
 
           <div class="flex">
-            <BaseButton :type="'submit'" :disabled="isLoading" label="Get Started" class="w-full shadow-xl" />
+            <BaseButton
+              :type="'submit'"
+              :disabled="isLoading"
+              label="Get Started"
+              class="w-full shadow-xl"
+            />
           </div>
 
           <!-- Optional: Show error or success message -->
           <p v-if="error" class="text-red-500 text-sm mt-4">{{ error }}</p>
-          <p v-if="success" class="text-green-500 text-sm mt-4">{{ success }}</p>
+          <p v-if="success" class="text-green-500 text-sm mt-4">
+            {{ success }}
+          </p>
         </form>
       </div>
     </div>
@@ -84,7 +98,11 @@ const handleSignUp = async () => {
   isLoading.value = true
 
   try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value)
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email.value,
+      password.value,
+    )
     // userCredential.user contains the user info
     success.value = 'Account created successfully!'
   } catch (err: any) {

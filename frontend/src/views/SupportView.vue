@@ -10,8 +10,9 @@
       <section class="mb-5">
         <h2 class="text-xl font-semibold">We're Here to Help</h2>
         <p class="mb-2">
-          Whether you have questions about using the platform, need assistance with your account, or want to provide
-          feedback, our support team is ready to assist you.
+          Whether you have questions about using the platform, need assistance
+          with your account, or want to provide feedback, our support team is
+          ready to assist you.
         </p>
       </section>
 
@@ -19,8 +20,9 @@
       <section class="mb-5">
         <h2 class="text-xl font-semibold">How You Can Help</h2>
         <p>
-          Your donations help us cover hosting costs, enhance features, and keep tournament information up-to-date.
-          Every contribution, big or small, makes a difference.
+          Your donations help us cover hosting costs, enhance features, and keep
+          tournament information up-to-date. Every contribution, big or small,
+          makes a difference.
         </p>
       </section>
 
@@ -28,8 +30,10 @@
       <section class="mb-5">
         <h2 class="text-xl font-semibold">Why Your Support Matters</h2>
         <p>
-          By supporting this platform, you’re ensuring players, coaches, and fans have access to reliable tournament
-          reviews and information, making their decisions easier and the hockey community stronger.
+          By supporting this platform, you’re ensuring parents, players,
+          coaches, and fans have access to reliable tournament reviews and
+          information, making their decisions easier and the hockey community
+          stronger.
         </p>
       </section>
 
@@ -37,8 +41,9 @@
       <section class="mb-5">
         <h1 class="text-xl font-semibold">Join Us. Make a Difference.</h1>
         <p class="mb-5">
-          Your generosity helps us keep the platform free and accessible for everyone. Together, we can improve the
-          hockey tournament experience for the whole community.
+          Your generosity helps us keep the platform free and accessible for
+          everyone. Together, we can improve the hockey tournament experience
+          for the whole community.
         </p>
 
         <div class="flex gap-2">
@@ -55,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import BaseButton from '@/lib/ui/BaseButton.vue';
+import BaseButton from '@/lib/ui/BaseButton.vue'
 </script>
 
 <style scoped></style>

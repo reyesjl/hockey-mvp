@@ -25,4 +25,4 @@ const auth = getAuth(app)
 // }
 
 // Export the initialized Firebase app (and analytics if needed)
-export { app, auth}
+export { app, auth }
