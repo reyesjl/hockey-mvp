@@ -1,48 +1,45 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import AboutView from '@/views/AboutView.vue'
-import CommunityView from '@/views/CommunityView.vue'
-import HomeView from '@/views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import SupportView from '@/views/SupportView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
 import submissionRoutes from './submissionRoutes'
 import tournamentRoutes from './tournamentRoutes'
 import adminRoutes from './adminRoutes'
+import authRoutes from './authRoutes'
+
+const Home = () => import('@/views/HomeView.vue')
+const About = () => import('@/views/AboutView.vue')
+const Community = () => import('@/views/CommunityView.vue')
+const Support = () => import('@/views/SupportView.vue')
+const NotFound = () => import('@/views/NotFoundView.vue')
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: HomeView,
+    component: Home,
   },
   {
     path: '/about',
     name: 'about',
-    component: AboutView,
+    component: About,
   },
   {
     path: '/community',
     name: 'community',
-    component: CommunityView,
+    component: Community,
   },
   {
     path: '/support',
     name: 'support',
-    component: SupportView,
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginView,
+    component: Support,
   },
   ...tournamentRoutes,
   ...submissionRoutes,
+  ...authRoutes,
   ...adminRoutes,
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
-    component: NotFoundView,
+    component: NotFound,
   },
 ]
 

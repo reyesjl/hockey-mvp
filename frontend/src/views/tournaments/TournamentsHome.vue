@@ -1,5 +1,5 @@
 <template>
-  <main class="container">
+  <main class="pt-[3.125rem]">
     <!-- Search bar section -->
     <div class="search-wrapper flex flex-col items-center pt-5 pb-8 gap-4">
       <h1 class="md:text-5xl text-2xl font-bold">Tournaments</h1>
@@ -9,14 +9,18 @@
           v-model="searchQuery"
           type="text"
           placeholder="Enter location or tournament name"
-          class="rounded-full w-full text-black px-4 py-2 outline-none border-none"
+          class="rounded-full w-full text-black px-4 py-2 outline-none border-none shadow-md focus:shadow-xl"
         />
       </div>
       <RouterLink
         v-if="tournamentStore.tournaments.length > 0"
         :to="{ name: 'createTournamentSubmission' }"
       >
-        <BaseButton label="New Tournament" variant="primary" />
+        <BaseButton
+          class="shadow-md"
+          label="New Tournament"
+          variant="primary"
+        />
       </RouterLink>
     </div>
 

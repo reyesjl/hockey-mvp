@@ -15,8 +15,8 @@ const flagRoutes = require('./routes/flagRoutes');
 const { errorHandler } = require('./utils/errorHandler');
 const { ValidationError, NotFoundError, UnauthorizedError, InternalServerError } = require('./utils/AppError');
 
-// Load environment variables
-dotenv.config({ path: '../.env' });
+// .env config
+dotenv.config();
 
 // Establish database connection
 const connectDB = require('./config/db');

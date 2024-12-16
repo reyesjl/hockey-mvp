@@ -1,116 +1,70 @@
-<template>
-  <header class="bg-black text-white">
-    <nav
-      class="navbar z-50 flex justify-between items-center w-[92%] mx-auto p-3"
-    >
-      <div class="site-logo w-10">
-        <RouterLink to="/">
-          <img class="w-16" src="../assets/logoDraft1.3.svg" alt="yht logo" />
-        </RouterLink>
-      </div>
+<template lang="">
+  <header class="fixed top-0 z-[105] w-full" aria-label="Main navigation">
+    <nav aria-label="Main">
       <div
-        class="navlist z-40 md:static absolute md:bg-black bg-white md:min-h-fit min-h-[60vh] left-0 md:w-auto w-full flex items-center px-5 md:text-white text-black duration-300"
-        :class="{
-          'top-[10%]': isMenuOpen,
-          'top-[-100%]': !isMenuOpen,
-        }"
+        class="ease-out-cubic transform-gpu transition duration-300 h-[3.125rem] relative z-50 mx-auto w-full bg-navbar backdrop-blur-xl"
       >
-        <ul
-          class="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8"
-        >
-          <li>
-            <RouterLink
-              to="/"
-              class="hover:text-gray-500 duration-200"
-              @click="onCloseMenu(this)"
-              >Home
-            </RouterLink>
-          </li>
-          <li>
-            <RouterLink
-              to="/about"
-              class="hover:text-gray-500 duration-200"
-              @click="onCloseMenu(this)"
+        <div class="container h-full flex items-center">
+          <div class="flex none">
+            <RouterLink :to="{ name: 'home' }" class="font-semibold pr-4"
+              >YHT Reviews</RouterLink
             >
-              About</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink
-              to="/tournaments"
-              class="hover:text-gray-500 duration-200"
-              @click="onCloseMenu(this)"
-              >Tournaments</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink
-              to="/community"
-              class="hover:text-gray-500 duration-200"
-              @click="onCloseMenu(this)"
-            >
-              Community</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink
-              to="/support"
-              class="hover:text-gray-500 duration-200"
-              @click="onCloseMenu(this)"
-            >
-              Support</RouterLink
-            >
-          </li>
-          <li>
-            <RouterLink
-              to="/admin/dashboard"
-              class="hover:text-gray-500 duration-200 hidden md:block"
-              @onclick="onCloseMenu(this)"
-            >
-              <i class="fa-solid fa-user"></i>
-            </RouterLink>
-          </li>
-        </ul>
-      </div>
-      <div class="actions md:hidden flex align-center gap-2">
-        <button
-          @click="onToggleMenu(this)"
-          class="bg-black text-white border-solid border-2 border-white hover:bg-white hover:text-black px-3 py-1 rounded-full"
-        >
-          {{ isMenuOpen ? 'Close' : 'Menu' }}
-        </button>
-        <RouterLink
-          to="/admin/dashboard"
-          class="bg-black text-white border-solid border-2 border-white hover:bg-white hover:text-black px-3 py-1 rounded-full"
-          @onclick="onCloseMenu(this)"
-        >
-          <i class="fa-solid fa-user"></i>
-        </RouterLink>
+          </div>
+          <ul class="list-none flex text-sm group/list">
+            <li class="group/item group-hover/list:text-gray-500">
+              <RouterLink
+                :to="{ name: 'home' }"
+                class="h-full flex items-center px-4 group-hover/item:text-black duration-300"
+                >Home</RouterLink
+              >
+            </li>
+            <li class="group/item group-hover/list:text-gray-500">
+              <RouterLink
+                :to="{ name: 'about' }"
+                class="h-full flex items-center px-4 group-hover/item:text-black duration-300"
+                >About</RouterLink
+              >
+            </li>
+            <li class="group/item group-hover/list:text-gray-500">
+              <RouterLink
+                :to="{ name: 'tournaments' }"
+                class="h-full flex items-center px-4 group-hover/item:text-black duration-300"
+                >Tournaments</RouterLink
+              >
+            </li>
+            <li class="group/item group-hover/list:text-gray-500">
+              <RouterLink
+                :to="{ name: 'community' }"
+                class="h-full flex items-center px-4 group-hover/item:text-black duration-300"
+                >Community</RouterLink
+              >
+            </li>
+            <li class="group/item group-hover/list:text-gray-500">
+              <RouterLink
+                :to="{ name: 'support' }"
+                class="h-full flex items-center px-4 group-hover/item:text-black duration-300"
+                >Support</RouterLink
+              >
+            </li>
+            <li class="group/item group-hover/list:text-gray-500">
+              <RouterLink
+                :to="{ name: 'signup' }"
+                class="h-full flex items-center px-4 group-hover/item:text-black duration-300"
+                >Sign Up</RouterLink
+              >
+            </li>
+            <li class="group/item group-hover/list:text-gray-500">
+              <RouterLink
+                :to="{ name: 'login' }"
+                class="h-full flex items-center px-4 group-hover/item:text-black duration-300"
+                >Login</RouterLink
+              >
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   </header>
 </template>
-
-<script>
-import { RouterLink } from 'vue-router'
-export default {
-  components: {
-    RouterLink,
-  },
-  data() {
-    return {
-      isMenuOpen: false,
-    }
-  },
-  methods: {
-    onToggleMenu(e) {
-      this.isMenuOpen = !this.isMenuOpen
-    },
-    onCloseMenu(e) {
-      this.isMenuOpen = false
-    },
-  },
-}
-</script>
-
-<style scoped></style>
+<script setup></script>
+<style lang=""></style>

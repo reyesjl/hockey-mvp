@@ -138,7 +138,10 @@
             No reviews exist yet. Be the first to leave a review!
           </p>
           <RouterLink
-            :to="{ name: 'createTournamentReview', params: { tournamentId: tournament._id } }"
+            :to="{
+              name: 'createTournamentReview',
+              params: { tournamentId: tournament._id },
+            }"
             class="mb-4 w-fit border-solid border-2 border-white text-white px-4 py-2 rounded-full hover:bg-white hover:text-black duration-200 ml-2"
           >
             New Review <i class="fa-solid fa-comments"></i>

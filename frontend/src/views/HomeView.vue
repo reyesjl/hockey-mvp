@@ -1,36 +1,44 @@
 <template>
-  <main class="container">
-    <div class="w-auto mx-auto">
-      <div
-        class="mt-5 mb-10 flex flex-col items-center text-center min-h-[80vh] justify-evenly"
-      >
-        <div>
-          <p class="pb-2">YHT Reviews Beta</p>
-          <h1 class="md:pb-10 pb-5 text-4xl md:text-5xl font-semibold">
-            Plan. Play. <br />Review & Connect.
-          </h1>
-        </div>
+  <main class="h-full pt-[3.125rem]">
+    <header
+      class="mt-10 md:mt-16 grid grid-cols-12 justify-items-center text-center"
+    >
+      <div class="col-span-12">
+        <p class="font-semibold text-xs">YHT REVIEWS BETA v1.0</p>
+        <h1 class="text-4xl md:text-6xl font-semibold">
+          Plan. Play. <br />Review & Connect.
+        </h1>
+      </div>
+    </header>
+    <div class="mt-5 grid grid-cols-12 justify-items-center px-4 md:px-0">
+      <div class="col-span-12">
         <img
-          class="md:pb-10 pb-5 object-fit rounded-full"
+          class="object-fill rounded-full"
           src="../assets/celebrate.webp"
           alt="hockey team celebration gif"
         />
+      </div>
+    </div>
 
-        <p class="md:w-1/2 mx-auto md:text-xl text-gray-400">
+    <div class="mt-5 grid grid-cols-12 justify-items-center text-center px-4">
+      <div class="md:col-span-4 col-span-12 md:col-start-5 text-balance">
+        <p class="md:text-xl">
           Explore hockey-specific reviews on hotels, restaurants, rinks, and
           activities so your team’s experience is as smooth off the ice as it is
           on. Whether you’re looking to discover or review, your journey starts
           here.
         </p>
+      </div>
+    </div>
 
-        <div class="flex flex-row gap-5 pt-5">
-          <RouterLink :to="{ name: 'tournaments' }">
-            <BaseButton label="Tournaments" variant="primary" />
-          </RouterLink>
-          <RouterLink :to="{ name: 'about' }">
-            <BaseButton label="Learn More" variant="linkSecondary" />
-          </RouterLink>
-        </div>
+    <div class="flex flex-col items-center text-center h-full">
+      <div class="flex flex-row gap-5 pt-5">
+        <RouterLink :to="{ name: 'tournaments' }">
+          <BaseButton label="Tournaments" variant="primary" />
+        </RouterLink>
+        <RouterLink :to="{ name: 'about' }">
+          <BaseButton label="Learn More" variant="linkSecondary" />
+        </RouterLink>
       </div>
     </div>
   </main>

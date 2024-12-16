@@ -1,10 +1,12 @@
 // src/router/adminRoutes.ts
-import AdminLayout from '@/layouts/AdminLayout.vue'
-import AdminDashboard from '@/views/admin/AdminDashboardView.vue'
-import AdminSubmissions from '@/views/admin/AdminSubmissionsView.vue'
-import AdminTournaments from '@/views/admin/AdminTournamentsView.vue'
-import AdminFlags from '@/views/admin/AdminFlagsView.vue'
+
 import type { RouteRecordRaw } from 'vue-router'
+
+const AdminLayout = () => import('@/layouts/AdminLayout.vue')
+const AdminDashboard = () => import('@/views/admin/AdminDashboardView.vue')
+const AdminSubmissions = () => import('@/views/admin/AdminSubmissionsView.vue')
+const AdminTournaments = () => import('@/views/admin/AdminTournamentsView.vue')
+const AdminFlags = () => import('@/views/admin/AdminFlagsView.vue')
 
 const adminRoutes: Array<RouteRecordRaw> = [
   {

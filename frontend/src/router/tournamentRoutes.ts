@@ -1,10 +1,12 @@
 // src/router/tournamentRoutes.ts
 
 import type { RouteRecordRaw } from 'vue-router'
-import TournamentsView from '@/views/tournaments/TournamentsHome.vue'
-import TournamentDetailView from '@/views/tournaments/TournamentDetail.vue'
-import CreateReviewView from '@/views/tournaments/CreateReview.vue'
-import CreateFlagView from '@/views/tournaments/CreateFlag.vue'
+
+const TournamentsView = () => import('@/views/tournaments/TournamentsHome.vue')
+const TournamentDetailView = () =>
+  import('@/views/tournaments/TournamentDetail.vue')
+const CreateReviewView = () => import('@/views/tournaments/CreateReview.vue')
+const CreateFlagView = () => import('@/views/tournaments/CreateFlag.vue')
 
 const tournamentRoutes: Array<RouteRecordRaw> = [
   {

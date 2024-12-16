@@ -36,7 +36,7 @@ const props = defineProps<{
   name: string
   location: string
   company: string
-  overallRating: Number
+  overallRating: number
 }>()
 </script>
 

@@ -68,7 +68,7 @@ const onClick = event => {
 }
 
 const variantClasses = {
-  primary: 'bg-white hover:bg-gray-500 text-black hover:text-white',
+  primary: 'bg-black text-white hover:bg-gray-500',
   secondary: 'bg-black hover:bg-gray-500 text-white',
   alternate: 'bg-gray-200 hover:bg-gray-300 text-gray-800',
   danger: 'bg-red-600 hover:bg-red-700 text-white',
