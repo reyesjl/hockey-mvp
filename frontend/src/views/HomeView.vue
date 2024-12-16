@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="flex flex-col items-center text-center h-full">
+    <div class="flex flex-col items-center text-center h-full mb-8">
       <div class="flex flex-row gap-5 pt-5">
         <RouterLink :to="{ name: 'tournaments' }">
           <BaseButton label="Tournaments" variant="primary" />
