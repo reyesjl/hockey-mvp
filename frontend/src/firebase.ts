@@ -1,5 +1,6 @@
 // src/firebase.ts
 import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
 // import { getAnalytics } from 'firebase/analytics'
 
 // Read from the environment variables
@@ -15,6 +16,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
+const auth = getAuth(app)
 
 // Analytics is optional - will only work on deployed environments with HTTPS
 // let analytics
@@ -23,4 +25,4 @@ const app = initializeApp(firebaseConfig)
 // }
 
 // Export the initialized Firebase app (and analytics if needed)
-export { app }
+export { app, auth}

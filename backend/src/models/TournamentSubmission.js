@@ -32,8 +32,8 @@ const tournamentSubmissionSchema = new mongoose.Schema({
             message: 'Contact email must be a valid email address.'
         }
     },
-    notes: { type: String, default: '' },
-    company: { type: String, default: '' }, // Optional
+    notes: { type: String },
+    company: { type: String }, // Optional
     gamesMinimum: { type: Number, required: true, min: 1 },
     levelOfPlay: {
         type: [String],
@@ -60,16 +60,11 @@ const tournamentSubmissionSchema = new mongoose.Schema({
         enum: ['pending', 'approved', 'denied'],
         default: 'pending'
     },
-    submittedBy: {
+    userUid: {
         type: String,
         required: true,
-        validate: {
-            validator: function (value) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-            },
-            message: 'Submitted by must be a valid email address.'
-        }
-    }
+        index: true
+    },
 }, {
     timestamps: true
 });

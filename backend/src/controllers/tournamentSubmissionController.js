@@ -1,15 +1,17 @@
 // backend/controllers/tournamentSubmissionController.js
 
+const Tournament = require('../models/Tournament'); // Import Tournament model
 const TournamentSubmission = require('../models/TournamentSubmission');
 const { ValidationError, NotFoundError, InternalServerError } = require('../utils/AppError');
 const { wrapResponse } = require('../utils/responseHandler');
 
+
 // Create a new tournament submission
 exports.create = async (req, res, next) => {
-    const { name, location, dates, contactEmail, notes, company, gamesMinimum, levelOfPlay, ageGroups, submittedBy } = req.body;
+    const { name, location, dates, contactEmail, notes, company, gamesMinimum, levelOfPlay, ageGroups, userUid } = req.body;
 
     // Basic check for required fields
-    if (!name || !location || !dates || !contactEmail || !gamesMinimum || !levelOfPlay || !ageGroups || !submittedBy) {
+    if (!name || !location || !dates || !contactEmail || !gamesMinimum || !levelOfPlay || !ageGroups || !userUid) {
         return next(new ValidationError('Please provide all required fields.'));
     }
 
@@ -24,7 +26,7 @@ exports.create = async (req, res, next) => {
             gamesMinimum,
             levelOfPlay,
             ageGroups,
-            submittedBy
+            userUid
         });
 
         await tournamentSubmission.save();
@@ -95,6 +97,77 @@ exports.update = async (req, res, next) => {
     } catch (error) {
         next(new ValidationError('Failed to update tournament submission. Please check your input.'));
     }
+};
+
+// Approve a tournament submission
+exports.approve = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    // Find the submission
+    const submission = await TournamentSubmission.findById(id);
+    if (!submission) {
+      return next(new NotFoundError('Tournament submission not found.'));
+    }
+
+    // Check if already approved or denied
+    if (submission.approvalStatus !== 'pending') {
+      return next(new ValidationError(`Submission is already ${submission.approvalStatus}.`));
+    }
+
+    // Create a new Tournament from submission data
+    const {
+      name,
+      location,
+      dates,
+      contactEmail,
+      notes,
+      company,
+      gamesMinimum,
+      levelOfPlay,
+      ageGroups
+    } = submission;
+
+    // Create the Tournament
+    const newTournament = new Tournament({
+      name,
+      location,
+      dates,
+      contactEmail,
+      notes,
+      company,
+      gamesMinimum,
+      levelOfPlay,
+      ageGroups,
+      // All rating sums and counts start at 0 by default
+      // Additional fields in Tournament default to false or empty arrays as defined
+    });
+
+    await newTournament.save();
+
+    // Update the submission status to approved or delete it
+    // Mark as approved FOR NOW:
+    submission.approvalStatus = 'approved';
+    await submission.save();
+
+    // IMPLEMENT LATER MAYBE?
+    // Delete after approval:
+    // await TournamentSubmission.findByIdAndDelete(id);
+
+    wrapResponse(res, 200, 'Tournament submission approved and new tournament created.', {
+      tournament: newTournament
+    });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const details = Object.keys(error.errors).map(key => ({
+        field: key,
+        message: error.errors[key].message,
+      }));
+      return next(new ValidationError('Validation failed.', details));
+    }
+
+    next(new InternalServerError('Failed to approve tournament submission. Please try again.'));
+  }
 };
 
 // Delete a tournament submission by ID

@@ -1,29 +1,23 @@
-<template lang="html">
+<template>
   <main class="pt-[3.125rem]">
     <!-- Full background -->
-    <div
-      class="w-full h-screen bg-gradient-to-b from-blue-200 to-blue-100 fixed"
-    >
+    <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
       <!-- Invisible form wrapper -->
       <div class="container">
         <!-- Actual form element -->
         <form
-          class="mt-10 md:mt-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white"
+          class="my-10 md:my-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white"
+          @submit.prevent="handleSignUp"
         >
           <!-- Form logo -->
           <div class="flex justify-center mb-6">
-            <i
-              class="fa-solid fa-plus text-black p-4 aspect-square bg-white rounded-xl shadow-xl"
-            ></i>
+            <i class="fa-solid fa-user text-black p-4 aspect-square bg-white rounded-xl shadow-xl"></i>
           </div>
           <!-- Form header -->
           <div class="mb-6 flex flex-col gap-2">
-            <h2 class="font-semibold text-xl md:text-2xl text-center">
-              Sign up with email
-            </h2>
+            <h2 class="font-semibold text-xl md:text-2xl text-center">Sign up with email</h2>
             <p class="text-sm text-slate-500 text-center text-balance">
-              Contribute by adding new tournaments, writing reviews, & rating
-              events.
+              Contribute by adding new tournaments, writing reviews, & rating events.
             </p>
           </div>
 
@@ -35,10 +29,12 @@
                 <i class="text-slate-400 fa-solid fa-at"></i>
               </span>
               <input
+                v-model="email"
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
                 placeholder="Email"
                 type="email"
                 name="email"
+                autocomplete="email"
               />
             </label>
             <label class="relative block">
@@ -47,17 +43,23 @@
                 <i class="text-slate-400 fa-solid fa-lock"></i>
               </span>
               <input
+                v-model="password"
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
                 placeholder="Password"
                 type="password"
                 name="password"
+                autocomplete="new-password"
               />
             </label>
           </div>
 
           <div class="flex">
-            <BaseButton label="Get Started" class="w-full shadow-xl" />
+            <BaseButton :type="'submit'" :disabled="isLoading" label="Get Started" class="w-full shadow-xl" />
           </div>
+
+          <!-- Optional: Show error or success message -->
+          <p v-if="error" class="text-red-500 text-sm mt-4">{{ error }}</p>
+          <p v-if="success" class="text-green-500 text-sm mt-4">{{ success }}</p>
         </form>
       </div>
     </div>
@@ -65,7 +67,30 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth } from '@/firebase'
 import BaseButton from '@/lib/ui/BaseButton.vue'
-</script>
 
-<style lang=""></style>
+const email = ref('')
+const password = ref('')
+const error = ref('')
+const success = ref('')
+const isLoading = ref(false)
+
+const handleSignUp = async () => {
+  error.value = ''
+  success.value = ''
+  isLoading.value = true
+
+  try {
+    const userCredential = await createUserWithEmailAndPassword(auth, email.value, password.value)
+    // userCredential.user contains the user info
+    success.value = 'Account created successfully!'
+  } catch (err: any) {
+    error.value = err.message
+  } finally {
+    isLoading.value = false
+  }
+}
+</script>

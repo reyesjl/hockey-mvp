@@ -1,262 +1,99 @@
 <template>
-  <div class="container py-10 md:py-20">
-    <div class="max-w-2xl mx-auto p-6 rounded-lg bg-white">
-      <h2 class="text-2xl font-bold mb-4 text-gray-700">Leave a Review</h2>
-      <form @submit.prevent="handleSubmit" class="space-y-4 text-black">
-        <!-- Tournament ID (Hidden) -->
-        <input type="hidden" v-model="form.tournamentId" />
+  <main class="pt-[3.125rem]">
+    <!-- Full background -->
+    <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
+      <!-- Invisible form wrapper -->
+      <div class="container">
+        <!-- Actual form element -->
+        <form class="my-10 md:my-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white">
+          <!-- Form logo -->
+          <div class="flex justify-center mb-6">
+            <i class="fa-solid fa-pen text-black p-4 aspect-square bg-white rounded-xl shadow-xl"></i>
+          </div>
 
-        <!-- Submitted By -->
-        <div>
-          <label
-            for="submittedBy"
-            class="block text-sm font-medium text-gray-700"
-            >Your Email</label
-          >
-          <input
-            type="email"
-            id="submittedBy"
-            v-model="form.submittedBy"
-            required
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
+          <!-- Form header -->
+          <div class="mb-6 flex flex-col gap-2">
+            <h2 class="font-semibold text-xl md:text-2xl text-center">
+              Submit Your Review
+            </h2>
+            <p class="text-sm text-slate-500 text-center text-balance">
+              Share your experience about the tournament you attended.
+            </p>
+          </div>
 
-        <!-- Attended Date -->
-        <div>
-          <label
-            for="attendedDate"
-            class="block text-sm font-medium text-gray-700"
-            >Date You Attended</label
-          >
-          <input
-            type="date"
-            id="attendedDate"
-            v-model="form.attendedDate"
-            required
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
+          <!-- Form fields -->
+          <div class="mb-8">
+            <!-- Title -->
+            <label class="relative block mb-3">
+              <span class="sr-only">Title</span>
+              <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                <i class="text-slate-400 fa-solid fa-heading"></i>
+              </span>
+              <input
+                class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+                placeholder="Review Title"
+                type="text"
+                name="title"
+              />
+            </label>
 
-        <!-- Comment -->
-        <div>
-          <label for="comment" class="block text-sm font-medium text-gray-700"
-            >Your Comment</label
-          >
-          <textarea
-            id="comment"
-            v-model="form.comment"
-            required
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          ></textarea>
-        </div>
+            <!-- Content (Review Body) -->
+            <label class="relative block mb-3">
+              <span class="sr-only">Content</span>
+              <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                <i class="text-slate-400 fa-solid fa-sticky-note"></i>
+              </span>
+              <textarea
+                class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm h-32"
+                placeholder="Share your experience... 250 chars max"
+                name="content"
+              ></textarea>
+            </label>
 
-        <!-- Parking Notes -->
-        <div>
-          <label
-            for="parkingNotes"
-            class="block text-sm font-medium text-gray-700"
-            >Parking Notes (Optional)</label
-          >
-          <textarea
-            id="parkingNotes"
-            v-model="form.parkingNotes"
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          ></textarea>
-        </div>
+            <!-- Parking Notes -->
+            <label class="relative block mb-3">
+              <span class="sr-only">Parking Notes</span>
+              <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                <i class="text-slate-400 fa-solid fa-car"></i>
+              </span>
+              <textarea
+                class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm h-25"
+                placeholder="Parking Notes (optional)"
+                type="text"
+                name="parkingNotes"
+              ></textarea>
+            </label>
 
-        <!-- Overall Rating -->
-        <div>
-          <label
-            for="overallRating"
-            class="block text-sm font-medium text-gray-700"
-            >Overall Rating (1-5)</label
-          >
-          <input
-            type="number"
-            id="overallRating"
-            v-model="form.overallRating"
-            min="1"
-            max="5"
-            step="0.1"
-            required
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
+            <!-- Attended Date -->
+            <span class="text-slate-400 text-sm">Date you attended</span>
+            <label class="relative block mb-3">
+              <span class="sr-only">Attended Date</span>
+              <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                <i class="text-slate-400 fa-solid fa-calendar-days"></i>
+              </span>
+              <input
+                class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+                type="date"
+                name="attendedDate"
+              />
+            </label>
 
-        <!-- Referee Rating -->
-        <div>
-          <label
-            for="refereeRating"
-            class="block text-sm font-medium text-gray-700"
-            >Referee Rating (1-5)</label
-          >
-          <input
-            type="number"
-            id="refereeRating"
-            v-model="form.refereeRating"
-            min="1"
-            max="5"
-            step="0.1"
-            required
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
+            <!-- Hidden fields for tournamentId, userUid if needed -->
+            <!-- <input type="hidden" name="tournamentId" value="..." /> -->
+            <!-- <input type="hidden" name="userUid" value="..." /> -->
+          </div>
 
-        <!-- Communication Rating -->
-        <div>
-          <label
-            for="communicationRating"
-            class="block text-sm font-medium text-gray-700"
-            >Communication Rating (1-5)</label
-          >
-          <input
-            type="number"
-            id="communicationRating"
-            v-model="form.communicationRating"
-            min="1"
-            max="5"
-            step="0.1"
-            required
-            class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
-          />
-        </div>
-
-        <button
-          type="submit"
-          :disabled="loading"
-          class="w-full border-solid border-2 border-black text-black hover:bg-black hover:text-white font-semibold py-2 rounded-full shadow-sm"
-        >
-          Submit Review
-        </button>
-      </form>
-    </div>
-
-    <!-- Modal Pop-up for Successful Submission -->
-    <div
-      v-if="showModal"
-      class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-50 p-5"
-    >
-      <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-        <h3 class="text-xl font-semibold text-gray-700 mb-4">
-          Review Submitted!
-        </h3>
-        <p class="text-gray-600 mb-4">
-          Your review has been submitted successfully.
-        </p>
-        <div class="mt-4">
-          <button
-            @click="closeModal"
-            class="border-solid border-2 border-black text-black hover:bg-black hover:text-white py-2 px-4 rounded-full"
-          >
-            Close
-          </button>
-        </div>
+          <div class="flex">
+            <BaseButton label="Submit Review" class="w-full shadow-xl" />
+          </div>
+        </form>
       </div>
     </div>
-
-    <!-- Error Modal -->
-    <div
-      v-if="errorMessage"
-      class="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-50 p-5"
-    >
-      <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
-        <h3 class="text-xl font-semibold text-red-600 mb-4">
-          Error Submitting Review
-        </h3>
-        <p class="text-sm text-gray-700 mb-4">{{ errorMessage }}</p>
-        <button
-          @click="closeErrorModal"
-          class="bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded-full"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
+  </main>
 </template>
 
-<script>
-export default {
-  props: {
-    tournamentId: {
-      type: String,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      form: {
-        tournamentId: this.tournamentId,
-        submittedBy: '',
-        attendedDate: '',
-        comment: '',
-        parkingNotes: '',
-        overallRating: 4.5,
-        refereeRating: 4.5,
-        communicationRating: 4.5,
-      },
-      errorMessage: '',
-      showModal: false,
-      loading: false,
-    }
-  },
-  methods: {
-    async handleSubmit() {
-      this.loading = true
-
-      // Trim all ratings to one decimal place
-      this.form.overallRating = parseFloat(this.form.overallRating).toFixed(1)
-      this.form.refereeRating = parseFloat(this.form.refereeRating).toFixed(1)
-      this.form.communicationRating = parseFloat(
-        this.form.communicationRating,
-      ).toFixed(1)
-
-      try {
-        const response = await fetch('http://localhost:5000/api/v1/reviews', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(this.form),
-        })
-
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.message || 'Failed to submit review')
-        }
-
-        this.errorMessage = ''
-        this.showModal = true
-        this.resetForm()
-      } catch (error) {
-        this.errorMessage = error.message
-      } finally {
-        this.loading = false
-      }
-    },
-    closeModal() {
-      this.showModal = false
-    },
-    closeErrorModal() {
-      this.errorMessage = ''
-    },
-    resetForm() {
-      this.form = {
-        tournamentId: this.tournamentId,
-        submittedBy: '',
-        attendedDate: '',
-        comment: '',
-        parkingNotes: '',
-        overallRating: 4.5,
-        refereeRating: 4.5,
-        communicationRating: 4.5,
-      }
-    },
-  },
-}
+<script setup lang="ts">
+import BaseButton from '@/lib/ui/BaseButton.vue'
 </script>
 
-<style scoped>
-/* TailwindCSS classes are already included */
-</style>
+<style scoped></style>
