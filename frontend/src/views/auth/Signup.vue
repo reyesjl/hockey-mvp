@@ -60,13 +60,14 @@
             </label>
           </div>
 
-          <div class="flex">
+          <div class="flex flex-col gap-4">
             <BaseButton
               :type="'submit'"
               :disabled="isLoading"
               label="Get Started"
               class="w-full shadow-xl"
             />
+            <RouterLink :to="{ name: 'login' }" class="text-center text-xs text-gray-500 underline">Already have an account? Login.</RouterLink>
           </div>
 
           <!-- Optional: Show error or success message -->
@@ -82,7 +83,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth'
 import { auth } from '@/firebase'
 import BaseButton from '@/lib/ui/BaseButton.vue'
 
@@ -103,8 +104,16 @@ const handleSignUp = async () => {
       email.value,
       password.value,
     )
-    // userCredential.user contains the user info
-    success.value = 'Account created successfully!'
+
+    const user = userCredential.user
+
+    // send verification email
+    await sendEmailVerification(user)
+    
+    // sign them out
+    await signOut(auth)
+
+    success.value = 'Account created. You must verify your email before you can login.'
   } catch (err: any) {
     error.value = err.message
   } finally {

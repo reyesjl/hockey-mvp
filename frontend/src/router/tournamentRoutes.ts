@@ -25,12 +25,14 @@ const tournamentRoutes: Array<RouteRecordRaw> = [
     name: 'createTournamentReview',
     component: CreateReviewView,
     props: true,
+    meta: { requiresAuth: true },
   },
   {
     path: '/tournaments/:tournamentId/flags/create',
     name: 'createTournamentFlag',
     component: CreateFlagView,
     props: true,
+    meta: { requiresAuth: true },
   },
 ]
 

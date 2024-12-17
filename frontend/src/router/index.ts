@@ -12,6 +12,8 @@ const Community = () => import('@/views/CommunityView.vue')
 const Support = () => import('@/views/SupportView.vue')
 const NotFound = () => import('@/views/NotFoundView.vue')
 
+import { useUserStore } from '@/stores/userStore'
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -48,6 +50,18 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+})
+
+// Navigation Guard
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore()
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+
+  if (requiresAuth && !userStore.user) {
+    next({ name: 'login' }) // Redirect to Login if not authenticated
+  } else {
+    next()
+  }
 })
 
 export default router

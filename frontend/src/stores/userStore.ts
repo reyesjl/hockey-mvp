@@ -6,10 +6,15 @@ import type { User } from 'firebase/auth'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
+  const isLoading = ref(true) // Add a loading state
 
   const setUser = (newUser: User | null) => {
     user.value = newUser
   }
 
-  return { user, setUser }
+  const setLoading = (loading: boolean) => {
+    isLoading.value = loading
+  }
+
+  return { user, setUser, isLoading, setLoading }
 })

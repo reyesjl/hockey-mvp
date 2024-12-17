@@ -4,6 +4,7 @@ import type { RouteRecordRaw } from 'vue-router'
 
 const Signup = () => import('@/views/auth/Signup.vue')
 const Login = () => import('@/views/auth/Login.vue')
+const Account = () => import('@/views/auth/Account.vue')
 
 const authRoutes: Array<RouteRecordRaw> = [
   {
@@ -16,6 +17,11 @@ const authRoutes: Array<RouteRecordRaw> = [
     name: 'login',
     component: Login,
   },
+  {
+    path: '/account',
+    name: 'account',
+    component: Account,
+  }
 ]
 
 export default authRoutes

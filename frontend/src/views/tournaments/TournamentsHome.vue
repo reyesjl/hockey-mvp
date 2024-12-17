@@ -1,7 +1,7 @@
 <template>
   <main class="pt-[3.125rem]">
     <!-- Search bar section -->
-    <div class="search-wrapper flex flex-col items-center pt-5 pb-8 gap-4">
+    <div class="search-wrapper flex flex-col items-center mt-10 md:mt-16 pb-8 gap-4">
       <h1 class="md:text-5xl text-2xl font-bold">Tournaments</h1>
       <div class="search-bar md:w-1/2 w-full mb-2">
         <!-- Bind searchQuery to the input using v-model -->

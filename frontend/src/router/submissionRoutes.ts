@@ -9,6 +9,7 @@ const submissionRoutes: Array<RouteRecordRaw> = [
     path: '/submissions/create',
     name: 'createTournamentSubmission',
     component: CreateSubmission,
+    meta: { requiresAuth: true },
   },
 ]
 
