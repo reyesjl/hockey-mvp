@@ -10,8 +10,8 @@
         </h1>
       </div>
     </header>
-    <div class="mt-5 grid grid-cols-12 justify-items-center px-4 md:px-0">
-      <div class="col-span-12">
+    <div class="container">
+      <div class="mt-5 flex justify-center">
         <img
           class="object-fill rounded-full"
           src="../assets/celebrate.webp"
@@ -20,15 +20,13 @@
       </div>
     </div>
 
-    <div class="mt-5 grid grid-cols-12 justify-items-center text-center px-4">
-      <div class="md:col-span-4 col-span-12 md:col-start-5 text-balance">
-        <p class="md:text-xl">
-          Explore hockey-specific reviews on hotels, restaurants, rinks, and
-          activities so your team’s experience is as smooth off the ice as it is
-          on. Whether you’re looking to discover or review, your journey starts
-          here.
-        </p>
-      </div>
+    <div class="mt-5 flex justify-center text-center">
+      <p class="text-balance max-w-lg md:text-xl">
+        Explore hockey-specific reviews on hotels, restaurants, rinks, and
+        activities so your team’s experience is as smooth off the ice as it is
+        on. Whether you’re looking to discover or review, your journey starts
+        here.
+      </p>
     </div>
 
     <div class="flex flex-col items-center text-center h-full mb-8">

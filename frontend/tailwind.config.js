@@ -8,9 +8,6 @@ export default {
         center: true,
         padding: {
           DEFAULT: '1rem',
-          lg: '0',
-          xl: '0',
-          '2xl': '0',
         },
       },
       colors: {

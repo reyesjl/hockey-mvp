@@ -3,28 +3,28 @@
 <template>
   <header
     :class="[
-      'fixed z-[105] w-full border-solid border-b-[1px] border-[#0000002c] transition-all duration-300',
+      'fixed z-40 w-full border-solid border-b-[1px] border-[#0000002c] transition-all duration-300',
       isVisible ? 'top-0' : '-top-24',
     ]"
     aria-label="Main navigation"
   >
     <nav aria-label="Main">
       <div
-        class="transform-gpu transition duration-300 h-[3.125rem] relative z-50 mx-auto w-full bg-navbar backdrop-blur-xl overflow-x-auto overflow-y-hidden"
+        class="transform-gpu transition duration-300 h-[3.125rem] relative mx-auto w-full backdrop-blur-xl"
       >
-        <div class="container h-full flex items-center">
+        <div class="container h-full relative flex items-center">
           <!-- Left section: Logo or Brand -->
-          <div class="flex-shrink-0">
+          <div class="absolute left-[1rem] flex-shrink-0 flex items-center">
             <RouterLink
               :to="{ name: 'home' }"
-              class="text-nowrap font-semibold pr-4 text-black"
+              class="text-nowrap font-semibold text-black"
             >
               YHT Reviews
             </RouterLink>
           </div>
 
-          <!-- Left section: Main navigation -->
-          <div class="flex-grow flex justify-center">
+          <!-- Center section: Main navigation -->
+          <div class="hidden absolute left-1/2 transform -translate-x-1/2 flex-grow md:flex justify-center items-center">
             <ul class="list-none flex text-sm">
               <li>
                 <RouterLink
@@ -69,7 +69,7 @@
             </ul>
           </div>
           <!-- Right: Auth menu -->
-          <div class="flex-shrink-0">
+          <div class="absolute right-[1rem] flex-shrink-0 flex items-center">
             <ul class="list-none flex text-sm">
               <!-- Conditional Links -->
               <li v-if="!user">
@@ -83,23 +83,23 @@
               <li v-if="!user">
                 <RouterLink
                   :to="{ name: 'login' }"
-                  class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
+                  class="text-nowrap h-full flex items-center pl-4 text-gray-700 hover:text-black transition-colors duration-300"
                 >
                   Login
                 </RouterLink>
               </li>
 
-              <li v-if="user">
-                <RouterLink
-                  :to="{ name: 'account' }"
-                  class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
-                >
-                  {{ user.displayName?.split("#")[0] || 'Account' }}
+              <li v-if="user" class="relative">
+                <RouterLink :to="{ name: 'account' }" class="flex items-center">
+                  <img
+                    :src="user.photoURL ? user.photoURL : 'https://robohash.org/' + user.displayName"
+                    alt="User Avatar"
+                    class="w-9 h-9 rounded-full object-cover shadow-sm"
+                  />
                 </RouterLink>
               </li>
             </ul>
           </div>
-
         </div>
       </div>
     </nav>
@@ -145,6 +145,4 @@ onUnmounted(() => {
 })
 </script>
 
-<style scoped>
-/* Optional: Adjust the transition timing if needed */
-</style>
+<style scoped></style>

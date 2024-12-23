@@ -1,16 +1,21 @@
 <template>
   <main class="pt-[3.125rem]">
     <!-- Full background -->
-    <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
+    <div
+      class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100"
+    >
       <!-- Invisible form wrapper -->
       <div class="container">
         <!-- Actual form element -->
         <form
           class="my-10 md:my-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white"
-          @submit.prevent="handleLogin">
+          @submit.prevent="handleLogin"
+        >
           <!-- Form logo -->
           <div class="flex justify-center mb-6">
-            <i class="fa-solid fa-right-to-bracket text-black p-4 aspect-square bg-white rounded-xl shadow-xl"></i>
+            <i
+              class="fa-solid fa-right-to-bracket text-black p-4 aspect-square bg-white rounded-xl shadow-xl"
+            ></i>
           </div>
 
           <!-- Form header -->
@@ -32,9 +37,14 @@
               <span class="absolute inset-y-0 left-0 flex items-center pl-2">
                 <i class="text-slate-400 fa-solid fa-at"></i>
               </span>
-              <input v-model="email"
+              <input
+                v-model="email"
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Email" type="email" name="email" autocomplete="email" />
+                placeholder="Email"
+                type="email"
+                name="email"
+                autocomplete="email"
+              />
             </label>
 
             <!-- Password -->
@@ -43,9 +53,14 @@
               <span class="absolute inset-y-0 left-0 flex items-center pl-2">
                 <i class="text-slate-400 fa-solid fa-lock"></i>
               </span>
-              <input v-model="password"
+              <input
+                v-model="password"
                 class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Password" type="password" name="password" autocomplete="current-password" />
+                placeholder="Password"
+                type="password"
+                name="password"
+                autocomplete="current-password"
+              />
             </label>
             <div class="mt-2 w-full flex justify-end">
               <BaseButton
@@ -62,8 +77,17 @@
           </div>
 
           <div class="flex flex-col gap-4">
-            <BaseButton :type="'submit'" :disabled="isLoading" label="Login" class="w-full shadow-xl" />
-            <RouterLink :to="{ name: 'signup' }" class="text-center text-xs text-gray-500 underline">Sign up if you dont have an account.</RouterLink>
+            <BaseButton
+              type="submit"
+              :disabled="isLoading"
+              label="Login"
+              class="w-full shadow-xl"
+            />
+            <RouterLink
+              :to="{ name: 'signup' }"
+              class="text-center text-xs text-gray-500 underline"
+              >Don't have an account? Create one!</RouterLink
+            >
           </div>
 
           <!-- Optional: Show error or success message -->
@@ -79,7 +103,12 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { signInWithEmailAndPassword, signOut, sendEmailVerification, sendPasswordResetEmail } from 'firebase/auth'
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+} from 'firebase/auth'
 import { auth } from '@/firebase'
 import BaseButton from '@/lib/ui/BaseButton.vue'
 import { useRouter } from 'vue-router'
@@ -114,7 +143,8 @@ const handleLogin = async () => {
     } else {
       // Email is not verified, sign out the user
       await signOut(auth)
-      error.value = 'Your email is not verified. Please verify your email to proceed. New email has been sent.'
+      error.value =
+        'Your email is not verified. Please verify your email to proceed. New email has been sent.'
 
       // Send verification email
       await sendEmailVerification(user)
@@ -137,7 +167,7 @@ const handleForgotPassword = async () => {
 
   // Validate email presence
   if (!trimmedEmail) {
-    error.value = 'Please enter your email.'
+    error.value = 'Please enter your email, and try again.'
     return
   }
 

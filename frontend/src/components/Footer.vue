@@ -1,4 +1,4 @@
-<template lang="">
+<template lang="html">
   <footer
     class="pt-20 pb-10 border-t-[1px] border-[#0000002c] transition-all duration-300"
   >

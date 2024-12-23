@@ -32,7 +32,7 @@ const userStore = useUserStore()
 app.component('ProgressBar', ProgressBar)
 
 // Set up Firebase Auth State Listener
-onAuthStateChanged(auth, (firebaseUser) => {
+onAuthStateChanged(auth, firebaseUser => {
   if (firebaseUser) {
     // User is signed in.
     userStore.setUser(firebaseUser)

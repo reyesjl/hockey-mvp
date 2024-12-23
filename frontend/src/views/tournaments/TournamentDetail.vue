@@ -2,7 +2,9 @@
   <main class="pt-[3.125rem]">
     <div class="container max-w-4xl mx-auto mt-10 md:mt-16" v-if="tournament">
       <!-- Tournament Header Section -->
-      <div class="bg-gradient-to-b from-sky-300 to-sky-100 py-4 px-3 rounded-xl text-black">
+      <div
+        class="bg-gradient-to-b from-sky-300 to-sky-100 py-4 px-3 rounded-xl text-black"
+      >
         <div class="flex justify-between items-center mb-6">
           <!-- Location -->
           <div class="flex justify-between align-middle w-full">
@@ -27,11 +29,18 @@
             </div>
           </div>
           <!-- Flag Button -->
-          <RouterLink :to="{
-            name: 'createTournamentFlag',
-            params: { tournamentId: tournament._id },
-          }">
-            <BaseButton label="Flag" variant="danger" iconRight="fa-solid fa-flag" raised="lg" />
+          <RouterLink
+            :to="{
+              name: 'createTournamentFlag',
+              params: { tournamentId: tournament._id },
+            }"
+          >
+            <BaseButton
+              label="Flag"
+              variant="danger"
+              iconRight="fa-solid fa-flag"
+              raised="lg"
+            />
           </RouterLink>
         </div>
         <div>
@@ -50,8 +59,11 @@
         </p>
         <p v-else class="text-gray-500 text-xs">No upcoming dates</p>
         <div class="flex gap-2 mt-2">
-          <div v-for="(date, index) in formattedDates" :key="index"
-            class="flex flex-col min-w-fit items-center p-2 bg-black text-white rounded-md">
+          <div
+            v-for="(date, index) in formattedDates"
+            :key="index"
+            class="flex flex-col min-w-fit items-center p-2 bg-black text-white rounded-md"
+          >
             <div class="text-xs uppercase">{{ date.month }}</div>
             <div class="text-3xl font-semibold">{{ date.day }}</div>
           </div>
@@ -61,14 +73,18 @@
       <!-- Show loading spinner for tournament and reviews -->
       <div v-if="isTournamentLoading" class="text-center mt-6">
         <div class="flex justify-center items-center space-x-2">
-          <i class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"></i>
+          <i
+            class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"
+          ></i>
         </div>
         <p class="text-white">Loading tournament...</p>
       </div>
 
       <div v-else-if="isReviewsLoading && tournament" class="text-center mt-6">
         <div class="flex justify-center items-center space-x-2">
-          <i class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"></i>
+          <i
+            class="fa-solid fa-spinner animate-spin text-gray-500 text-2xl"
+          ></i>
         </div>
         <p class="text-white">Loading reviews...</p>
       </div>
@@ -76,7 +92,10 @@
       <!-- Once both tournament and reviews are loaded -->
       <div v-else>
         <!-- Reviews Section -->
-        <div v-if="reviews && reviews.length" class="max-w-4xl mt-8 mx-auto reviews-section pb-6">
+        <div
+          v-if="reviews && reviews.length"
+          class="max-w-4xl mt-8 mx-auto reviews-section pb-6"
+        >
           <div class="flex justify-between items-center">
             <h2 class="text-2xl font-semibold text-white">Rating & Reviews</h2>
             <!-- <RouterLink :to="{ name: 'createTournamentReview', params: { tournamentId: tournament._id } }"
@@ -91,10 +110,12 @@
           <p class="mb-4 text-center text-gray-300">
             No reviews exist yet. Be the first to leave a review!
           </p>
-          <RouterLink :to="{
-            name: 'createTournamentReview',
-            params: { tournamentId: tournament._id }
-          }">
+          <RouterLink
+            :to="{
+              name: 'createTournamentReview',
+              params: { tournamentId: tournament._id },
+            }"
+          >
             <BaseButton label="New Review" variant="primary" />
           </RouterLink>
         </div>

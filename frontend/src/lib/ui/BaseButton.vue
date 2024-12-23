@@ -3,7 +3,7 @@
     :class="computedClasses"
     :disabled="disabled || loading"
     @click="onClick"
-    type="button"
+    :type="type"
   >
     <span v-if="loading" class="inline-block animate-spin mr-2">
       <i class="fa-solid fa-spinner"></i>
@@ -57,6 +57,10 @@ const props = defineProps({
     type: String,
     default: '', // e.g. "fa-solid fa-chevron-right"
   },
+  type: {
+    type: String,
+    default: 'button',
+  }
 })
 
 const emit = defineEmits(['click'])

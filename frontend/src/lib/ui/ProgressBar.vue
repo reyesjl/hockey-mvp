@@ -25,20 +25,20 @@ let timer: number | undefined
 
 watch(
   () => props.start,
-  (newVal) => {
+  newVal => {
     if (newVal) {
       startProgress()
     }
-  }
+  },
 )
 
 watch(
   () => props.finish,
-  (newVal) => {
+  newVal => {
     if (newVal) {
       finishProgress()
     }
-  }
+  },
 )
 
 const startProgress = () => {
