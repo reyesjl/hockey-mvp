@@ -24,7 +24,7 @@
           </div>
 
           <!-- Center section: Main navigation -->
-          <div class="hidden absolute left-1/2 transform -translate-x-1/2 flex-grow md:flex justify-center items-center">
+          <div class="hidden absolute left-1/2 transform-gpu -translate-x-1/2 flex-grow md:flex justify-center items-center">
             <ul class="list-none flex text-sm">
               <li>
                 <RouterLink
@@ -111,7 +111,7 @@
 
   <!-- Mobile Nav Menu -->
   <div
-    class="fixed top-0 w-full h-full z-50 flex flex-col items-center justify-center bg-white/50 backdrop-blur-xl transition-transform duration-300 ease-in-out transform"
+    class="fixed top-0 w-full h-full z-50 flex flex-col items-center justify-center bg-white/50 backdrop-blur-xl transition-transform duration-300 ease-in-out transform-gpu"
     :class="{ 'translate-y-0': isMobileMenuOpen, 'translate-y-full': !isMobileMenuOpen }"
   >
     <button

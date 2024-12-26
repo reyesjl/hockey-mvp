@@ -13,11 +13,13 @@ const authRoutes: Array<RouteRecordRaw> = [
     path: '/auth/signup',
     name: 'signup',
     component: Signup,
+    meta: { requiresAuth: true },
   },
   {
     path: '/auth/login',
     name: 'login',
     component: Login,
+    meta: { requiresAuth: true },
   },
   {
     path: '/account',

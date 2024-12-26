@@ -56,9 +56,12 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const isAuthPage = ['login', 'signup'].includes(to.name as string)
 
   if (requiresAuth && !userStore.user) {
     next({ name: 'login' }) // Redirect to Login if not authenticated
+  } else if (userStore.user && isAuthPage) {
+    next({ name: 'account' }) // Redirect to account page on login / signup
   } else {
     next()
   }
