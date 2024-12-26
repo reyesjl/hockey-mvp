@@ -10,11 +10,11 @@
   >
     <nav aria-label="Main">
       <div
-        class="transform-gpu transition duration-300 h-[3.125rem] relative mx-auto w-full backdrop-blur-xl"
+        class="transform-gpu transition duration-300 h-[3.125rem] relative mx-auto w-full backdrop-blur-xl bg-white/20"
       >
         <div class="container h-full relative flex items-center">
           <!-- Left section: Logo or Brand -->
-          <div class="absolute left-[1rem] flex-shrink-0 flex items-center">
+          <div class="absolute left-2 flex-shrink-0 flex items-center">
             <RouterLink
               :to="{ name: 'home' }"
               class="text-nowrap font-semibold text-black"
@@ -69,10 +69,10 @@
             </ul>
           </div>
           <!-- Right: Auth menu -->
-          <div class="absolute right-[1rem] flex-shrink-0 flex items-center">
+          <div class="absolute right-2 flex-shrink-0 flex items-center gap-2">
             <ul class="list-none flex text-sm">
               <!-- Conditional Links -->
-              <li v-if="!user">
+              <li v-if="!user" class="hidden md:block">
                 <RouterLink
                   :to="{ name: 'signup' }"
                   class="text-nowrap h-full flex items-center px-4 text-gray-700 hover:text-black transition-colors duration-300"
@@ -80,8 +80,9 @@
                   Sign Up
                 </RouterLink>
               </li>
-              <li v-if="!user">
+              <li v-if="!user" class="hidden md:block">
                 <RouterLink
+                  @click="toggleMobileMenu"
                   :to="{ name: 'login' }"
                   class="text-nowrap h-full flex items-center pl-4 text-gray-700 hover:text-black transition-colors duration-300"
                 >
@@ -94,16 +95,108 @@
                   <img
                     :src="user.photoURL ? user.photoURL : 'https://robohash.org/' + user.displayName"
                     alt="User Avatar"
-                    class="w-9 h-9 rounded-full object-cover shadow-sm"
+                    class="w-8 h-8 rounded-full object-cover shadow-sm"
                   />
                 </RouterLink>
               </li>
             </ul>
+            <div @click="toggleMobileMenu" class="text-xl md:hidden cursor-pointer">
+              <i class="fa-solid fa-bars text-black"></i>
+            </div>
           </div>
         </div>
       </div>
     </nav>
   </header>
+
+  <!-- Mobile Nav Menu -->
+  <div
+    class="fixed top-0 w-full h-full z-50 flex flex-col items-center justify-center bg-white/50 backdrop-blur-xl transition-transform duration-300 ease-in-out transform"
+    :class="{ 'translate-y-0': isMobileMenuOpen, 'translate-y-full': !isMobileMenuOpen }"
+  >
+    <button
+      @click="toggleMobileMenu"
+      aria-label="Close menu"
+      class="text-3xl absolute top-5 right-5 text-black"
+    >
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <ul class="list-none align-middle text-center flex flex-col text-3xl space-y-4">
+      <li>
+        <RouterLink
+          @click="toggleMobileMenu"
+          :to="{ name: 'home' }"
+          class="text-nowrap text-gray-700 hover:text-black transition-colors duration-300"
+        >
+          Home
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink
+          @click="toggleMobileMenu"
+          :to="{ name: 'about' }"
+          class="text-nowrap items-center text-gray-700 hover:text-black transition-colors duration-300"
+        >
+          About
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink
+          @click="toggleMobileMenu"
+          :to="{ name: 'tournaments' }"
+          class="text-nowrap items-center text-gray-700 hover:text-black transition-colors duration-300"
+        >
+          Tournaments
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink
+          @click="toggleMobileMenu"
+          :to="{ name: 'community' }"
+          class="text-nowrap items-center text-gray-700 hover:text-black transition-colors duration-300"
+        >
+          Community
+        </RouterLink>
+      </li>
+      <li>
+        <RouterLink
+          @click="toggleMobileMenu"
+          :to="{ name: 'support' }"
+          class="text-nowrap items-center text-gray-700 hover:text-black transition-colors duration-300"
+        >
+          Support
+        </RouterLink>
+      </li>
+      <!-- Conditional Links -->
+      <li v-if="!user">
+        <RouterLink
+          @click="toggleMobileMenu"
+          :to="{ name: 'signup' }"
+          class="text-nowrap h-full items-center text-gray-700 hover:text-black transition-colors duration-300"
+        >
+          Sign Up
+        </RouterLink>
+      </li>
+      <li v-if="!user">
+        <RouterLink
+          @click="toggleMobileMenu"
+          :to="{ name: 'login' }"
+          class="text-nowrap h-full items-center text-gray-700 hover:text-black transition-colors duration-300"
+        >
+          Login
+        </RouterLink>
+      </li>
+
+      <li v-if="user" class="relative">
+        <RouterLink 
+          @click="toggleMobileMenu"
+          :to="{ name: 'account' }" 
+          class="text-nowrap h-full items-center text-gray-700 hover:text-black transition-colors duration-300">
+          Account
+        </RouterLink>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -112,6 +205,7 @@ import { useUserStore } from '@/stores/userStore'
 
 // Reactive variable to track header visibility
 const isVisible = ref(true)
+const isMobileMenuOpen = ref(false)
 let lastScroll = 0
 
 // Access userStore
@@ -133,6 +227,12 @@ const handleScroll = () => {
   }
 
   lastScroll = currentScroll
+}
+
+// Mobile menu visibility handler
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+  console.log('Mobile menu toggled')
 }
 
 onMounted(() => {
