@@ -1,5 +1,5 @@
 <template>
-  <main class="pt-20">
+  <main class="pt-[3.125rem]">
     <div class="container mx-auto max-w-4xl px-4">
       <!-- Header Section -->
       <header class="mb-8 mt-10 md:mt-16">
