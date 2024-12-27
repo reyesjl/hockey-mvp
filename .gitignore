@@ -34,3 +34,5 @@ cypress/screenshots/
 .editorconfig
 
 .vscode/
+
+serviceFile.json
