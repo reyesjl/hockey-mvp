@@ -29,7 +29,6 @@ export const fetchAndSetUserClaims = async () => {
   if (userStore.user) {
     const idTokenResult = await userStore.user.getIdTokenResult()
     const claims = idTokenResult.claims
-    console.log('User claims:', claims)
     userStore.setClaims(claims)
     userStore.setAdmin(claims.admin === true)
   } else {
@@ -46,7 +45,6 @@ export const logout = async () => {
     userStore.setAdmin(false)
     userStore.clearStateFromLocalStorage()
     await signOut(auth)
-    console.log('User logged out')
   } catch (error) {
     console.error('Error logging out:', error)
   }

@@ -35,16 +35,13 @@ onAuthStateChanged(auth, async firebaseUser => {
   if (firebaseUser) {
     // User is signed in.
     userStore.setUser(firebaseUser)
-    console.log('user is logged in.')
     await fetchAndSetUserClaims()
   } else {
     // User is signed out.
     userStore.setUser(null)
-    console.log('user is logged out.')
   }
   // Set loading to false after auth state is determined
   userStore.setLoading(false)
-  console.log('user loading done.')
 })
 
 // Mount the app after setting up the auth listener

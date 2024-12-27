@@ -48,6 +48,9 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  }
 })
 
 // Navigation Guard
@@ -56,26 +59,22 @@ router.beforeEach(async (to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
   const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
 
-  console.log(`Navigating to: ${to.fullPath}`)
-  console.log(`From: ${from.fullPath}`)
-  console.log(`Requires Auth: ${requiresAuth}`)
-  console.log(`Requires Admin: ${requiresAdmin}`)
-  console.log(`User is logged in: ${userStore.isLoggedIn}`)
-  console.log(`User is admin: ${userStore.isAdmin}`)
+  // console.log(`Navigating to: ${to.fullPath}`)
+  // console.log(`From: ${from.fullPath}`)
+  // console.log(`Requires Auth: ${requiresAuth}`)
+  // console.log(`Requires Admin: ${requiresAdmin}`)
+  // console.log(`User is logged in: ${userStore.isLoggedIn}`)
+  // console.log(`User is admin: ${userStore.isAdmin}`)
 
   if (requiresAuth && !userStore.isLoggedIn) {
-    console.log('User is not logged in, redirecting to login page')
     next({ name: 'login' })
   } else if (requiresAdmin) {
     if (userStore.isAdmin) {
-      console.log('User is an admin, allowing access')
       next()
     } else {
-      console.log('User is not an admin, redirecting to account page')
       next({ name: 'account' })
     }
   } else {
-    console.log('No special requirements, allowing access')
     next()
   }
 })

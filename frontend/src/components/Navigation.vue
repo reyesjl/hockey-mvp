@@ -231,7 +231,6 @@ const handleScroll = () => {
 // Mobile menu visibility handler
 const toggleMobileMenu = () => {
   isMobileMenuOpen.value = !isMobileMenuOpen.value
-  console.log('Mobile menu toggled')
 }
 
 onMounted(() => {
