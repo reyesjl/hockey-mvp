@@ -9,11 +9,10 @@ import { createPinia } from 'pinia'
 import { auth } from '@/firebase' // Ensure this path is correct
 import { onAuthStateChanged } from 'firebase/auth'
 import { useUserStore } from '@/stores/userStore'
+import { fetchAndSetUserClaims } from '@/services/userService'
 
 import App from './App.vue'
 import router from './router'
-
-import ProgressBar from '@/lib/ui/ProgressBar.vue'
 
 // Create a Pinia instance
 const pinia = createPinia()
@@ -28,15 +27,16 @@ app.use(router)
 // Initialize User Store
 const userStore = useUserStore()
 
-// Add ProgressBar globally
-app.component('ProgressBar', ProgressBar)
+// Load user from local storage first
+userStore.loadStateFromLocalStorage()
 
 // Set up Firebase Auth State Listener
-onAuthStateChanged(auth, firebaseUser => {
+onAuthStateChanged(auth, async firebaseUser => {
   if (firebaseUser) {
     // User is signed in.
     userStore.setUser(firebaseUser)
     console.log('user is logged in.')
+    await fetchAndSetUserClaims()
   } else {
     // User is signed out.
     userStore.setUser(null)

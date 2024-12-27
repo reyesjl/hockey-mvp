@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import submissionRoutes from './submissionRoutes'
 import tournamentRoutes from './tournamentRoutes'
-import adminRoutes from './adminRoutes'
 import authRoutes from './authRoutes'
 import infoRoutes from './infoRoutes'
 
@@ -38,7 +37,6 @@ const routes: Array<RouteRecordRaw> = [
   ...tournamentRoutes,
   ...submissionRoutes,
   ...authRoutes,
-  ...adminRoutes,
   ...infoRoutes,
   {
     path: '/:pathMatch(.*)*',
@@ -53,16 +51,31 @@ const router = createRouter({
 })
 
 // Navigation Guard
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore()
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const isAuthPage = ['login', 'signup'].includes(to.name as string)
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
 
-  if (requiresAuth && !userStore.user) {
-    next({ name: 'login' }) // Redirect to Login if not authenticated
-  } else if (userStore.user && isAuthPage) {
-    next({ name: 'account' }) // Redirect to account page on login / signup
+  console.log(`Navigating to: ${to.fullPath}`)
+  console.log(`From: ${from.fullPath}`)
+  console.log(`Requires Auth: ${requiresAuth}`)
+  console.log(`Requires Admin: ${requiresAdmin}`)
+  console.log(`User is logged in: ${userStore.isLoggedIn}`)
+  console.log(`User is admin: ${userStore.isAdmin}`)
+
+  if (requiresAuth && !userStore.isLoggedIn) {
+    console.log('User is not logged in, redirecting to login page')
+    next({ name: 'login' })
+  } else if (requiresAdmin) {
+    if (userStore.isAdmin) {
+      console.log('User is an admin, allowing access')
+      next()
+    } else {
+      console.log('User is not an admin, redirecting to account page')
+      next({ name: 'account' })
+    }
   } else {
+    console.log('No special requirements, allowing access')
     next()
   }
 })

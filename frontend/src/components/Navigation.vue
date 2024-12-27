@@ -82,7 +82,6 @@
               </li>
               <li v-if="!user" class="hidden md:block">
                 <RouterLink
-                  @click="toggleMobileMenu"
                   :to="{ name: 'login' }"
                   class="text-nowrap h-full flex items-center pl-4 text-gray-700 hover:text-black transition-colors duration-300"
                 >

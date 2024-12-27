@@ -58,12 +58,12 @@
             <i class="fa-solid fa-camera text-white"></i>
           </RouterLink>
         </div>
+        <p class="text-red-500">admin</p>
         <p class="text-xl font-semibold">{{ user.displayName || 'N/A' }}</p>
         <p class="text-sm">
           {{ user.email || 'N/A' }}
           <i :class="user.emailVerified ? 'fa-solid fa-check text-green-500' : 'fa-solid fa-times text-red-500'"></i>
         </p>
-        <p>{{ }}</p>
       </div>
       <div v-else>
         <p>User data is not available.</p>
@@ -94,13 +94,8 @@ const userStore = useUserStore()
 // Get router instance
 const router = useRouter()
 
-// redirect the user to admin dashboard
-if (userStore.isAdmin) {
-  router.push({ name: 'admin' })
-}
-
 // Computed property to get the current user
-const user = userStore.user
+const user = computed(() => userStore.user)
 
 // Logout function
 const handleLogout = async () => {

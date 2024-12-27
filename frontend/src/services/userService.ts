@@ -1,10 +1,11 @@
+// frontend/src/services/userService.ts
+
 import { auth } from '@/firebase'
 import { updateProfile, signOut } from 'firebase/auth'
 import { useUserStore } from '@/stores/userStore'
 
-const userStore = useUserStore()
-
 export const setDisplayName = async (newDisplayName: string) => {
+  const userStore = useUserStore()
   if (auth.currentUser) {
     await updateProfile(auth.currentUser, { displayName: newDisplayName })
     userStore.setUser({ ...auth.currentUser, displayName: newDisplayName })
@@ -14,6 +15,7 @@ export const setDisplayName = async (newDisplayName: string) => {
 }
 
 export const setPhotoURL = async (newPhotoURL: string) => {
+  const userStore = useUserStore()
   if (auth.currentUser) {
     await updateProfile(auth.currentUser, { photoURL: newPhotoURL })
     userStore.setUser({ ...auth.currentUser, photoURL: newPhotoURL })
@@ -22,9 +24,27 @@ export const setPhotoURL = async (newPhotoURL: string) => {
   }
 }
 
+export const fetchAndSetUserClaims = async () => {
+  const userStore = useUserStore()
+  if (userStore.user) {
+    const idTokenResult = await userStore.user.getIdTokenResult()
+    const claims = idTokenResult.claims
+    console.log('User claims:', claims)
+    userStore.setClaims(claims)
+    userStore.setAdmin(claims.admin === true)
+  } else {
+    userStore.setClaims(null)
+    userStore.setAdmin(false)
+  }
+}
+
 export const logout = async () => {
+  const userStore = useUserStore()
   try {
     userStore.setUser(null)
+    userStore.setClaims(null)
+    userStore.setAdmin(false)
+    userStore.clearStateFromLocalStorage()
     await signOut(auth)
     console.log('User logged out')
   } catch (error) {

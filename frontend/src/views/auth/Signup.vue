@@ -126,7 +126,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import {
   createUserWithEmailAndPassword,
   signOut,
@@ -136,6 +136,8 @@ import { auth } from '@/firebase'
 import BaseButton from '@/lib/ui/BaseButton.vue'
 import { setDisplayName } from '@/services/profile'
 import * as yup from 'yup'
+import { useUserStore } from '@/stores/userStore'
+import { useRouter } from 'vue-router'
 
 const email = ref('')
 const password = ref('')
@@ -160,6 +162,16 @@ const schema = yup.object().shape({
   confirmPassword: yup.string()
     .oneOf([yup.ref('password'), undefined], 'Passwords must match')
     .required('Confirm password is required'),
+})
+
+// Router instance for navigation
+const router = useRouter()
+const userStore = useUserStore()
+
+onMounted(() => {
+  if (userStore.user) {
+    router.push({ name: 'account' })
+  }
 })
 
 const validateForm = async (): Promise<boolean> => {
