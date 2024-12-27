@@ -1,13 +1,8 @@
-import axios from 'axios'
-
-const API_ROOT = 'http://localhost:5000/api'
-const API_VERSION = '/v1'
-const SUBMISSIONS_SUFFIX = '/tournament-submissions'
-const API_URL = `${API_ROOT}${API_VERSION}${SUBMISSIONS_SUFFIX}`
+import { axiosInstance } from "@/config/apiConfig"
 
 export const createTournamentSubmission = async (newSubmission: any) => {
   try {
-    const response = await axios.post(API_URL, newSubmission)
+    const response = await axiosInstance.post('/tournament-submissions/', newSubmission)
     if (response.data.success) {
       return response.data
     } else {

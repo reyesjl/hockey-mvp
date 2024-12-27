@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import axios from 'axios'
+import { axiosInstance } from '@/config/apiConfig'
 import type { Review } from '@/types'
 
 export function useReviews() {
@@ -9,8 +9,8 @@ export function useReviews() {
 
   const fetchReviewsByTournamentId = async (tournamentId: string) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/api/v1/reviews/tournament/${tournamentId}`,
+      const response = await axiosInstance.get(
+        `/reviews/tournament/${tournamentId}`,
       )
 
       // The response structure is consistent, check for success
