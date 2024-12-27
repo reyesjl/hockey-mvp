@@ -5,22 +5,24 @@
       <ul class="text-sm flex flex-row w-full">
         <li class="px-4">
           <div class="py-2">
-            <RouterLink :to="{ name: 'account' }">Home</RouterLink>
+            <RouterLink :to="{ name: 'dashboard' }">Home</RouterLink>
           </div>
         </li>
         <li class="px-4">
           <div class="py-2">
-            <RouterLink :to="{ name: 'account' }">Submissions</RouterLink>
+            <RouterLink :to="{ name: 'dashboard' }">Submissions</RouterLink>
           </div>
         </li>
         <li class="px-4">
           <div class="py-2">
-            <RouterLink :to="{ name: 'edit-profile' }">Display name</RouterLink>
+            <RouterLink :to="{ name: 'edit-display-name' }">Display name</RouterLink>
           </div>
         </li>
         <li class="px-4">
           <div class="py-2">
-            <RouterLink :to="{ name: 'edit-avatar' }">Profile picture</RouterLink>
+            <RouterLink :to="{ name: 'edit-avatar' }"
+              >Profile picture</RouterLink
+            >
           </div>
         </li>
       </ul>
@@ -44,25 +46,31 @@
             v-else
             class="flex items-center justify-center bg-gray-200 w-full h-full shadow-lg transition duration-300 group-hover:blur-sm"
           >
-            <img :src="'https://robohash.org/' + user.displayName" alt="Profile Picture" />
+            <img
+              :src="'https://robohash.org/' + user.displayName"
+              alt="Profile Picture"
+            />
           </div>
 
           <!-- Overlay (appears on hover) -->
           <RouterLink
             :to="{ name: 'edit-avatar' }"
-            class="absolute inset-0 flex items-center justify-center 
-                   opacity-0 group-hover:opacity-100 
-                   transition-opacity duration-300 
-                   bg-black/20"
+            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20"
           >
             <i class="fa-solid fa-camera text-white"></i>
           </RouterLink>
         </div>
-        <p class="text-red-500">admin</p>
+        <p class="text-red-700 text-sm font-extrabold">admin</p>
         <p class="text-xl font-semibold">{{ user.displayName || 'N/A' }}</p>
         <p class="text-sm">
           {{ user.email || 'N/A' }}
-          <i :class="user.emailVerified ? 'fa-solid fa-check text-green-500' : 'fa-solid fa-times text-red-500'"></i>
+          <i
+            :class="
+              user.emailVerified
+                ? 'fa-solid fa-check text-green-500'
+                : 'fa-solid fa-times text-red-500'
+            "
+          ></i>
         </p>
       </div>
       <div v-else>
@@ -71,11 +79,21 @@
     </div>
     <!-- Edit user account -->
     <div class="flex justify-center gap-2 pt-4">
-      <RouterLink :to="{ name: 'edit-profile' }">
-        <BaseButton iconRight="fa-solid fa-pencil" class="text-sm" label="edit profile" variant="primary" />
+      <RouterLink :to="{ name: 'edit-display-name' }">
+        <BaseButton
+          iconRight="fa-solid fa-pencil"
+          class="text-sm"
+          label="edit profile"
+          variant="primary"
+        />
       </RouterLink>
       <button @click="handleLogout">
-        <BaseButton iconRight="fa-solid fa-arrow-right-from-bracket" class="text-sm" label="logout" variant="primary" />
+        <BaseButton
+          iconRight="fa-solid fa-arrow-right-from-bracket"
+          class="text-sm"
+          label="logout"
+          variant="primary"
+        />
       </button>
     </div>
   </main>

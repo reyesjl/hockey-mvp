@@ -18,7 +18,7 @@ const adminRoutes: Array<RouteRecordRaw> = [
         name: 'admin',
         component: AdminDashboard,
         meta: { requiresAuth: true, requiresAdmin: true },
-      }
+      },
     ],
   },
 ]

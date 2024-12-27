@@ -46,7 +46,9 @@
                   name="name"
                 />
               </label>
-              <p v-if="errors.name" class="text-red-500 text-sm mt-1 mb-1">{{ errors.name }}</p>
+              <p v-if="errors.name" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.name }}
+              </p>
             </div>
 
             <!-- Company -->
@@ -64,7 +66,9 @@
                   name="company"
                 />
               </label>
-              <p v-if="errors.company" class="text-red-500 text-sm mt-1 mb-1">{{ errors.company }}</p>
+              <p v-if="errors.company" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.company }}
+              </p>
             </div>
 
             <!-- Contact Email -->
@@ -82,7 +86,12 @@
                   name="contactEmail"
                 />
               </label>
-              <p v-if="errors.contactEmail" class="text-red-500 text-sm mt-1 mb-1">{{ errors.contactEmail }}</p>
+              <p
+                v-if="errors.contactEmail"
+                class="text-red-500 text-sm mt-1 mb-1"
+              >
+                {{ errors.contactEmail }}
+              </p>
             </div>
 
             <!-- Location -->
@@ -100,7 +109,9 @@
                   name="location"
                 />
               </label>
-              <p v-if="errors.location" class="text-red-500 text-sm mt-1 mb-1">{{ errors.location }}</p>
+              <p v-if="errors.location" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.location }}
+              </p>
             </div>
 
             <!-- Dates -->
@@ -118,14 +129,20 @@
                   @change="addDate"
                 />
               </label>
-              <p v-if="errors.dates" class="text-red-500 text-sm mt-1 mb-1">{{ errors.dates }}</p>
+              <p v-if="errors.dates" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.dates }}
+              </p>
             </div>
 
             <!-- User added dates -->
             <div class="mb-3">
               <span class="text-gray-500">Dates</span>
               <ul class="mb-3">
-                <li v-for="(date, index) in dates" :key="index" class="text-gray-500 flex justify-between items-center">
+                <li
+                  v-for="(date, index) in dates"
+                  :key="index"
+                  class="text-gray-500 flex justify-between items-center"
+                >
                   {{ date }}
                   <i
                     class="text-red-500 hover:text-red-800 duration-300 fa-regular fa-circle-xmark cursor-pointer"
@@ -151,7 +168,12 @@
                   min="1"
                 />
               </label>
-              <p v-if="errors.gamesMinimum" class="text-red-500 text-sm mt-1 mb-1">{{ errors.gamesMinimum }}</p>
+              <p
+                v-if="errors.gamesMinimum"
+                class="text-red-500 text-sm mt-1 mb-1"
+              >
+                {{ errors.gamesMinimum }}
+              </p>
             </div>
 
             <!-- Notes -->
@@ -172,33 +194,65 @@
             <div class="mb-3 text-sm">
               <span class="text-gray-500">Level of Play</span>
               <div class="text-gray-500 flex flex-wrap gap-2">
-                <label v-for="level in VALID_LEVELS_OF_PLAY" :key="level" class="flex items-center">
-                  <input type="checkbox" :value="level" v-model="levelOfPlay" class="mr-2" />
+                <label
+                  v-for="level in VALID_LEVELS_OF_PLAY"
+                  :key="level"
+                  class="flex items-center"
+                >
+                  <input
+                    type="checkbox"
+                    :value="level"
+                    v-model="levelOfPlay"
+                    class="mr-2"
+                  />
                   {{ level }}
                 </label>
               </div>
-              <p v-if="errors.levelOfPlay" class="text-red-500 text-sm mt-1 mb-1">{{ errors.levelOfPlay }}</p>
+              <p
+                v-if="errors.levelOfPlay"
+                class="text-red-500 text-sm mt-1 mb-1"
+              >
+                {{ errors.levelOfPlay }}
+              </p>
             </div>
 
             <!-- Age Groups -->
             <div class="mb-3 text-sm">
               <span class="text-gray-500">Age Groups</span>
               <div class="text-gray-500 flex flex-wrap gap-2">
-                <label v-for="age in VALID_AGE_GROUPS" :key="age" class="flex items-center">
-                  <input type="checkbox" :value="age" v-model="ageGroups" class="mr-2" />
+                <label
+                  v-for="age in VALID_AGE_GROUPS"
+                  :key="age"
+                  class="flex items-center"
+                >
+                  <input
+                    type="checkbox"
+                    :value="age"
+                    v-model="ageGroups"
+                    class="mr-2"
+                  />
                   {{ age }}
                 </label>
               </div>
-              <p v-if="errors.ageGroups" class="text-red-500 text-sm mt-1 mb-1">{{ errors.ageGroups }}</p>
+              <p v-if="errors.ageGroups" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.ageGroups }}
+              </p>
             </div>
           </div>
 
           <div class="flex">
-            <BaseButton type="submit" label="Submit Tournament" class="w-full shadow-xl" :disabled="isLoading" />
+            <BaseButton
+              type="submit"
+              label="Submit Tournament"
+              class="w-full shadow-xl"
+              :disabled="isLoading"
+            />
           </div>
 
           <p v-if="error" class="text-red-500 text-sm mt-4">{{ error }}</p>
-          <p v-if="success" class="text-green-500 text-sm mt-4">{{ success }}</p>
+          <p v-if="success" class="text-green-500 text-sm mt-4">
+            {{ success }}
+          </p>
         </form>
       </div>
     </div>
@@ -212,7 +266,18 @@ import BaseButton from '@/lib/ui/BaseButton.vue'
 import { createTournamentSubmission } from '@/services/submissions'
 import * as yup from 'yup'
 
-const VALID_AGE_GROUPS = ['8U', '10U', '12U', '14U', '16U', '18U', 'Midget', 'Junior', 'Varsity', 'Adult/Rec']
+const VALID_AGE_GROUPS = [
+  '8U',
+  '10U',
+  '12U',
+  '14U',
+  '16U',
+  '18U',
+  'Midget',
+  'Junior',
+  'Varsity',
+  'Adult/Rec',
+]
 const VALID_LEVELS_OF_PLAY = ['AAA', 'AA', 'A', 'B', 'C/Rec/House']
 
 const name = ref('')
@@ -234,18 +299,18 @@ const userStore = useUserStore()
 
 const addDate = async () => {
   if (date.value) {
-    const selectedDate = new Date(date.value);
-    const now = new Date();
-    now.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(date.value)
+    const now = new Date()
+    now.setHours(0, 0, 0, 0)
 
     if (selectedDate <= now) {
-      errors.value.dates = 'Selected date must be in the future';
-      return;
+      errors.value.dates = 'Selected date must be in the future'
+      return
     }
 
-    dates.value.push(date.value);
-    date.value = '';
-    await validateForm();
+    dates.value.push(date.value)
+    date.value = ''
+    await validateForm()
   }
 }
 
@@ -257,24 +322,42 @@ const removeDate = async (index: number) => {
 const schema = yup.object().shape({
   name: yup.string().required('Tournament name is required'),
   location: yup.string().required('Location is required'),
-  contactEmail: yup.string().email('Invalid email').required('Contact email is required'),
-  gamesMinimum: yup.number().min(1, 'Minimum games must be at least 1').required('Minimum games is required'),
-  dates: yup.array().of(yup.string().required()).min(1, 'At least one date is required'),
-  levelOfPlay: yup.array().of(yup.string().required()).min(1, 'At least one level of play is required'),
-  ageGroups: yup.array().of(yup.string().required()).min(1, 'At least one age group is required'),
+  contactEmail: yup
+    .string()
+    .email('Invalid email')
+    .required('Contact email is required'),
+  gamesMinimum: yup
+    .number()
+    .min(1, 'Minimum games must be at least 1')
+    .required('Minimum games is required'),
+  dates: yup
+    .array()
+    .of(yup.string().required())
+    .min(1, 'At least one date is required'),
+  levelOfPlay: yup
+    .array()
+    .of(yup.string().required())
+    .min(1, 'At least one level of play is required'),
+  ageGroups: yup
+    .array()
+    .of(yup.string().required())
+    .min(1, 'At least one age group is required'),
 })
 
 const validateForm = async (): Promise<boolean> => {
   try {
-    await schema.validate({
-      name: name.value,
-      location: location.value,
-      contactEmail: contactEmail.value,
-      gamesMinimum: gamesMinimum.value,
-      dates: dates.value,
-      levelOfPlay: levelOfPlay.value,
-      ageGroups: ageGroups.value,
-    }, { abortEarly: false })
+    await schema.validate(
+      {
+        name: name.value,
+        location: location.value,
+        contactEmail: contactEmail.value,
+        gamesMinimum: gamesMinimum.value,
+        dates: dates.value,
+        levelOfPlay: levelOfPlay.value,
+        ageGroups: ageGroups.value,
+      },
+      { abortEarly: false },
+    )
     errors.value = {}
     return true
   } catch (err: any) {

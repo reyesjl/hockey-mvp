@@ -1,20 +1,30 @@
 <template>
   <main class="pt-[3.125rem]">
-    <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
+    <div
+      class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100"
+    >
       <div class="container">
-        <div class="my-10 md:my-16 mx-auto p-8 h-fit max-w-3xl rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white">
+        <div
+          class="my-10 md:my-16 mx-auto p-8 h-fit max-w-3xl rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white"
+        >
           <div class="flex justify-center mb-6">
-            <i class="fa-solid fa-user text-black p-4 aspect-square bg-white rounded-xl shadow-xl"></i>
+            <i
+              class="fa-solid fa-user text-black p-4 aspect-square bg-white rounded-xl shadow-xl"
+            ></i>
           </div>
           <div class="mb-6 flex flex-col gap-2">
-            <h2 class="font-semibold text-xl md:text-2xl text-center">Choose Your Avatar</h2>
+            <h2 class="font-semibold text-xl md:text-2xl text-center">
+              Choose Your Avatar
+            </h2>
           </div>
 
           <!-- Current Avatar Preview -->
           <div class="mb-8 flex justify-center">
-            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-sky-500">
-              <img 
-                :src="user?.photoURL || 'https://robohash.org/default'" 
+            <div
+              class="w-24 h-24 rounded-full overflow-hidden border-4 border-sky-500"
+            >
+              <img
+                :src="user?.photoURL || 'https://robohash.org/default'"
                 alt="Current Avatar"
                 class="w-full h-full object-cover"
               />
@@ -39,8 +49,12 @@
             </div>
           </div>
 
-          <p v-if="error" class="text-red-500 text-sm mt-4 text-center">{{ error }}</p>
-          <p v-if="success" class="text-green-500 text-sm mt-4 text-center">{{ success }}</p>
+          <p v-if="error" class="text-red-500 text-sm mt-4 text-center">
+            {{ error }}
+          </p>
+          <p v-if="success" class="text-green-500 text-sm mt-4 text-center">
+            {{ success }}
+          </p>
         </div>
       </div>
     </div>
@@ -70,7 +84,7 @@ const handleUpdateAvatar = async (photoURL: string) => {
       await updateProfile(user.value, { photoURL })
       success.value = 'Avatar updated successfully'
       setTimeout(() => {
-        router.push({ name: 'account' })
+        router.push({ name: 'dashboard' })
       }, 1000)
     }
   } catch (err: any) {

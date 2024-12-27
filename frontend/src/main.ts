@@ -44,5 +44,8 @@ onAuthStateChanged(auth, async firebaseUser => {
   userStore.setLoading(false)
 })
 
+// Call refreshUserData on app load
+userStore.refreshUserData()
+
 // Mount the app after setting up the auth listener
 app.mount('#app')

@@ -55,9 +55,7 @@ export const useTournamentSubmissionStore = defineStore(
 
           if (!response.ok) {
             const errorData = await response.json()
-            throw new Error(
-              errorData.message || 'Failed to submit tournament',
-            )
+            throw new Error(errorData.message || 'Failed to submit tournament')
           }
 
           const { success, message } = await response.json()

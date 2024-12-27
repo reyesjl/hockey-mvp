@@ -3,7 +3,7 @@
     <div class="container max-w-4xl pb-20">
       <!-- Header -->
       <header class="mb-5 mt-10 md:mt-16">
-        <h1 class="text-4xl md:text-8xl font-semibold">Support</h1>
+        <h1 class="text-4xl md:text-6xl font-semibold">Support</h1>
       </header>
 
       <!-- Support Overview Section -->

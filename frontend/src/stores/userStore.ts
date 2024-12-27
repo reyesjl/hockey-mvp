@@ -3,6 +3,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User } from 'firebase/auth'
+import { auth } from '@/firebase'
+import { fetchAndSetUserClaims } from '@/services/userService'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
@@ -29,13 +31,13 @@ export const useUserStore = defineStore('user', () => {
     saveStateToLocalStorage()
   }
 
-  const isLoggedIn = computed(() => user.value !== null);
+  const isLoggedIn = computed(() => user.value !== null)
 
   const saveStateToLocalStorage = () => {
     const state = {
       user: user.value,
       isAdmin: isAdmin.value,
-      claims: claims.value
+      claims: claims.value,
     }
     localStorage.setItem('userStore', JSON.stringify(state))
   }
@@ -54,5 +56,26 @@ export const useUserStore = defineStore('user', () => {
     localStorage.removeItem('userStore')
   }
 
-  return { user, setUser, isLoading, setLoading, isLoggedIn, isAdmin, setAdmin, claims, setClaims, loadStateFromLocalStorage, clearStateFromLocalStorage}
+  const refreshUserData = async () => {
+    const currentUser = auth.currentUser
+    if (currentUser) {
+      setUser(currentUser)
+      await fetchAndSetUserClaims()
+    }
+  }
+
+  return {
+    user,
+    setUser,
+    isLoading,
+    setLoading,
+    isLoggedIn,
+    isAdmin,
+    setAdmin,
+    claims,
+    setClaims,
+    loadStateFromLocalStorage,
+    clearStateFromLocalStorage,
+    refreshUserData
+  }
 })

@@ -24,7 +24,9 @@
           </div>
 
           <!-- Center section: Main navigation -->
-          <div class="hidden absolute left-1/2 transform-gpu -translate-x-1/2 flex-grow md:flex justify-center items-center">
+          <div
+            class="hidden absolute left-1/2 transform-gpu -translate-x-1/2 flex-grow md:flex justify-center items-center"
+          >
             <ul class="list-none flex text-sm">
               <li>
                 <RouterLink
@@ -90,16 +92,23 @@
               </li>
 
               <li v-if="user" class="relative">
-                <RouterLink :to="{ name: 'account' }" class="flex items-center">
+                <RouterLink :to="{ name: 'dashboard' }" class="flex items-center">
                   <img
-                    :src="user.photoURL ? user.photoURL : 'https://robohash.org/' + user.displayName"
+                    :src="
+                      user.photoURL
+                        ? user.photoURL
+                        : 'https://robohash.org/' + user.displayName
+                    "
                     alt="User Avatar"
                     class="w-8 h-8 rounded-full object-cover shadow-sm"
                   />
                 </RouterLink>
               </li>
             </ul>
-            <div @click="toggleMobileMenu" class="text-xl md:hidden cursor-pointer">
+            <div
+              @click="toggleMobileMenu"
+              class="text-xl md:hidden cursor-pointer"
+            >
               <i class="fa-solid fa-bars text-black"></i>
             </div>
           </div>
@@ -111,7 +120,10 @@
   <!-- Mobile Nav Menu -->
   <div
     class="fixed top-0 w-full h-full z-50 flex flex-col items-center justify-center bg-white/50 backdrop-blur-xl transition-transform duration-300 ease-in-out transform-gpu"
-    :class="{ 'translate-y-0': isMobileMenuOpen, 'translate-y-full': !isMobileMenuOpen }"
+    :class="{
+      'translate-y-0': isMobileMenuOpen,
+      'translate-y-full': !isMobileMenuOpen,
+    }"
   >
     <button
       @click="toggleMobileMenu"
@@ -120,7 +132,9 @@
     >
       <i class="fa-solid fa-xmark"></i>
     </button>
-    <ul class="list-none align-middle text-center flex flex-col text-3xl space-y-4">
+    <ul
+      class="list-none align-middle text-center flex flex-col text-3xl space-y-4"
+    >
       <li>
         <RouterLink
           @click="toggleMobileMenu"
@@ -187,10 +201,11 @@
       </li>
 
       <li v-if="user" class="relative">
-        <RouterLink 
+        <RouterLink
           @click="toggleMobileMenu"
-          :to="{ name: 'account' }" 
-          class="text-nowrap h-full items-center text-gray-700 hover:text-black transition-colors duration-300">
+          :to="{ name: 'dashboard' }"
+          class="text-nowrap h-full items-center text-gray-700 hover:text-black transition-colors duration-300"
+        >
           Account
         </RouterLink>
       </li>

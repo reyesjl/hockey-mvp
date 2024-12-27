@@ -1,19 +1,27 @@
 <template>
   <main class="pt-[3.125rem]">
-    <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
+    <div
+      class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100"
+    >
       <div class="container">
         <form
           class="my-10 md:my-16 mx-auto p-8 h-fit max-w-md rounded-xl shadow-xl bg-gradient-to-b from-sky-200 to-white"
           @submit.prevent="handleUpdateProfile"
         >
           <div class="flex justify-center mb-6">
-            <i class="fa-solid fa-user text-black p-4 aspect-square bg-white rounded-xl shadow-xl"></i>
+            <i
+              class="fa-solid fa-user text-black p-4 aspect-square bg-white rounded-xl shadow-xl"
+            ></i>
           </div>
           <div class="mb-6 flex flex-col gap-2">
-            <h2 class="font-semibold text-xl md:text-2xl text-center">Edit Profile</h2>
+            <h2 class="font-semibold text-xl md:text-2xl text-center">
+              Edit Profile
+            </h2>
           </div>
           <div class="mb-8">
-            <p class="text-xl font-semibold text-center mb-3">{{ user?.displayName || 'N/A' }}</p>
+            <p class="text-xl font-semibold text-center mb-3">
+              {{ user?.displayName || 'N/A' }}
+            </p>
             <div class="mb-3">
               <label class="relative block mb-1">
                 <span class="sr-only">Display Name</span>
@@ -28,14 +36,21 @@
                   name="displayName"
                 />
               </label>
-              <p v-if="errors.displayName" class="text-red-500 text-sm mt-1 mb-1">{{ errors.displayName }}</p>
+              <p
+                v-if="errors.displayName"
+                class="text-red-500 text-sm mt-1 mb-1"
+              >
+                {{ errors.displayName }}
+              </p>
             </div>
           </div>
           <div class="flex flex-col gap-4">
             <BaseButton type="submit" label="Save" class="w-full shadow-xl" />
           </div>
           <p v-if="error" class="text-red-500 text-sm mt-4">{{ error }}</p>
-          <p v-if="success" class="text-green-500 text-sm mt-4">{{ success }}</p>
+          <p v-if="success" class="text-green-500 text-sm mt-4">
+            {{ success }}
+          </p>
         </form>
       </div>
     </div>
@@ -69,9 +84,12 @@ const schema = yup.object().shape({
 
 const validateForm = async (): Promise<boolean> => {
   try {
-    await schema.validate({
-      displayName: displayName.value,
-    }, { abortEarly: false })
+    await schema.validate(
+      {
+        displayName: displayName.value,
+      },
+      { abortEarly: false },
+    )
     errors.value = {}
     return true
   } catch (err: any) {
@@ -98,7 +116,7 @@ const handleUpdateProfile = async () => {
         displayName: displayName.value || user.value.displayName,
       })
       success.value = 'Profile updated successfully'
-      router.push({ name: 'account' })
+      router.push({ name: 'dashboard' })
     }
   } catch (err: any) {
     error.value = err.message

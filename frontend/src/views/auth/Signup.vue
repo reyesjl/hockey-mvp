@@ -45,7 +45,12 @@
                   autocomplete="name"
                 />
               </label>
-              <p v-if="errors.displayName" class="text-red-500 text-sm mt-1 mb-1">{{ errors.displayName }}</p>
+              <p
+                v-if="errors.displayName"
+                class="text-red-500 text-sm mt-1 mb-1"
+              >
+                {{ errors.displayName }}
+              </p>
             </div>
             <div class="mb-3">
               <label class="relative block mb-1">
@@ -62,7 +67,9 @@
                   autocomplete="email"
                 />
               </label>
-              <p v-if="errors.email" class="text-red-500 text-sm mt-1 mb-1">{{ errors.email }}</p>
+              <p v-if="errors.email" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.email }}
+              </p>
             </div>
             <div class="mb-3">
               <label class="relative block mb-1">
@@ -79,7 +86,9 @@
                   autocomplete="new-password"
                 />
               </label>
-              <p v-if="errors.password" class="text-red-500 text-sm mt-1 mb-1">{{ errors.password }}</p>
+              <p v-if="errors.password" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.password }}
+              </p>
             </div>
             <div class="mb-3">
               <label class="relative block mb-1">
@@ -96,7 +105,12 @@
                   autocomplete="new-password"
                 />
               </label>
-              <p v-if="errors.confirmPassword" class="text-red-500 text-sm mt-1 mb-1">{{ errors.confirmPassword }}</p>
+              <p
+                v-if="errors.confirmPassword"
+                class="text-red-500 text-sm mt-1 mb-1"
+              >
+                {{ errors.confirmPassword }}
+              </p>
             </div>
           </div>
 
@@ -151,7 +165,8 @@ const errors = ref<{ [key: string]: string }>({})
 const schema = yup.object().shape({
   displayName: yup.string().required('Display name is required'),
   email: yup.string().email('Invalid email').required('Email is required'),
-  password: yup.string()
+  password: yup
+    .string()
     .required('Password is required')
     .min(6, 'Password must be at least 6 characters')
     .max(4096, 'Password must be less than 4096 characters')
@@ -159,7 +174,8 @@ const schema = yup.object().shape({
     .matches(/[a-z]/, 'Password must contain a lowercase letter')
     .matches(/[0-9]/, 'Password must contain a number')
     .matches(/[\W_]/, 'Password must contain a special character'),
-  confirmPassword: yup.string()
+  confirmPassword: yup
+    .string()
     .oneOf([yup.ref('password'), undefined], 'Passwords must match')
     .required('Confirm password is required'),
 })
@@ -170,18 +186,21 @@ const userStore = useUserStore()
 
 onMounted(() => {
   if (userStore.user) {
-    router.push({ name: 'account' })
+    router.push({ name: 'dashboard' })
   }
 })
 
 const validateForm = async (): Promise<boolean> => {
   try {
-    await schema.validate({
-      displayName: displayName.value,
-      email: email.value,
-      password: password.value,
-      confirmPassword: confirmPassword.value,
-    }, { abortEarly: false })
+    await schema.validate(
+      {
+        displayName: displayName.value,
+        email: email.value,
+        password: password.value,
+        confirmPassword: confirmPassword.value,
+      },
+      { abortEarly: false },
+    )
     errors.value = {}
     return true
   } catch (err: any) {

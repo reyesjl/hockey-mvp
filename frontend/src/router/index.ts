@@ -50,7 +50,7 @@ const router = createRouter({
   routes,
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 }
-  }
+  },
 })
 
 // Navigation Guard
@@ -72,7 +72,7 @@ router.beforeEach(async (to, from, next) => {
     if (userStore.isAdmin) {
       next()
     } else {
-      next({ name: 'account' })
+      next({ name: 'dashboard' })
     }
   } else {
     next()

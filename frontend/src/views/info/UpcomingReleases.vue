@@ -3,7 +3,7 @@
     <div class="container mx-auto max-w-4xl px-4">
       <!-- Header Section -->
       <header class="mb-8 mt-10 md:mt-16">
-        <h1 class="text-4xl md:text-6xl font-extrabold">Upcoming Releases</h1>
+        <h1 class="text-4xl md:text-6xl font-semibold">Upcoming Releases</h1>
         <p class="mt-4 text-lg">
           We are continuously working to enhance the Hockey Tournament Review
           Platform. Here's a glimpse of what you can expect in our future
