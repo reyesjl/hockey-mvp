@@ -1,15 +1,16 @@
 // backend/controllers/tournamentController.js
 
 const Tournament = require('../models/Tournament');
-const { ErrorResponse } = require('../utils/errorHandler');
+const { wrapResponse } = require('../utils/responseHandler');
+const { ValidationError, NotFoundError, InternalServerError } = require('../utils/AppError');
 
 // Create a new tournament
-exports.createTournament = async (req, res, next) => {
+exports.create = async (req, res, next) => {
     const { name, location, date, contactEmail, notes, company, overallRating, refereeRating, tournamentCommunicationRating, gamesMinimum, levelOfPlay, ageGroups, usaHockeySanctioned, firstPlaceHardware, secondPlaceHardware, stayAndPlay, extendedCheckout, multiTeamDiscounts, earlyBirdDiscounts, otherDiscounts } = req.body;
 
     // Basic check for required fields
     if (!name || !location || !date || !contactEmail || !company || !gamesMinimum || !levelOfPlay || !ageGroups) {
-        return next(new ErrorResponse('Please provide all required fields.', 400));
+        return next(new ValidationError('Please provide all required fields.'));
     }
 
     try {
@@ -37,7 +38,7 @@ exports.createTournament = async (req, res, next) => {
         });
 
         await tournament.save();
-        res.status(201).json(tournament);
+        return wrapResponse(res, 201, 'Tournament created successfully', tournament);
     } catch (error) {
         // Collect all validation error details
         if (error.name === 'ValidationError') {
@@ -45,70 +46,84 @@ exports.createTournament = async (req, res, next) => {
                 field: key,
                 message: error.errors[key].message,
             }));
-            return next(new ErrorResponse('Validation failed.', 400, details));
+            return next(new ValidationError('Validation failed.', details));
         }
 
         // Handle duplicate key error
         if (error.code === 11000) {
             const keyValue = error.keyValue.name; // Get the value of the duplicate key
-            return next(new ErrorResponse(`Tournament with the name "${keyValue}" already exists. Please choose a different name.`, 400));
+            return next(new ValidationError(`Tournament with the name "${keyValue}" already exists. Please choose a different name.`));
         }
 
-        next(new ErrorResponse('Failed to create tournament. Please try again.', 500));
+        return next(new InternalServerError('Failed to create tournament. Please try again.'));
     }
 };
 
 // Get all tournaments
-exports.getAllTournaments = async (req, res, next) => {
+exports.index = async (req, res, next) => {
+    const { search } = req.query;
+    let query = {};
+
+    // Use text search if a search term is provided
+    if (search) {
+        query = {
+            $or: [
+                { $text: { $search: search } },  // Text search for exact matches
+                { name: { $regex: search, $options: 'i' } },  // Regex for partial matches
+                { location: { $regex: search, $options: 'i' } }  // Regex for partial matches
+            ]
+        };
+    }
+
     try {
-        const tournaments = await Tournament.find();
-        res.status(200).json(tournaments);
+        const tournaments = await Tournament.find(query);
+        return wrapResponse(res, 200, 'Tournaments fetched successfully', tournaments);
     } catch (error) {
-        next(new ErrorResponse('Failed to fetch tournaments. Please try again.', 500));
+        return next(new InternalServerError('Failed to fetch tournaments. Please try again.'));
     }
 };
 
 // Get a tournament by ID
-exports.getTournamentById = async (req, res, next) => {
+exports.show = async (req, res, next) => {
     const { id } = req.params;
 
     try {
         const tournament = await Tournament.findById(id);
         if (!tournament) {
-            return next(new ErrorResponse('Tournament not found.', 404));
+            return next(new NotFoundError('Tournament not found.'));
         }
-        res.status(200).json(tournament);
+        return wrapResponse(res, 200, 'Tournament fetched successfully', tournament);
     } catch (error) {
-        next(new ErrorResponse('Failed to fetch tournament. Please try again.', 500));
+        return next(new InternalServerError('Failed to fetch tournament. Please try again.'));
     }
 };
 
 // Update a tournament by ID
-exports.updateTournament = async (req, res, next) => {
+exports.update = async (req, res, next) => {
     const { id } = req.params;
 
     try {
         const tournament = await Tournament.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
         if (!tournament) {
-            return next(new ErrorResponse('Tournament not found.', 404));
+            return next(new NotFoundError('Tournament not found.'));
         }
-        res.status(200).json(tournament);
+        return wrapResponse(res, 200, 'Tournament updated successfully', tournament);
     } catch (error) {
-        next(new ErrorResponse('Failed to update tournament. Please check your input.', 400));
+        return next(new ValidationError('Failed to update tournament. Please check your input.'));
     }
 };
 
 // Delete a tournament by ID
-exports.deleteTournament = async (req, res, next) => {
+exports.destroy = async (req, res, next) => {
     const { id } = req.params;
 
     try {
         const tournament = await Tournament.findByIdAndDelete(id);
         if (!tournament) {
-            return next(new ErrorResponse('Tournament not found.', 404));
+            return next(new NotFoundError('Tournament not found.'));
         }
-        res.status(204).send(); // No content
+        return res.status(204).send(); // No content
     } catch (error) {
-        next(new ErrorResponse('Failed to delete tournament. Please try again.', 500));
+        return next(new InternalServerError('Failed to delete tournament. Please try again.'));
     }
 };

@@ -2,14 +2,14 @@
 
 const express = require('express');
 const router = express.Router();
-const tournamentController = require('../controllers/tournamentController');
+const tc = require('../controllers/tournamentController');
 
 // Tournament routes
-router.post('/', tournamentController.createTournament);
-router.get('/', tournamentController.getAllTournaments);
-router.get('/:id', tournamentController.getTournamentById);
-router.patch('/:id', tournamentController.updateTournament);
-router.delete('/:id', tournamentController.deleteTournament);
+router.get('/', tc.index);
+router.post('/', tc.create);
+router.get('/:id', tc.show);
+router.patch('/:id', tc.update);
+router.delete('/:id', tc.destroy);
 
 // Export the router
 module.exports = router;
