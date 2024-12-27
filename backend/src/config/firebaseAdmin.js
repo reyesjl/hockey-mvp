@@ -11,4 +11,4 @@ const setAdminClaim = async (uid) => {
   console.log(`Custom claim set for user ${uid}`);
 };
 
-setAdminClaim('EuyncutrImZJyOqblktv8kxASW63').then(() => process.exit());
+setAdminClaim('uuid').then(() => process.exit());
