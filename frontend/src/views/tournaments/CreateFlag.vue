@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { axiosInstance } from '@/config/apiConfig';
 
 export default {
   data() {
@@ -100,7 +100,7 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        const response = await axios.post('/api/v1/flags', this.flag)
+        const response = await axiosInstance.post('/flags', this.flag)
         alert('Flag submitted successfully!')
         console.log(response.data)
         // Optionally reset form
