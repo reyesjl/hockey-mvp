@@ -10,6 +10,7 @@ router.post('/', tsc.create);
 router.get('/:id', tsc.show);
 router.patch('/:id', tsc.update);
 router.delete('/:id', tsc.destroy);
+router.post('/:id/approve', tsc.approve);
 
 // Export the router
 module.exports = router;

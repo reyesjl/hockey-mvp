@@ -1,44 +1,66 @@
-<script setup lang="ts">
-</script>
-
 <template>
-  <main class="container mx-auto py-10">
-    <!-- Support Overview Section -->
-    <section class="mb-8">
-      <h1 class="text-4xl font-extrabold text-white mb-4">Support the Platform</h1>
-      <p class="text-xl text-gray-400 mb-6">
-        The <strong>Hockey Tournament Review Platform</strong> is a community-driven project, not backed by big hockey companies. We’re funded entirely by individuals who care about making the hockey tournament experience better for everyone. Your support helps keep this platform alive and running!
-      </p>
-    </section>
+  <main class="pt-[3.125rem]">
+    <div class="container max-w-4xl pb-20">
+      <!-- Header -->
+      <header class="mb-5 mt-10 md:mt-16">
+        <h1 class="text-4xl md:text-6xl font-semibold">Support</h1>
+      </header>
 
-    <!-- How You Can Help Section -->
-    <section class="bg-gray-50 p-6 rounded-lg shadow-lg mb-8">
-      <h2 class="text-2xl font-semibold text-gray-700 mb-4">How You Can Help</h2>
-      <p class="text-lg text-gray-500">
-        Donations from the community help us cover hosting costs, enhance features, and keep tournament information up-to-date. Every contribution, big or small, makes a difference.
-      </p>
-    </section>
+      <!-- Support Overview Section -->
+      <section class="mb-5">
+        <h2 class="text-xl font-semibold">We're Here to Help</h2>
+        <p class="mb-2">
+          Whether you have questions about using the platform, need assistance
+          with your account, or want to provide feedback, our support team is
+          ready to assist you.
+        </p>
+      </section>
 
-    <!-- Why It Matters Section -->
-    <section class="bg-gray-100 p-6 rounded-lg shadow-lg mb-8">
-      <h2 class="text-2xl font-semibold text-gray-700 mb-4">Why Your Support Matters</h2>
-      <p class="text-lg text-gray-500">
-        By supporting this platform, you’re helping to ensure players, coaches, and fans have access to reliable tournament reviews and information, making their decisions easier and the hockey community stronger.
-      </p>
-    </section>
+      <!-- How You Can Help Section -->
+      <section class="mb-5">
+        <h2 class="text-xl font-semibold">How You Can Help</h2>
+        <p>
+          Your donations help us cover hosting costs, enhance features, and keep
+          tournament information up-to-date. Every contribution, big or small,
+          makes a difference.
+        </p>
+      </section>
 
-    <!-- Call to Action Section -->
-    <section class="mt-8 text-center">
-      <h2 class="text-2xl font-semibold text-white mb-4">Join Us in Making a Difference</h2>
-      <p class="text-lg text-gray-400 mb-6">
-        Your generosity helps us keep the platform free and accessible for everyone. Together, we can improve the hockey tournament experience for the whole community.
-      </p>
-      <RouterLink to="/" class="bg-sky-700 px-5 py-2 rounded-full hover:bg-sky-500 duration-200">
-        Donate Today
-      </RouterLink>
-    </section>
+      <!-- Why It Matters Section -->
+      <section class="mb-5">
+        <h2 class="text-xl font-semibold">Why Your Support Matters</h2>
+        <p>
+          By supporting this platform, you’re ensuring parents, players,
+          coaches, and fans have access to reliable tournament reviews and
+          information, making their decisions easier and the hockey community
+          stronger.
+        </p>
+      </section>
+
+      <!-- Call to Action Section -->
+      <section class="mb-5">
+        <h1 class="text-xl font-semibold">Join Us. Make a Difference.</h1>
+        <p class="mb-5">
+          Your generosity helps us keep the platform free and accessible for
+          everyone. Together, we can improve the hockey tournament experience
+          for the whole community.
+        </p>
+
+        <div class="flex gap-2">
+          <RouterLink :to="{ name: 'signup' }">
+            <BaseButton label="Sign Up" variant="primary" />
+          </RouterLink>
+          <RouterLink :to="{ name: 'about' }">
+            <BaseButton label="Read More" variant="linkSecondary" />
+          </RouterLink>
+        </div>
+      </section>
+    </div>
   </main>
 </template>
 
-<style scoped></style>
+<script setup lang="ts">
+import BaseButton from '@/lib/ui/BaseButton.vue'
+</script>
 
+<style scoped></style>

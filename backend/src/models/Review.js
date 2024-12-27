@@ -10,51 +10,31 @@ const reviewSchema = new mongoose.Schema({
         required: true,
         index: true
     },
-    submittedBy: {
+    userUid: {
         type: String,
-        required: true,
-        validate: {
-            validator: function (value) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-            },
-            message: 'Submitted by must be a valid email address.'
-        }
+        required: true
     },
     attendedDate: {
         type: Date,
         default: Date.now
     },
-    comment: {
+    title: {
+        type: String,
+        required: true
+    },
+    content: {
         type: String,
         required: true
     },
     parkingNotes: {
         type: String,
         default: ''
-    },
-    overallRating: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5
-    },
-    refereeRating: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5
-    },
-    communicationRating: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5
     }
 }, {
     timestamps: true
 });
 
-reviewSchema.index({ tournamentId: 1, submittedBy: 1 }, { unique: true });
+// Ensure one review document per user per tournament
+reviewSchema.index({ tournamentId: 1, userUid: 1 }, { unique: true });
 
-// Export the model
 module.exports = mongoose.model('Review', reviewSchema, 'reviews');

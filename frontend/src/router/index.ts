@@ -1,54 +1,82 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
-import AboutView from '@/views/AboutView.vue'
-import CommunityView from '@/views/CommunityView.vue'
-import HomeView from '@/views/HomeView.vue'
-import LoginView from '@/views/LoginView.vue'
-import SupportView from '@/views/SupportView.vue'
-import NotFoundView from '@/views/NotFoundView.vue'
 import submissionRoutes from './submissionRoutes'
 import tournamentRoutes from './tournamentRoutes'
-import adminRoutes from './adminRoutes'
+import authRoutes from './authRoutes'
+import infoRoutes from './infoRoutes'
+
+const Home = () => import('@/views/HomeView.vue')
+const About = () => import('@/views/AboutView.vue')
+const Community = () => import('@/views/CommunityView.vue')
+const Support = () => import('@/views/SupportView.vue')
+const NotFound = () => import('@/views/NotFoundView.vue')
+
+import { useUserStore } from '@/stores/userStore'
 
 const routes: Array<RouteRecordRaw> = [
-    {
-        path: '/',
-        name: 'home',
-        component: HomeView,
-    },
-    {
-        path: '/about',
-        name: 'about',
-        component: AboutView,
-    },
-    {
-        path: '/community',
-        name: 'community',
-        component: CommunityView,
-    },
-    {
-        path: '/support',
-        name: 'support',
-        component: SupportView,
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: LoginView,
-    },
-    ...tournamentRoutes,
-    ...submissionRoutes,
-    ...adminRoutes,
-    {
-        path: '/:pathMatch(.*)*',
-        name: 'NotFound',
-        component: NotFoundView,
-    },
+  {
+    path: '/',
+    name: 'home',
+    component: Home,
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: About,
+  },
+  {
+    path: '/community',
+    name: 'community',
+    component: Community,
+  },
+  {
+    path: '/support',
+    name: 'support',
+    component: Support,
+  },
+  ...tournamentRoutes,
+  ...submissionRoutes,
+  ...authRoutes,
+  ...infoRoutes,
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound,
+  },
 ]
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes,
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    return { top: 0 }
+  },
+})
+
+// Navigation Guard
+router.beforeEach(async (to, from, next) => {
+  const userStore = useUserStore()
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
+
+  // console.log(`Navigating to: ${to.fullPath}`)
+  // console.log(`From: ${from.fullPath}`)
+  // console.log(`Requires Auth: ${requiresAuth}`)
+  // console.log(`Requires Admin: ${requiresAdmin}`)
+  // console.log(`User is logged in: ${userStore.isLoggedIn}`)
+  // console.log(`User is admin: ${userStore.isAdmin}`)
+
+  if (requiresAuth && !userStore.isLoggedIn) {
+    next({ name: 'login' })
+  } else if (requiresAdmin) {
+    if (userStore.isAdmin) {
+      next()
+    } else {
+      next({ name: 'dashboard' })
+    }
+  } else {
+    next()
+  }
 })
 
 export default router

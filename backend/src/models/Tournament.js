@@ -3,7 +3,6 @@
 const mongoose = require('mongoose');
 const { VALID_AGE_GROUPS, VALID_LEVELS_OF_PLAY } = require('./values/tournamentConstants');
 
-// Tournament model
 const tournamentSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -36,12 +35,15 @@ const tournamentSchema = new mongoose.Schema({
             message: 'Contact email must be a valid email address.'
         }
     },
-    notes: { type: String, default: '' },
-    company: { type: String, required: true },
-    overallRating: { type: Number, default: 0.0, min: 0, max: 5 },
-    refereeRating: { type: Number, default: 0.0, min: 0, max: 5 },
-    tournamentCommunicationRating: { type: Number, default: 0.0, min: 0, max: 5 },
-    gamesMinimum: { type: Number, required: true, min: 1 },
+    notes: { type: String },
+    company: { type: String },
+    overallRatingSum: { type: Number, default: 0 },
+    overallRatingCount: { type: Number, default: 0 },
+    communicationRatingSum: { type: Number, default: 0 },
+    communicationRatingCount: { type: Number, default: 0 },
+    refereeRatingSum: { type: Number, default: 0 },
+    refereeRatingCount: { type: Number, default: 0 },
+    gamesMinimum: { type: Number, default: 1, min: 1 },
     levelOfPlay: {
         type: [String],
         required: true,
@@ -62,20 +64,34 @@ const tournamentSchema = new mongoose.Schema({
             message: 'Invalid age group.'
         }
     },
-    usaHockeySanctioned: { type: Boolean, default: false },
-    firstPlaceHardware: { type: [String], default: [] }, // Example: ['Team Banner', 'Players Medals']
-    secondPlaceHardware: { type: [String], default: [] }, // Example: ['Team Banner']
-    stayAndPlay: { type: Boolean, default: false },
-    extendedCheckout: { type: Boolean, default: false },
-    multiTeamDiscounts: { type: Boolean, default: false },
-    earlyBirdDiscounts: { type: String, default: '' }, // Description of early bird discounts
-    otherDiscounts: { type: String, default: '' } // Description of other discounts
+    usaHockeySanctioned: { type: Boolean },
+    firstPlaceHardware: { type: [String] }, // Example: ['Team Banner', 'Players Medals']
+    secondPlaceHardware: { type: [String] }, // Example: ['Team Banner']
+    stayAndPlay: { type: Boolean },
+    extendedCheckout: { type: Boolean },
+    multiTeamDiscounts: { type: Boolean },
+    earlyBirdDiscounts: { type: String }, // Description of early bird discounts
+    otherDiscounts: { type: String } // Description of other discounts
 }, {
-    timestamps: true // Automatically manage createdAt and updatedAt fields
+    timestamps: true
 });
 
-// Indexes
+// Index name and location for searching efficiency
 tournamentSchema.index({ name: 'text', location: 'text' });
 
-// Export the model
+// Virtual computed average rating
+tournamentSchema.virtual('computedOverallRating').get(function() {
+    return this.overallRatingCount > 0 ? this.overallRatingSum / this.overallRatingCount : 0;
+});
+
+// Virtual computed communication rating
+tournamentSchema.virtual('computedCommunicationRating').get(function() {
+    return this.communicationRatingCount > 0 ? this.communicationRatingSum / this.communicationRatingCount : 0;
+});
+
+// VIrtual computed referee rating
+tournamentSchema.virtual('computedRefereeRating').get(function() {
+    return this.refereeRatingCount > 0 ? this.refereeRatingSum / this.refereeRatingCount : 0;
+});
+
 module.exports = mongoose.model('Tournament', tournamentSchema, 'tournaments');
