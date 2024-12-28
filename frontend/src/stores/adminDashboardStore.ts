@@ -1,5 +1,6 @@
 // src/store/adminDashboardStore.ts
 import { defineStore } from 'pinia'
+import { axiosInstance } from '@/config/apiConfig'
 
 export const useAdminDashboardStore = defineStore('adminDashboard', {
   state: () => ({
@@ -15,16 +16,8 @@ export const useAdminDashboardStore = defineStore('adminDashboard', {
       this.error = null
 
       try {
-        const response = await fetch(
-          'http://localhost:5000/api/v1/admin/metrics',
-        )
-
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.message || 'Failed to fetch admin metrics')
-        }
-
-        const { success, message, data } = await response.json() // Destructure success, message, and data
+        const response = await axiosInstance.get('/admin/metrics')
+        const { success, message, data } = response.data
 
         if (success) {
           this.tournamentCount = data.tournamentCount

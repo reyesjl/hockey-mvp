@@ -1,6 +1,7 @@
 // src/store/tournamentStore.ts
 import { defineStore } from 'pinia'
 import type { Tournament } from '@/types'
+import { axiosInstance } from '@/config/apiConfig'
 
 export const useTournamentStore = defineStore('tournament', {
   state: () => ({
@@ -14,32 +15,20 @@ export const useTournamentStore = defineStore('tournament', {
       this.error = null
 
       try {
-        // Construct the API URL with optional search parameter
-        const url = `http://localhost:5000/api/v1/tournaments${searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ''}`
-        const response = await fetch(url)
+        const url = `/tournaments${searchTerm ? `?search=${encodeURIComponent(searchTerm)}` : ''}`
+        const response = await axiosInstance.get(url)
+        const { success, message, data } = response.data
 
-        // Check for HTTP success (status 200)
-        if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.message || 'Failed to fetch tournaments')
-        }
-
-        // Parse the response as JSON
-        const responseData = await response.json()
-
-        // Check if the response is successful
-        if (responseData.success) {
-          // Set tournaments to the 'data' field from the response
-          this.tournaments = responseData.data
+        if (success) {
+          this.tournaments = data
         } else {
-          throw new Error(responseData.message || 'Failed to fetch tournaments')
+          throw new Error(message || 'Failed to fetch tournaments')
         }
       } catch (error) {
-        // Handle any errors and set the error message
         this.error = 'An error occurred while fetching tournaments'
         console.error('Error fetching tournaments:', error)
       } finally {
-        this.loading = false // Set loading to false after the operation is complete
+        this.loading = false
       }
     },
   },
