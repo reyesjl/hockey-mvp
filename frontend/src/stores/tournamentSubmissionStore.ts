@@ -1,5 +1,6 @@
 // src/store/tournamentSubmissionStore.ts
 import { defineStore } from 'pinia'
+import { axiosInstance } from '@/config/apiConfig'
 
 export const useTournamentSubmissionStore = defineStore(
   'tournamentSubmissionStore',
@@ -15,16 +16,8 @@ export const useTournamentSubmissionStore = defineStore(
         this.error = null
 
         try {
-          const url = 'http://localhost:5000/api/v1/tournament-submissions/'
-          const response = await fetch(url)
-          if (!response.ok) {
-            const errorData = await response.json()
-            throw new Error(
-              errorData.message || 'Failed to fetch tournament submissions',
-            )
-          }
-
-          const { success, message, data } = await response.json()
+          const response = await axiosInstance.get('/tournament-submissions/')
+          const { success, message, data } = response.data
 
           if (success) {
             this.submissions = data // Assuming the data contains the tournament submissions
@@ -44,21 +37,8 @@ export const useTournamentSubmissionStore = defineStore(
         this.error = null
 
         try {
-          const url = 'http://localhost:5000/api/v1/tournament-submissions/'
-          const response = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(tournamentData),
-          })
-
-          if (!response.ok) {
-            const errorData = await response.json()
-            throw new Error(errorData.message || 'Failed to submit tournament')
-          }
-
-          const { success, message } = await response.json()
+          const response = await axiosInstance.post('/tournament-submissions/', tournamentData)
+          const { success, message } = response.data
 
           if (!success) {
             throw new Error(message || 'Failed to submit tournament')
