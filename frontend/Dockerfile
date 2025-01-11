@@ -15,7 +15,9 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Ensure environment variables are available during build
+# Ensure environment variables are available during buildARG VITE_NODE_ENV
+ARG VITE_API_URL_DEV
+ARG VITE_API_URL_PROD
 ARG VITE_FIREBASE_API_KEY
 ARG VITE_FIREBASE_AUTH_DOMAIN
 ARG VITE_FIREBASE_PROJECT_ID
