@@ -1,114 +1,106 @@
+**Author:** [@reyesjl](https://github.com/reyesjl)
+
 # Hockey Tournament Review Platform
 
-This repository contains the code for the **Hockey Tournament Review Platform**, a web application designed to provide a user-driven review system for hockey tournaments. Users can submit new tournaments, review them, and explore nearby amenities such as hotels, rinks, and entertainment venues.
+A user-driven platform designed to help hockey players, families, and organizers discover, review, and manage hockey tournaments. It features community-submitted events, in-depth ratings, and nearby amenities integration, simplifying your tournament planning and enhancing the overall experience.
+
+---
 
 ## Table of Contents
 
 - [Hockey Tournament Review Platform](#hockey-tournament-review-platform)
   - [Table of Contents](#table-of-contents)
-  - [Features](#features)
-  - [Tech Stack](#tech-stack)
-  - [Setup and Installation](#setup-and-installation)
-    - [Prerequisites](#prerequisites)
-    - [Installation](#installation)
-  - [Project Structure](#project-structure)
-  - [Usage](#usage)
-  - [API Documentation](#api-documentation)
-  - [Contributing](#contributing)
-  - [License](#license)
+  - [Project Overview](#project-overview)
+  - [Key Features](#key-features)
+  - [Detailed Features](#detailed-features)
+  - [How You Can Help](#how-you-can-help)
+  - [Contact \& Feedback](#contact--feedback)
 
 ---
 
-## Features
+## Project Overview
 
-- **User Registration and Authentication**
-- **Tournament Submission and Admin Approval**
-- **Review and Rating System for Tournaments**
-- **Nearby Venues (Hotels, Rinks, Entertainment) Integration**
-- **Admin Dashboard for Content Moderation**
-- **Mobile-Responsive UI**
+- **What Is It?**  
+  A centralized resource for finding and sharing information about hockey tournaments. Users can search existing listings, contribute new events, and leave detailed feedback.
 
-## Tech Stack
+- **Who Is It For?**  
+  - **Players & Families:** Explore tournaments, post reviews, and plan trips more efficiently.  
+  - **Organizers & Coaches:** Submit events, update details, and engage with user feedback.  
+  - **Hockey Community:** Share experiences, flag inaccuracies, and help maintain trusted tournament data.
 
-- **Frontend**: Vue.js, Tailwind CSS
-- **Backend**: Express.js
-- **Database**: MongoDB
-- **Deployment**: TBD
+- **Why It Matters**  
+  By featuring user-generated reviews and a straightforward event submission process, this platform streamlines planning while fostering a stronger hockey community. It ensures high-quality, verified information is available to everyone.
 
-## Setup and Installation
+---
 
-### Prerequisites
+## Key Features
 
-- **Node.js** (v14 or higher)
-- **MongoDB** (running locally or use a MongoDB Atlas cluster)
-- **Git**
+1. **User Accounts**  
+   Create a personal account to submit new tournaments, leave feedback, and keep track of your contributions.
 
-### Installation
+2. **Tournament Listings**  
+   Quickly search for tournaments by name or location. Each listing comes with essential details such as dates, contact info, and user-generated reviews.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/hockey-tournament-review.git
-   cd hockey-tournament-review
+3. **Reviews & Ratings**  
+   Share real-world tournament experiences. Rate events based on overall quality, communication, and referee performance.
 
-2. Install dependencies for the backend and frontend
-    ```bash
-    # Backend
-    cd backend
-    npm install
+4. **Approval & Flagging System**  
+   New events and user-flagged content go through an admin review process, ensuring accuracy and reliability.
 
-    # Frontend
-    cd ../frontend
-    npm install
+5. **Accessibility & Responsiveness**  
+   Built for mobile and desktop users alike, adhering to ARIA standards to ensure an inclusive experience for everyone.
 
-3. Setup environment variables
-    ```bash
-    Create a .env in the backend folder with the following:
-    PORT=5000
-    MONGO_URI=your_mongo_connection_string
-    JWT_SECRET=your_jwt_secret
+---
 
-4. Start the development servers
-    ```bash
-    # In the backend directory
-    npm run dev
+## Detailed Features
 
-    # In the frontend directory
-    npm run serve
+1. **Accounts**  
+   - **Secure Login & Profile Management**: Protect your data and view your submissions.  
+   - **Submission Status**: Receive email notifications when your tournaments are approved or denied.
 
-The backend server will run on http://localhost:5000 and the frontend server will run on http://localhost:8080.
+2. **Tournaments**  
+   - **Search & Filter**: Find events by name or location.  
+   - **Essential Data**: Dates, contact details, notes, and more.  
+   - **User Ratings & Reviews**: A quick overview of community sentiment.
 
-## Project Structure
-    hockey-tournament-review/
-    ├── backend/               # Express.js API server
-    │   ├── config/            # Configuration files (e.g., database)
-    │   ├── controllers/       # API route controllers
-    │   ├── models/            # Mongoose models
-    │   ├── routes/            # API routes
-    │   └── server.js          # Main server file
-    ├── frontend/              # Vue.js frontend application
-    │   ├── src/
-    │   │   ├── assets/        # Static assets
-    │   │   ├── components/    # Reusable Vue components
-    │   │   ├── views/         # Application views/pages
-    │   │   └── App.vue        # Main application component
-    │   └── public/            # Public files
-    └── README.md
+3. **Reviews**  
+   - **One Review per User**: Helps maintain high-quality, unbiased feedback.  
+   - **Structured Input**: Includes a title, detailed body, and optional parking notes.
 
-## Usage
-- User: Register an account to submit and review tournaments.
-- Admin: Approve/deny tournament submissions and manage flagged content through the admin dashboard.
+4. **Ratings**  
+   - **Overall, Communication & Referee**: Users can rate these categories to give tournaments well-rounded feedback.  
+   - **Single Rating per Category**: Ensures accurate representation of attendee experiences.
 
-## API Documentation
-Refer to the API documentation for details on available endpoints and request/response structures.
+5. **Approval Process**  
+   - **Admin Moderation**: All new tournaments are reviewed before being published.  
+   - **Spam Prevention**: Keeps the platform clean and helpful.
 
-## Contributing
-1. Fork the repository.
-2. Create a new branch (git checkout -b feature-branch).
-3. Make your changes and commit (git commit -m 'Add new feature').
-4. Push to your branch (git push origin feature-branch).
-5. Open a pull request.
+6. **Flagging System**  
+   - **User-Driven Flags**: Report inaccurate or problematic tournaments.  
+   - **Admin Intervention**: Inaccurate listings can be updated or removed to maintain data integrity.
 
-## License
-This project is licensed under the MIT License.
+7. **Accessibility & Responsiveness**  
+   - **Mobile-Optimized**: Works smoothly on phones, tablets, and desktops.  
+   - **Inclusive Design**: ARIA labels and best practices for web accessibility.
 
+---
 
+## How You Can Help
+
+- **Review Tournaments**: Share honest feedback to guide others.  
+- **Submit New Events**: Keep the platform up-to-date by adding missing tournaments.  
+- **Suggest Features**: Let us know what would make planning tournaments even easier.  
+- **Report Issues**: Flag or report any misleading or offensive content.
+
+---
+
+## Contact & Feedback
+
+- **Issues & Suggestions**: Please open a [GitHub issue](#) if you spot a bug or want to propose a feature.  
+- **General Questions**: Feel free to reach out via email or on social media.
+
+Thank you for being part of the Hockey Tournament Review Platform. Together, we can build a thriving community that makes planning and enjoying tournaments a better experience for everyone!
+
+---
+
+*© 2025 Hockey Tournament Review Platform. All rights reserved.*
