@@ -1,9 +1,9 @@
 <!-- StatsBlock Component -->
 <template>
   <div class="stats-block flex flex-col items-center min-w-fit">
-    <div class="text-gray-400 uppercase text-xs md:text-sm">{{ title }}</div>
-    <div class="text-gray-300 text-xl font-semibold">{{ value }}</div>
-    <div v-if="suffix" class="text-gray-300 text-xs uppercase">
+    <div class="text-gray-500 uppercase text-xs md:text-sm">{{ title }}</div>
+    <div class="text-gray-400 text-xl font-semibold">{{ value }}</div>
+    <div v-if="suffix" class="text-gray-400 text-xs uppercase">
       {{ suffix }}
     </div>
   </div>

@@ -106,8 +106,8 @@
         </div>
 
         <!-- No Reviews Found State -->
-        <div v-else class="flex flex-col items-center">
-          <p class="mb-4 text-center text-gray-300">
+        <div v-else class="flex flex-col items-center pb-20">
+          <p class="mb-4 text-center text-gray-500">
             No reviews exist yet. Be the first to leave a review!
           </p>
           <RouterLink
