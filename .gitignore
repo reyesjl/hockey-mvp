@@ -36,3 +36,5 @@ cypress/screenshots/
 .vscode/
 
 serviceFile.json
+
+ssl/

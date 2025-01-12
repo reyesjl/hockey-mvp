@@ -15,7 +15,9 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Ensure environment variables are available during buildARG VITE_NODE_ENV
+# Ensure environment variables are available during build
+ARG BUILD_ENV
+ARG VITE_NODE_ENV
 ARG VITE_API_URL_DEV
 ARG VITE_API_URL_PROD
 ARG VITE_FIREBASE_API_KEY
@@ -31,11 +33,21 @@ RUN npm run build
 
 # Use a lightweight web server to serve the built files
 FROM nginx:alpine
-COPY nginx.conf /etc/nginx/nginx.conf
+
+# Remove default NGINX configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Copy the production NGINX configuration
+COPY --from=build /app/frontend/nginx.${BUILD_ENV}.conf /etc/nginx/nginx.conf
+
+# Create directory for SSL certificates
+RUN mkdir -p /etc/nginx/ssl
+
+# COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=0 /app/dist /usr/share/nginx/html
 
 # Expose the port the app runs on
-EXPOSE 80
+EXPOSE 80 443
 
 # Start the web server
 CMD ["nginx", "-g", "daemon off;"]
