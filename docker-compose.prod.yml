@@ -24,10 +24,14 @@ services:
       VITE_FIREBASE_MEASUREMENT_ID: ${VITE_FIREBASE_MEASUREMENT_ID}
     ports: 
       - "8080:80"
+      - "443:443"
     depends_on:
       - backend
     networks:
       - webnet
+    volumes:
+      - ./ssl/nginx.crt:/etc/nginx/ssl/nginx.crt:ro
+      - ./ssl/nginx.key:/etc/nginx/ssl/nginx.key:ro
 
 networks:
   webnet:
