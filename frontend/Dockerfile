@@ -38,7 +38,8 @@ FROM nginx:alpine
 RUN rm /etc/nginx/conf.d/default.conf
 
 # Copy the production NGINX configuration
-COPY --from=build /app/frontend/nginx.${BUILD_ENV}.conf /etc/nginx/nginx.conf
+COPY nginx.production.conf /etc/nginx/nginx.conf
+# COPY --from=build /app/frontend/nginx.${BUILD_ENV}.conf /etc/nginx/nginx.conf
 
 # Create directory for SSL certificates
 RUN mkdir -p /etc/nginx/ssl
