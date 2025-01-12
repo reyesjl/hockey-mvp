@@ -11,6 +11,7 @@ services:
   frontend:
     image: reyesjl/yhtreviews-frontend:latest
     environment:
+      BUILD_ENV: ${BUILD_ENV}
       VITE_NODE_ENV: ${VITE_NODE_ENV}
       VITE_API_URL_DEV: ${VITE_API_URL_DEV}
       VITE_API_PORT_DEV: ${VITE_API_PORT_DEV}

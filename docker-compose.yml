@@ -15,6 +15,7 @@ services:
     build: 
       context: ./frontend
       args:
+        BUILD_ENV: ${BUILD_ENV}
         VITE_NODE_ENV: ${VITE_NODE_ENV}
         VITE_API_URL_DEV: ${VITE_API_URL_DEV}
         VITE_API_PORT_DEV: ${VITE_API_PORT_DEV}
@@ -27,6 +28,7 @@ services:
         VITE_FIREBASE_APP_ID: ${VITE_FIREBASE_APP_ID}
         VITE_FIREBASE_MEASUREMENT_ID: ${VITE_FIREBASE_MEASUREMENT_ID}
     environment:
+      BUILD_ENV: ${BUILD_ENV}
       VITE_NODE_ENV: ${VITE_NODE_ENV}
       VITE_API_URL_DEV: ${VITE_API_URL_DEV}
       VITE_API_PORT_DEV: ${VITE_API_PORT_DEV}
