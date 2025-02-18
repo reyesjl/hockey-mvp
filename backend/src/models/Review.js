@@ -1,40 +1,65 @@
-// backend/models/Review.js
+/**
+ * Youth Hockey Tournaments
+ * 
+ * Author: Jose Reyes
+ * Date: Dec 27, 2025
+ * 
+ * Copyright © 2025 Jose Reyes. All rights reserved.
+ * 
+ * This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+ * in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+ * 
+ * This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+ * Any unauthorized use may result in legal action.
+ * 
+ * For inquiries regarding licensing or permissions, please contact Jose Reyes.
+ */
 
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
+import Tournament from './Tournament.js';
 
 // Review model
-const reviewSchema = new mongoose.Schema({
-    tournamentId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tournament',
+const reviewSchema = new Schema({
+    tournament: { 
+        type: Schema.Types.ObjectId, 
+        ref: 'Tournament', 
+        required: true 
+    },
+    reviewer: { 
+        type: String, // Firebase Auth user ID
+        required: true 
+    },
+    rating: { 
+        type: Number, 
+        required: true, 
+        min: 1, 
+        max: 5 
+    },
+    subject: {
+        type: String,
         required: true,
-        index: true
+        minlength: 5,
+        maxlength: 50
     },
-    userUid: {
-        type: String,
-        required: true
+    comment: { 
+        type: String, 
+        required: true,
+        minlength: 50,
+        maxlength: 1000
     },
-    attendedDate: {
-        type: Date,
-        default: Date.now
-    },
-    title: {
-        type: String,
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-    parkingNotes: {
-        type: String,
-        default: ''
-    }
 }, {
     timestamps: true
 });
 
-// Ensure one review document per user per tournament
-reviewSchema.index({ tournamentId: 1, userUid: 1 }, { unique: true });
+// Unique compound index to ensure one review per user per tournament
+reviewSchema.index({ tournament: 1, reviewer: 1 }, { unique: true });
 
-module.exports = mongoose.model('Review', reviewSchema, 'reviews');
+// Post-save hook to update tournament rating
+reviewSchema.post('save', async function() {
+    const tournament = await Tournament.findById(this.tournament);
+    if (tournament) {
+        await tournament.calculateRating();
+    }
+});
+
+export default model('Review', reviewSchema, 'reviews');

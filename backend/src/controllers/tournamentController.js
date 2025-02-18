@@ -1,67 +1,45 @@
-// backend/controllers/tournamentController.js
+/**
+ * Youth Hockey Tournaments
+ * 
+ * Author: Jose Reyes
+ * Date: Dec 27, 2025
+ * 
+ * Copyright © 2025 Jose Reyes. All rights reserved.
+ * 
+ * This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+ * in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+ * 
+ * This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+ * Any unauthorized use may result in legal action.
+ * 
+ * For inquiries regarding licensing or permissions, please contact Jose Reyes.
+ */
 
-const Tournament = require('../models/Tournament');
-const { wrapResponse } = require('../utils/responseHandler');
-const { ValidationError, NotFoundError, InternalServerError } = require('../utils/AppError');
+import Tournament from '../models/Tournament.js';
+import { sendResponse } from '../utils/responses/responseHandler.js';
+import { ValidationError, NotFoundError, InternalServerError } from '../middlewares/errors/AppError.js';
 
 // Create a new tournament
-exports.create = async (req, res, next) => {
-    const { name, location, date, contactEmail, notes, company, overallRating, refereeRating, tournamentCommunicationRating, gamesMinimum, levelOfPlay, ageGroups, usaHockeySanctioned, firstPlaceHardware, secondPlaceHardware, stayAndPlay, extendedCheckout, multiTeamDiscounts, earlyBirdDiscounts, otherDiscounts } = req.body;
+export async function create(req, res, next) {
+    const { name, location, dates, company, level_of_play, age_groups, gender, submitted_by } = req.body;
 
     // Basic check for required fields
-    if (!name || !location || !date || !contactEmail || !company || !gamesMinimum || !levelOfPlay || !ageGroups) {
+    if (!name || !location || !dates || !company || !level_of_play || !age_groups || !gender || !submitted_by) {
         return next(new ValidationError('Please provide all required fields.'));
     }
 
     try {
-        const tournament = new Tournament({
-            name,
-            location,
-            date,
-            contactEmail,
-            notes,
-            company,
-            overallRating,
-            refereeRating,
-            tournamentCommunicationRating,
-            gamesMinimum,
-            levelOfPlay,
-            ageGroups,
-            usaHockeySanctioned,
-            firstPlaceHardware,
-            secondPlaceHardware,
-            stayAndPlay,
-            extendedCheckout,
-            multiTeamDiscounts,
-            earlyBirdDiscounts,
-            otherDiscounts,
-        });
-
+        const tournament = new Tournament(req.body);
         await tournament.save();
-        return wrapResponse(res, 201, 'Tournament created successfully', tournament);
+        return sendResponse(res, 201, 'Tournament created successfully', tournament);
     } catch (error) {
-        // Collect all validation error details
-        if (error.name === 'ValidationError') {
-            const details = Object.keys(error.errors).map(key => ({
-                field: key,
-                message: error.errors[key].message,
-            }));
-            return next(new ValidationError('Validation failed.', details));
-        }
-
-        // Handle duplicate key error
-        if (error.code === 11000) {
-            const keyValue = error.keyValue.name; // Get the value of the duplicate key
-            return next(new ValidationError(`Tournament with the name "${keyValue}" already exists. Please choose a different name.`));
-        }
-
-        return next(new InternalServerError('Failed to create tournament. Please try again.'));
+        return next(error);
     }
-};
+}
 
 // Get all tournaments
-exports.index = async (req, res, next) => {
-    const { search } = req.query;
+export async function index(req, res, next) {
+    const { search, city, companyName, startDate, endDate, page = 1, limit = 12 } = req.query;
     let query = {};
 
     // Use text search if a search term is provided
@@ -70,21 +48,47 @@ exports.index = async (req, res, next) => {
             $or: [
                 { $text: { $search: search } },  // Text search for exact matches
                 { name: { $regex: search, $options: 'i' } },  // Regex for partial matches
-                { location: { $regex: search, $options: 'i' } }  // Regex for partial matches
+                { 'location.city': { $regex: search, $options: 'i' } }  // Regex for partial matches
             ]
         };
     }
 
-    try {
-        const tournaments = await Tournament.find(query);
-        return wrapResponse(res, 200, 'Tournaments fetched successfully', tournaments);
-    } catch (error) {
-        return next(new InternalServerError('Failed to fetch tournaments. Please try again.'));
+    // Filter by city
+    if (city) {
+        query['location.city'] = city;
     }
-};
+
+    // Filter by company name
+    if (companyName) {
+        query['company.name'] = companyName;
+    }
+
+    // Filter by date range
+    if (startDate && endDate) {
+        query.dates = {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate)
+        };
+    }
+
+    const options = {
+        page: parseInt(page, 10),
+        limit: parseInt(limit, 10),
+        skip: (parseInt(page, 10) - 1) * parseInt(limit, 10)
+    };
+
+    try {
+        const tournaments = await Tournament.find(query)
+            .skip(options.skip)
+            .limit(options.limit);
+        return sendResponse(res, 200, 'Tournaments fetched successfully', tournaments);
+    } catch (error) {
+        return next(error);
+    }
+}
 
 // Get a tournament by ID
-exports.show = async (req, res, next) => {
+export async function show(req, res, next) {
     const { id } = req.params;
 
     try {
@@ -92,14 +96,14 @@ exports.show = async (req, res, next) => {
         if (!tournament) {
             return next(new NotFoundError('Tournament not found.'));
         }
-        return wrapResponse(res, 200, 'Tournament fetched successfully', tournament);
+        return sendResponse(res, 200, 'Tournament fetched successfully', tournament);
     } catch (error) {
-        return next(new InternalServerError('Failed to fetch tournament. Please try again.'));
+        return next(error);
     }
-};
+}
 
 // Update a tournament by ID
-exports.update = async (req, res, next) => {
+export async function update(req, res, next) {
     const { id } = req.params;
 
     try {
@@ -107,14 +111,14 @@ exports.update = async (req, res, next) => {
         if (!tournament) {
             return next(new NotFoundError('Tournament not found.'));
         }
-        return wrapResponse(res, 200, 'Tournament updated successfully', tournament);
+        return sendResponse(res, 200, 'Tournament updated successfully', tournament);
     } catch (error) {
-        return next(new ValidationError('Failed to update tournament. Please check your input.'));
+        return next(error);
     }
-};
+}
 
 // Delete a tournament by ID
-exports.destroy = async (req, res, next) => {
+export async function destroy(req, res, next) {
     const { id } = req.params;
 
     try {
@@ -124,6 +128,6 @@ exports.destroy = async (req, res, next) => {
         }
         return res.status(204).send(); // No content
     } catch (error) {
-        return next(new InternalServerError('Failed to delete tournament. Please try again.'));
+        return next(error);
     }
-};
+}

@@ -15,22 +15,14 @@
  * For inquiries regarding licensing or permissions, please contact Jose Reyes.
  */
 
-import { connect } from 'mongoose';
-import { InternalServerError } from '../middlewares/errors/AppError.js';
-
-const connectDB = async () => {
-  try {
-    const conn = await connect(process.env.DB_URI);
-    console.log(`MongoDB connected: ${conn.connection.host}`);
-  } catch (error) {
-    // Log the error for debugging
-    console.error(`Database connection error: ${error.message}`);
-    
-    // Throw an InternalServerError with relevant details
-    throw new InternalServerError('Database connection failed', {
-      originalError: error.message,
-    });
-  }
+// Helper function to wrap responses in a consistent format
+const sendResponse = (res, statusCode, message, data = null) => {
+    const response = {
+        success: true,
+        message,
+        data,
+    };
+    res.status(statusCode).json(response);
 };
 
-export default connectDB;
+export { sendResponse };

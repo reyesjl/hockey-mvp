@@ -1,25 +1,34 @@
-// backend/app.js
+/**
+ * Youth Hockey Tournaments
+ * 
+ * Author: Jose Reyes
+ * Date: Dec 27, 2025
+ * 
+ * Copyright © 2025 Jose Reyes. All rights reserved.
+ * 
+ * This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+ * in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+ * 
+ * This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+ * Any unauthorized use may result in legal action.
+ * 
+ * For inquiries regarding licensing or permissions, please contact Jose Reyes.
+ */
 
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
+import express from 'express';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import errorHandler from './middlewares/errors/errorHandler.js';
+import connectDB from './config/db.js';
 
 // Import routes
-const tournamentRoutes = require('./routes/tournamentRoutes');
-const tournamentSubmissionRoutes = require('./routes/tournamentSubmissionRoutes');
-const reviewRoutes = require('./routes/reviewRoutes');
-const adminRoutes = require('./routes/adminRoutes');
-const flagRoutes = require('./routes/flagRoutes');
-
-// Import error handler and AppError class
-const { errorHandler } = require('./utils/errorHandler');
-const { ValidationError, NotFoundError, UnauthorizedError, InternalServerError } = require('./utils/AppError');
+import tournamentRoutes from './routes/tournamentRoutes.js';
+import reviewRoutes from './routes/reviewRoutes.js';
 
 // .env config
 dotenv.config();
 
 // Establish database connection
-const connectDB = require('./config/db');
 connectDB();
 
 // Create the express application
@@ -38,12 +47,9 @@ app.get('/', (req, res) => {
 
 // Use routes
 app.use('/api/v1/tournaments/', tournamentRoutes);
-app.use('/api/v1/tournament-submissions/', tournamentSubmissionRoutes);
 app.use('/api/v1/reviews/', reviewRoutes);
-app.use('/api/v1/admin/', adminRoutes);
-app.use('/api/v1/flags/', flagRoutes);
 
-// Use error handler middleware at the end
+// Use error handler catch all middleware
 app.use(errorHandler);
 
 // Start the server

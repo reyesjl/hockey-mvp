@@ -1,6 +1,7 @@
 {
   "name": "yht-reviews",
   "version": "1.0.0",
+  "type": "module",
   "description": "MVP hockey tournament review app focused on user-submitted tournament reviews, aimed at helping families make informed decisions about tournament attendance.",
   "main": "app.js",
   "scripts": {
@@ -22,6 +23,7 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "firebase-admin": "^13.0.2",
-    "mongoose": "^8.7.3"
+    "mongoose": "^8.7.3",
+    "validator": "^13.12.0"
   }
 }

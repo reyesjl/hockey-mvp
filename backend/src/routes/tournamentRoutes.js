@@ -1,15 +1,29 @@
-// backend/routes/tournamentRoutes.js
+/**
+ * Youth Hockey Tournaments
+ * 
+ * Author: Jose Reyes
+ * Date: Dec 27, 2025
+ * 
+ * Copyright © 2025 Jose Reyes. All rights reserved.
+ * 
+ * This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+ * in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+ * 
+ * This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+ * Any unauthorized use may result in legal action.
+ * 
+ * For inquiries regarding licensing or permissions, please contact Jose Reyes.
+ */
 
-const express = require('express');
-const router = express.Router();
-const tc = require('../controllers/tournamentController');
+import { Router } from 'express';
+import { index, create, show, update, destroy } from '../controllers/tournamentController.js';
 
-// Tournament routes
-router.get('/', tc.index);
-router.post('/', tc.create);
-router.get('/:id', tc.show);
-router.patch('/:id', tc.update);
-router.delete('/:id', tc.destroy);
+const router = Router();
 
-// Export the router
-module.exports = router;
+router.get('/', index);
+router.post('/', create);
+router.get('/:id', show);
+router.patch('/:id', update);
+router.delete('/:id', destroy);
+
+export default router;
