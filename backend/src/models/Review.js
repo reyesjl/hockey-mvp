@@ -26,14 +26,35 @@ const reviewSchema = new Schema({
         required: true 
     },
     reviewer: { 
-        type: String, // Firebase Auth user ID
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true 
     },
-    rating: { 
-        type: Number, 
-        required: true, 
-        min: 1, 
-        max: 5 
+    ratings: {
+        overall: {
+            type: Number,
+            required: true,
+            min: 1,
+            max: 5
+        },
+        referee: {
+            type: Number,
+            min: 1,
+            max: 5,
+            default: 5
+        },
+        communication: {
+            type: Number,
+            min: 1,
+            max: 5,
+            default: 5
+        },
+        facilities: {
+            type: Number,
+            min: 1,
+            max: 5,
+            default: 5
+        }
     },
     subject: {
         type: String,
@@ -46,6 +67,11 @@ const reviewSchema = new Schema({
         required: true,
         minlength: 50,
         maxlength: 1000
+    },
+    status: {
+        type: String,
+        enum: ['visible', 'hidden', 'flagged'],
+        default: 'visible'
     },
 }, {
     timestamps: true

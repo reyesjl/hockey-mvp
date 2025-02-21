@@ -24,6 +24,11 @@
           tournament information up-to-date. Every contribution, big or small,
           makes a difference.
         </p>
+        
+        <a class="mt-2 block bg-yellow-400 shadow-md hover:shadow-none hover:bg-yellow-300 duration-300 py-2 px-3 font-semibold w-fit rounded-full" href="https://www.buymeacoffee.com/josereyes9x">
+        ☕ Get the software guy a coffee 
+        </a>
+
       </section>
 
       <!-- Why It Matters Section -->

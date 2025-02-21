@@ -23,6 +23,11 @@ import Review from './Review.js';
 const VALID_AGE_GROUPS = ['8U', '10U', '12U', '14U', '16U', '18U', 'Midget', 'Junior', 'Varsity', 'Adult/Rec'];
 const VALID_LEVELS_OF_PLAY = ['AAA', 'AA', 'A', 'B', 'C/Rec/House'];
 
+// Helper function to format numbers to one decimal place
+function formatToOneDecimalPlace(value) {
+    return Math.round(value * 10) / 10;
+}
+
 const tournamentSchema = new Schema({
     name: {
         type: String,
@@ -48,7 +53,8 @@ const tournamentSchema = new Schema({
         },
     },
     submitted_by: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
     },
     owner: {
@@ -99,9 +105,12 @@ const tournamentSchema = new Schema({
         early_bird: { type: String },
         other: { type: String },
     },
-    rating: {
-        score: { type: Number, default: 0 },
-        votes: { type: Number, default: 0 },
+    ratings: {
+        overall: { type: Number, default: 5 },
+        referee: { type: Number, default: 5 },
+        communication: { type: Number, default: 5 },
+        facilities: { type: Number, default: 5 },
+        votes: { type: Number, default: 1 }
     },
     visible: {
         state: {
@@ -153,17 +162,37 @@ tournamentSchema.statics.findByDateRange = function(startDate, endDate) {
     });
 };
 
-// Method to calculate aggregate rating
+// Method to calculate aggregate ratings
 tournamentSchema.methods.calculateRating = async function() {
-    const reviews = await Review.find({ tournament: this._id });
-    if (reviews.length === 0) {
-        this.rating.score = 0;
-        this.rating.votes = 0;
+    const result = await Review.aggregate([
+        { $match: { tournament: this._id } },
+        {
+            $group: {
+                _id: null,
+                totalOverall: { $sum: '$ratings.overall' },
+                totalReferee: { $sum: '$ratings.referee' },
+                totalCommunication: { $sum: '$ratings.communication' },
+                totalFacilities: { $sum: '$ratings.facilities' },
+                count: { $sum: 1 }
+            }
+        }
+    ]);
+
+    if (result.length === 0) {
+        this.ratings.overall = 0;
+        this.ratings.referee = 0;
+        this.ratings.communication = 0;
+        this.ratings.facilities = 0;
+        this.ratings.votes = 0;
     } else {
-        const totalScore = reviews.reduce((sum, review) => sum + review.rating, 0);
-        this.rating.score = totalScore / reviews.length;
-        this.rating.votes = reviews.length;
+        const { totalOverall, totalReferee, totalCommunication, totalFacilities, count } = result[0];
+        this.ratings.overall = formatToOneDecimalPlace(totalOverall / count);
+        this.ratings.referee = formatToOneDecimalPlace(totalReferee / count);
+        this.ratings.communication = formatToOneDecimalPlace(totalCommunication / count);
+        this.ratings.facilities = formatToOneDecimalPlace(totalFacilities / count);
+        this.ratings.votes = count;
     }
+
     await this.save();
 };
 

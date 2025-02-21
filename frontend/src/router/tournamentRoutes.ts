@@ -2,37 +2,25 @@
 
 import type { RouteRecordRaw } from 'vue-router'
 
-const TournamentsView = () => import('@/views/tournaments/TournamentsHome.vue')
-const TournamentDetailView = () =>
-  import('@/views/tournaments/TournamentDetail.vue')
-const CreateReviewView = () => import('@/views/tournaments/CreateReview.vue')
-const CreateFlagView = () => import('@/views/tournaments/CreateFlag.vue')
+const tournamentCreate = () => import('@/views/tournaments/TournamentCreate.vue')
+const TournamentsIndex = () => import('@/views/tournaments/TournamentsIndex.vue')
+const TournamentShow = () => import('@/views/tournaments/TournamentShow.vue')
 
 const tournamentRoutes: Array<RouteRecordRaw> = [
   {
+    path: '/tournaments/create',
+    name: 'tournament-create',
+    component: tournamentCreate,
+  },
+  {
     path: '/tournaments',
     name: 'tournaments',
-    component: TournamentsView,
+    component: TournamentsIndex,
   },
   {
     path: '/tournaments/:tournamentId',
-    name: 'tournamentDetail',
-    component: TournamentDetailView,
-    props: true,
-  },
-  {
-    path: '/tournaments/:tournamentId/reviews/create',
-    name: 'createTournamentReview',
-    component: CreateReviewView,
-    props: true,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: '/tournaments/:tournamentId/flags/create',
-    name: 'createTournamentFlag',
-    component: CreateFlagView,
-    props: true,
-    meta: { requiresAuth: true },
+    name: 'tournament',
+    component: TournamentShow,
   },
 ]
 

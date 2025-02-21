@@ -22,8 +22,9 @@ import errorHandler from './middlewares/errors/errorHandler.js';
 import connectDB from './config/db.js';
 
 // Import routes
-import tournamentRoutes from './routes/tournamentRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
+import tournamentRoutes from './routes/tournamentRoutes.js';
 
 // .env config
 dotenv.config();
@@ -46,8 +47,9 @@ app.get('/', (req, res) => {
 });
 
 // Use routes
-app.use('/api/v1/tournaments/', tournamentRoutes);
+app.use('/api/v1/users/', userRoutes);
 app.use('/api/v1/reviews/', reviewRoutes);
+app.use('/api/v1/tournaments/', tournamentRoutes);
 
 // Use error handler catch all middleware
 app.use(errorHandler);

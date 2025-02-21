@@ -78,10 +78,11 @@ export async function index(req, res, next) {
     };
 
     try {
+        const totalTournaments = await Tournament.countDocuments();
         const tournaments = await Tournament.find(query)
             .skip(options.skip)
             .limit(options.limit);
-        return sendResponse(res, 200, 'Tournaments fetched successfully', tournaments);
+        return sendResponse(res, 200, 'Tournaments fetched successfully', { tournaments, totalTournaments});
     } catch (error) {
         return next(error);
     }
