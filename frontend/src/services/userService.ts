@@ -1,51 +1,54 @@
-// frontend/src/services/userService.ts
+/**
+ * Youth Hockey Tournaments
+ * 
+ * Author: Jose Reyes
+ * Date: Dec 27, 2025
+ * 
+ * Copyright © 2025 Jose Reyes. All rights reserved.
+ * 
+ * This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+ * in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+ * 
+ * This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+ * Any unauthorized use may result in legal action.
+ * 
+ * For inquiries regarding licensing or permissions, please contact Jose Reyes.
+ */
 
-import { auth } from '@/firebase'
-import { updateProfile, signOut } from 'firebase/auth'
-import { useUserStore } from '@/stores/userStore'
+import { axiosInstance } from '@/config/apiConfig';
+import { updateProfile } from 'firebase/auth';
+import { auth } from '@/firebase';
+import { useAuthStore } from '@/stores/authStore';
 
-export const setDisplayName = async (newDisplayName: string) => {
-  const userStore = useUserStore()
-  if (auth.currentUser) {
-    await updateProfile(auth.currentUser, { displayName: newDisplayName })
-    userStore.setUser({ ...auth.currentUser, displayName: newDisplayName })
-  } else {
-    throw new Error('No authenticated user found.')
-  }
-}
+// Update the user's avatar in the database and sync with Firebase
+export const resetUserAvatar = async (userId: string, defaultAvatarPath: string) => {
+    try {
+        // Update the user's avatar in the database
+        const response = await axiosInstance.patch(`/users/${userId}`, { avatar: defaultAvatarPath });
+        const { success, message, data } = response.data;
+        console.log('Reset user avatar response:', response.data);
+        
+        if (!success) {
+            throw new Error(message);
+        }
 
-export const setPhotoURL = async (newPhotoURL: string) => {
-  const userStore = useUserStore()
-  if (auth.currentUser) {
-    await updateProfile(auth.currentUser, { photoURL: newPhotoURL })
-    userStore.setUser({ ...auth.currentUser, photoURL: newPhotoURL })
-  } else {
-    throw new Error('No authenticated user found.')
-  }
-}
+        // Sync the updated avatar with Firebase
+        const firebaseUser = auth.currentUser;
+        if (firebaseUser) {
+            await updateProfile(firebaseUser, { photoURL: defaultAvatarPath });
+        }
 
-export const fetchAndSetUserClaims = async () => {
-  const userStore = useUserStore()
-  if (userStore.user) {
-    const idTokenResult = await userStore.user.getIdTokenResult()
-    const claims = idTokenResult.claims
-    userStore.setClaims(claims)
-    userStore.setAdmin(claims.admin === true)
-  } else {
-    userStore.setClaims(null)
-    userStore.setAdmin(false)
-  }
-}
+        // Update the user in the store
+        const authStore = useAuthStore();
+        authStore.setUser(data);
 
-export const logout = async () => {
-  const userStore = useUserStore()
-  try {
-    userStore.setUser(null)
-    userStore.setClaims(null)
-    userStore.setAdmin(false)
-    userStore.clearStateFromLocalStorage()
-    await signOut(auth)
-  } catch (error) {
-    console.error('Error logging out:', error)
-  }
-}
+        // Update the user in localStorage
+        localStorage.setItem('user', JSON.stringify(data));
+        console.log('User avatar reset successfully:', data);
+
+        return data;
+    } catch (error) {
+        console.error('Error resetting user avatar:', error);
+        throw new Error('Error resetting user avatar.');
+    }
+};

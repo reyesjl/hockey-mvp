@@ -1,3 +1,20 @@
+/**
+ * Youth Hockey Tournaments
+ * 
+ * Author: Jose Reyes
+ * Date: Dec 27, 2025
+ * 
+ * Copyright © 2025 Jose Reyes. All rights reserved.
+ * 
+ * This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+ * in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+ * 
+ * This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+ * Any unauthorized use may result in legal action.
+ * 
+ * For inquiries regarding licensing or permissions, please contact Jose Reyes.
+ */
+
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import submissionRoutes from './submissionRoutes'
@@ -11,7 +28,6 @@ const Community = () => import('@/views/CommunityView.vue')
 const Support = () => import('@/views/SupportView.vue')
 const NotFound = () => import('@/views/NotFoundView.vue')
 
-import { useUserStore } from '@/stores/userStore'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -51,32 +67,6 @@ const router = createRouter({
   scrollBehavior(to, from, savedPosition) {
     return { top: 0 }
   },
-})
-
-// Navigation Guard
-router.beforeEach(async (to, from, next) => {
-  const userStore = useUserStore()
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin)
-
-  // console.log(`Navigating to: ${to.fullPath}`)
-  // console.log(`From: ${from.fullPath}`)
-  // console.log(`Requires Auth: ${requiresAuth}`)
-  // console.log(`Requires Admin: ${requiresAdmin}`)
-  // console.log(`User is logged in: ${userStore.isLoggedIn}`)
-  // console.log(`User is admin: ${userStore.isAdmin}`)
-
-  if (requiresAuth && !userStore.isLoggedIn) {
-    next({ name: 'login' })
-  } else if (requiresAdmin) {
-    if (userStore.isAdmin) {
-      next()
-    } else {
-      next({ name: 'dashboard' })
-    }
-  } else {
-    next()
-  }
 })
 
 export default router

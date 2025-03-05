@@ -15,17 +15,20 @@
  * For inquiries regarding licensing or permissions, please contact Jose Reyes.
  */
 
-import { Router } from 'express';
-import { create, index, show, syncUser, update, destroy, uniqueUsername } from '../controllers/userController.js';
+import { ref, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/authStore'
 
-const router = Router();
+const useAuth = () => {
+  const authStore = useAuthStore()
+  const user = ref(authStore.user)
 
-router.get('/', index);
-router.post('/', create);
-router.get('/check-username/:username', uniqueUsername);
-router.get('/:id', show);
-router.patch('/sync', syncUser);
-router.patch('/:id', update);
-router.delete('/:id', destroy);
+  onMounted(() => {
+    authStore.$subscribe((mutation, state) => {
+      user.value = state.user;
+    });
+  });
 
-export default router;
+  return { user }
+}
+
+export default useAuth

@@ -15,17 +15,13 @@
  * For inquiries regarding licensing or permissions, please contact Jose Reyes.
  */
 
-import { Router } from 'express';
-import { create, index, show, syncUser, update, destroy, uniqueUsername } from '../controllers/userController.js';
+export class CustomError extends Error {
+    code: string;
+    details?: any;
 
-const router = Router();
-
-router.get('/', index);
-router.post('/', create);
-router.get('/check-username/:username', uniqueUsername);
-router.get('/:id', show);
-router.patch('/sync', syncUser);
-router.patch('/:id', update);
-router.delete('/:id', destroy);
-
-export default router;
+    constructor(message: string, code: string, details?: any) {
+        super(message);
+        this.code = code;
+        this.details = details;
+    }
+}

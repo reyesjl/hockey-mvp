@@ -1,3 +1,68 @@
+<!-- 
+  Youth Hockey Tournaments
+
+  Author: Jose Reyes
+  Date: Dec 27, 2025
+
+  Copyright © 2025 Jose Reyes. All rights reserved.
+
+  This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+  in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+
+  This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+  Any unauthorized use may result in legal action.
+
+  For inquiries regarding licensing or permissions, please contact Jose Reyes.
+-->
+<script setup lang="ts">
+import { ref } from 'vue'
+import * as yup from 'yup';
+import BaseButton from '@/lib/ui/BaseButton.vue'
+import { useRouter } from 'vue-router'
+import { login } from '@/services/authService'
+import { CustomError } from '@/utils/CustomError'
+import { loginSchema } from '@/utils/schemas/loginSchema'
+
+const email = ref('')
+const password = ref('')
+const error = ref('')
+const success = ref('')
+const loading = ref(false)
+const errors = ref<{ [key: string]: string }>({})
+
+// Router instance for navigation
+const router = useRouter()
+
+const handleLogin = async () => {
+  error.value = '';
+  success.value = '';
+  errors.value = {};
+
+  loading.value = true;
+
+  try {
+    await loginSchema.validate({ email: email.value, password: password.value }, { abortEarly: false });
+    await login(email.value, password.value);
+    success.value = 'Logged in successfully.';
+    router.push({ name: 'dashboard' });
+  } catch (err: any) {
+    if (err instanceof yup.ValidationError) {
+      err.inner.forEach((validationError: yup.ValidationError) => {
+        if (validationError.path) {
+          errors.value[validationError.path] = validationError.message;
+        }
+      });
+    } else if (err instanceof CustomError) {
+      error.value = err.message;
+    } else {
+      error.value = 'An unexpected error occurred.';
+    }
+  } finally {
+    loading.value = false;
+  }
+}
+</script> 
+
 <template>
   <main class="pt-[3.125rem]">
     <!-- Full background -->
@@ -32,43 +97,52 @@
           <!-- Form fields -->
           <div class="mb-8">
             <!-- Email -->
-            <label class="relative block mb-3">
-              <span class="sr-only">Email</span>
-              <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-                <i class="text-slate-400 fa-solid fa-at"></i>
-              </span>
-              <input
-                v-model="email"
-                class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Email"
-                type="email"
-                name="email"
-                autocomplete="email"
-              />
-            </label>
+            <div class="mb-3">
+              <label class="relative block mb-1">
+                <span class="sr-only">Email</span>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                  <i class="text-slate-400 fa-solid fa-at"></i>
+                </span>
+                <input
+                  v-model="email"
+                  class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+                  placeholder="Email"
+                  type="email"
+                  name="email"
+                  autocomplete="email"
+                />
+              </label>
+              <p v-if="errors.email" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.email }}
+              </p>
+            </div>
 
             <!-- Password -->
-            <label class="relative block">
-              <span class="sr-only">Password</span>
-              <span class="absolute inset-y-0 left-0 flex items-center pl-2">
-                <i class="text-slate-400 fa-solid fa-lock"></i>
-              </span>
-              <input
-                v-model="password"
-                class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
-                placeholder="Password"
-                type="password"
-                name="password"
-                autocomplete="current-password"
-              />
-            </label>
+            <div class="mb-3">
+              <label class="relative block">
+                <span class="sr-only">Password</span>
+                <span class="absolute inset-y-0 left-0 flex items-center pl-2">
+                  <i class="text-slate-400 fa-solid fa-lock"></i>
+                </span>
+                <input
+                  v-model="password"
+                  class="placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
+                  placeholder="Password"
+                  type="password"
+                  name="password"
+                  autocomplete="current-password"
+                />
+              </label>
+              <p v-if="errors.password" class="text-red-500 text-sm mt-1 mb-1">
+                {{ errors.password }}
+              </p>
+            </div>
+
             <div class="mt-2 w-full flex justify-end">
               <BaseButton
-                @click="handleForgotPassword"
                 label="Forgot Password?"
                 variant="linkSecondary"
                 class="text-xs"
-                :disabled="isSendingReset"
                 aria-label="Forgot Password"
               >
                 Forgot Password?
@@ -79,7 +153,7 @@
           <div class="flex flex-col gap-4">
             <BaseButton
               type="submit"
-              :disabled="isLoading"
+              :disabled="loading"
               label="Login"
               class="w-full shadow-xl"
             />
@@ -100,108 +174,5 @@
     </div>
   </main>
 </template>
-
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  sendEmailVerification,
-  sendPasswordResetEmail,
-} from 'firebase/auth'
-import { auth } from '@/firebase'
-import BaseButton from '@/lib/ui/BaseButton.vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/userStore'
-import { logout } from '@/services/userService'
-
-const email = ref('')
-const password = ref('')
-const error = ref('')
-const success = ref('')
-const isLoading = ref(false)
-const isSendingReset = ref(false)
-
-// Router instance for navigation
-const router = useRouter()
-const userStore = useUserStore()
-
-onMounted(() => {
-  if (userStore.user) {
-    router.push({ name: 'dashboard' })
-  }
-})
-
-const handleLogin = async () => {
-  error.value = ''
-  success.value = ''
-  isLoading.value = true
-
-  try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      email.value,
-      password.value,
-    )
-    const user = userCredential.user
-
-    if (user.emailVerified) {
-      // Email is verified, proceed to account page
-      success.value = 'Logged in successfully!'
-      if (userStore.isAdmin) {
-        router.push({ name: 'admin-dashboard' })
-      } else {
-        router.push({ name: 'dashboard' })
-      }
-    } else {
-      // Email is not verified, sign out the user
-      await logout()
-      error.value =
-        'Your email is not verified. Please verify your email to proceed. New email has been sent. Check spam too.'
-
-      // Send verification email
-      await sendEmailVerification(user)
-    }
-  } catch (err: any) {
-    error.value = err.message
-  } finally {
-    isLoading.value = false
-  }
-}
-
-// Handle Forgot Password
-const handleForgotPassword = async () => {
-  // Clear previous messages
-  error.value = ''
-  success.value = ''
-
-  // Trim the email to remove extra spaces
-  const trimmedEmail = email.value.trim()
-
-  // Validate email presence
-  if (!trimmedEmail) {
-    error.value = 'Please enter your email, and try again.'
-    return
-  }
-
-  // Optional: Validate email format using regex
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(trimmedEmail)) {
-    error.value = 'Please enter a valid email address.'
-    return
-  }
-
-  isSendingReset.value = true
-
-  try {
-    await sendPasswordResetEmail(auth, trimmedEmail)
-    success.value = 'The password reset link has been sent to your email.'
-  } catch (err: any) {
-    error.value = err.message
-  } finally {
-    isSendingReset.value = false
-  }
-}
-</script>
 
 <style scoped></style>

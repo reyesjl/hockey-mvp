@@ -8,11 +8,10 @@ import { createPinia } from 'pinia'
 
 import { auth } from '@/firebase' // Ensure this path is correct
 import { onAuthStateChanged } from 'firebase/auth'
-import { useUserStore } from '@/stores/userStore'
-import { fetchAndSetUserClaims } from '@/services/userService'
 
 import App from './App.vue'
 import router from './router'
+import { useAuthStore } from './stores/authStore'
 
 // Create a Pinia instance
 const pinia = createPinia()
@@ -24,28 +23,16 @@ const app = createApp(App)
 app.use(pinia)
 app.use(router)
 
-// Initialize User Store
-const userStore = useUserStore()
-
-// Load user from local storage first
-userStore.loadStateFromLocalStorage()
+// Initialize user data from localStorage
+const authStore = useAuthStore();
+const storedUser = localStorage.getItem('user');
+if (storedUser) {
+    authStore.setUser(JSON.parse(storedUser));
+}
 
 // Set up Firebase Auth State Listener
-onAuthStateChanged(auth, async firebaseUser => {
-  if (firebaseUser) {
-    // User is signed in.
-    userStore.setUser(firebaseUser)
-    await fetchAndSetUserClaims()
-  } else {
-    // User is signed out.
-    userStore.setUser(null)
-  }
-  // Set loading to false after auth state is determined
-  userStore.setLoading(false)
-})
-
-// Call refreshUserData on app load
-userStore.refreshUserData()
+// Don't need this since we are using our own session.
+// onAuthStateChanged(auth, async firebaseUser => {})
 
 // Mount the app after setting up the auth listener
 app.mount('#app')

@@ -1,6 +1,6 @@
 <template>
   <main class="max-w-screen-sm mx-auto p-4">
-    <div class="mt-8 justify-center">
+    <div class="justify-center mt-10 md:mt-16">
       <h3 class="text-3xl font-semibold">
         This page went wide of the goal. Maybe try skating back to the homepage?
       </h3>

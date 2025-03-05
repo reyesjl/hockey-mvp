@@ -41,6 +41,7 @@ const userSchema = new Schema({
     },
     avatar: {
         type: String,
+        default: 'default_avatar.webp',
     },
     roles: {
         type: [String],
@@ -51,6 +52,10 @@ const userSchema = new Schema({
         type: [String],
         default: [],
     },
+    isActive: {
+        type: Boolean,
+        default: true,
+    }
 }, {
     timestamps: true,
 });

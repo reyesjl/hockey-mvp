@@ -80,7 +80,7 @@
           </ul>
         </div>
       </div>
-      <div class="mt-5 text-xs text-gray-400">YHT Reviews 2024</div>
+      <div class="mt-5 text-xs text-gray-400">YHT Reviews 2025</div>
     </div>
   </footer>
 </template>

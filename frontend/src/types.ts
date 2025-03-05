@@ -86,4 +86,18 @@ type Review = {
   updatedAt?: string
 }
 
-export type { Tournament, Review }
+// User Type
+type User = {
+  _id: string
+  uuid: string
+  username: string
+  email: string
+  avatar?: string
+  roles: ('user' | 'admin' | 'moderator')[]
+  permissions: string[]
+  isActive: boolean
+  createdAt?: string
+  updatedAt?: string
+}
+
+export type { Tournament, Review, User }

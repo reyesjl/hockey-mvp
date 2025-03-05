@@ -1,130 +1,80 @@
-<template>
-  <main class="pt-[3.125rem] pb-20">
-    <!-- User account navigation -->
-    <div class="container mx-auto">
-      <ul class="text-sm flex flex-row w-full">
-        <li class="px-4">
-          <div class="py-2">
-            <RouterLink :to="{ name: 'dashboard' }">Home</RouterLink>
-          </div>
-        </li>
-        <li class="px-4">
-          <div class="py-2">
-            <RouterLink :to="{ name: 'dashboard' }">Submissions</RouterLink>
-          </div>
-        </li>
-        <li class="px-4">
-          <div class="py-2">
-            <RouterLink :to="{ name: 'edit-display-name' }">Display name</RouterLink>
-          </div>
-        </li>
-        <li class="px-4">
-          <div class="py-2">
-            <RouterLink :to="{ name: 'edit-avatar' }"
-              >Profile picture</RouterLink
-            >
-          </div>
-        </li>
-      </ul>
-    </div>
+<!-- 
+  Youth Hockey Tournaments
 
-    <div class="container mx-auto text-center">
-      <div v-if="user">
-        <!-- Profile Picture Container -->
-        <div
-          class="mt-10 md:mt-[16] mb-5 w-32 h-32 rounded-full shadow-lg overflow-hidden mx-auto relative group"
-        >
-          <!-- If user has a photo -->
-          <img
-            v-if="user.photoURL"
-            :src="user.photoURL"
-            alt="Profile Picture"
-            class="w-full h-full object-cover transition duration-300 group-hover:blur-sm"
-          />
-          <!-- Otherwise, use a placeholder robohash -->
-          <div
-            v-else
-            class="flex items-center justify-center bg-gray-200 w-full h-full shadow-lg transition duration-300 group-hover:blur-sm"
-          >
-            <img
-              :src="'https://robohash.org/' + user.displayName"
-              alt="Profile Picture"
-            />
-          </div>
+  Author: Jose Reyes
+  Date: Dec 27, 2025
 
-          <!-- Overlay (appears on hover) -->
-          <RouterLink
-            :to="{ name: 'edit-avatar' }"
-            class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20"
-          >
-            <i class="fa-solid fa-camera text-white"></i>
-          </RouterLink>
-        </div>
-        <p class="text-xl font-semibold">{{ user.displayName || 'N/A' }}</p>
-        <p class="text-sm">
-          {{ user.email || 'N/A' }}
-          <i
-            :class="
-              user.emailVerified
-                ? 'fa-solid fa-check text-green-500'
-                : 'fa-solid fa-times text-red-500'
-            "
-          ></i>
-        </p>
-        <p>{{}}</p>
-      </div>
-      <div v-else>
-        <p>User data is not available.</p>
-      </div>
-    </div>
-    <!-- Edit user account -->
-    <div class="flex justify-center gap-2 pt-4">
-      <RouterLink :to="{ name: 'edit-display-name' }">
-        <BaseButton
-          iconRight="fa-solid fa-pencil"
-          class="text-sm"
-          label="edit profile"
-          variant="primary"
-        />
-      </RouterLink>
-      <button @click="handleLogout">
-        <BaseButton
-          iconRight="fa-solid fa-arrow-right-from-bracket"
-          class="text-sm"
-          label="logout"
-          variant="primary"
-        />
-      </button>
-    </div>
-  </main>
-</template>
+  Copyright © 2025 Jose Reyes. All rights reserved.
 
+  This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+  in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+
+  This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+  Any unauthorized use may result in legal action.
+
+  For inquiries regarding licensing or permissions, please contact Jose Reyes.
+-->
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useUserStore } from '@/stores/userStore'
-import BaseButton from '@/lib/ui/BaseButton.vue'
 import { useRouter } from 'vue-router'
-import { logout } from '@/services/userService'
+import useAuth from '@/composables/useAuth'
+import { logout } from '@/services/authService'
+import BaseButton from '@/lib/ui/BaseButton.vue'
+import Avatar from '@/lib/ui/Avatar.vue'
+import { resetUserAvatar } from '@/services/userService'
 
-// Access userStore
-const userStore = useUserStore()
-
-// Get router instance
+// Get router object
 const router = useRouter()
 
-// redirect the user to admin dashboard
-if (userStore.isAdmin) {
-  router.push({ name: 'admin-dashboard' })
+// Get the current user from the composable
+const { user } = useAuth()
+
+function handleLogout() {
+    logout()
+    router.push({ name: 'login' });
 }
 
-// Computed property to get the current user
-const user = userStore.user
-
-// Logout function
-const handleLogout = async () => {
-  await logout()
-  router.push({ name: 'login' })
+async function handleResetAvatar() {
+    const defaultAvatarPath = 'default_avatar.webp';
+    if (user.value) {
+        try {
+            await resetUserAvatar(user.value.uuid, defaultAvatarPath);
+        } catch {
+            console.error('Error resetting user avatar');
+        }
+    }
 }
 </script>
 
-<style scoped></style>
+<template>
+    <main class="pt-[3.125rem]">
+        <div class="mt-10 md:mt-16">
+            <div class="container mb-20">
+
+                <div class="flex justify-between mb-5 items-center">
+                    <div>
+                        <h1 class="text-3xl font-semibold">Dashboard</h1>
+                    </div>
+                    <div>
+                        <BaseButton @click="handleLogout" iconRight="fa-solid fa-sign-out" size="sm" label="Logout" class="shadow-xl text-sm bg-gray-400" />
+                    </div>
+                </div>
+
+                <!-- User avatar -->
+                <div class="flex justify-center mb-3">
+                    <Avatar :path="user?.avatar || ''" alt="User Avatar" size="large" />
+                </div>
+
+                <!-- Username -->
+                <div class="text-center">
+                    <div class="text-lg font-semibold">@{{ user?.username }}</div>
+                </div>
+
+                <!-- Update avatar / Reset Avatar -->
+                <div class="flex justify-center mt-2">
+                    <BaseButton size="sm" iconRight="fa-solid fa-user" label="Change Avatar" class="shadow-xl text-sm mr-2" />
+                    <BaseButton @click="handleResetAvatar" size="sm" iconRight="fa-solid fa-rotate-left" label="Reset Avatar" class="shadow-xl text-sm bg-red-500 mr-2" />
+                </div>
+            </div>
+        </div>
+    </main>
+</template>

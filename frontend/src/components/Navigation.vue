@@ -1,4 +1,62 @@
-<!-- src/components/Navbar.vue -->
+<!-- 
+  Youth Hockey Tournaments
+
+  Author: Jose Reyes
+  Date: Dec 27, 2025
+
+  Copyright © 2025 Jose Reyes. All rights reserved.
+
+  This software is the intellectual property of Jose Reyes. Unauthorized copying, distribution, modification, or use of this file, 
+  in whole or in part, via any medium, is strictly prohibited without prior written consent from the author.
+
+  This code is developed for a private project and is not intended for commercial use, resale, or reproduction by any third party. 
+  Any unauthorized use may result in legal action.
+
+  For inquiries regarding licensing or permissions, please contact Jose Reyes.
+-->
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+import useAuth from '@/composables/useAuth'
+import Avatar from '@/lib/ui/Avatar.vue'
+
+// Reactive variable to track header visibility
+const isVisible = ref(true)
+const isMobileMenuOpen = ref(false)
+let lastScroll = 0
+
+
+// Get the current user from the composable
+const { user } = useAuth()
+
+// Scroll event handler
+const handleScroll = () => {
+  const currentScroll = window.pageYOffset
+
+  if (currentScroll > lastScroll && currentScroll > 100) {
+    // Scrolling down and scrolled more than 100px
+    isVisible.value = false
+  } else {
+    // Scrolling up
+    isVisible.value = true
+  }
+
+  lastScroll = currentScroll
+}
+
+// Mobile menu visibility handler
+const toggleMobileMenu = () => {
+  isMobileMenuOpen.value = !isMobileMenuOpen.value
+}
+
+onMounted(() => {
+  lastScroll = window.pageYOffset
+  window.addEventListener('scroll', handleScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll)
+})
+</script>
 
 <template>
   <header
@@ -93,15 +151,7 @@
 
               <li v-if="user" class="relative">
                 <RouterLink :to="{ name: 'dashboard' }" class="flex items-center">
-                  <img
-                    :src="
-                      user.photoURL
-                        ? user.photoURL
-                        : 'https://robohash.org/' + user.displayName
-                    "
-                    alt="User Avatar"
-                    class="w-8 h-8 rounded-full object-cover shadow-sm"
-                  />
+                  <Avatar :path="user?.avatar || ''" alt="User Avatar" size="small" />
                 </RouterLink>
               </li>
             </ul>
@@ -212,50 +262,3 @@
     </ul>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useUserStore } from '@/stores/userStore'
-
-// Reactive variable to track header visibility
-const isVisible = ref(true)
-const isMobileMenuOpen = ref(false)
-let lastScroll = 0
-
-// Access userStore
-const userStore = useUserStore()
-
-// Computed property to get the current user
-const user = computed(() => userStore.user)
-
-// Scroll event handler
-const handleScroll = () => {
-  const currentScroll = window.pageYOffset
-
-  if (currentScroll > lastScroll && currentScroll > 100) {
-    // Scrolling down and scrolled more than 100px
-    isVisible.value = false
-  } else {
-    // Scrolling up
-    isVisible.value = true
-  }
-
-  lastScroll = currentScroll
-}
-
-// Mobile menu visibility handler
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
-}
-
-onMounted(() => {
-  lastScroll = window.pageYOffset
-  window.addEventListener('scroll', handleScroll)
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll)
-})
-</script>
-
-<style scoped></style>

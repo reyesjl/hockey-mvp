@@ -15,17 +15,19 @@
  * For inquiries regarding licensing or permissions, please contact Jose Reyes.
  */
 
-import { Router } from 'express';
-import { create, index, show, syncUser, update, destroy, uniqueUsername } from '../controllers/userController.js';
+import { defineStore } from 'pinia';
+import type { User } from '@/types';
 
-const router = Router();
-
-router.get('/', index);
-router.post('/', create);
-router.get('/check-username/:username', uniqueUsername);
-router.get('/:id', show);
-router.patch('/sync', syncUser);
-router.patch('/:id', update);
-router.delete('/:id', destroy);
-
-export default router;
+export const useAuthStore = defineStore('auth', {
+    state: () => ({
+        user: null as User | null
+    }),
+    actions: {
+        setUser(user: User) {
+            this.user = user;
+        },
+        clearUser() {
+            this.user = null;
+        }
+    }
+});
