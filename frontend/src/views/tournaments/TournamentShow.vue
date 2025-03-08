@@ -17,9 +17,10 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { axiosInstance } from "@/config/apiConfig";
-import type { Tournament, Review } from "@/types";
+import type { Tournament, Review, User } from "@/types";
 import { getGenderIcon } from "@/utils/tournaments";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import useAuth from "@/composables/useAuth";
 
 // State variables
 const tournament = ref<Tournament | null>(null);
@@ -27,11 +28,15 @@ const loading = ref<boolean>(true);
 const error = ref<string | null>(null);
 const showModal = ref<boolean>(false);
 const showDetails = ref<boolean>(false);
+const submittedByUser = ref<User | null>(null);
 
 // Reviews state
 const reviews = ref<Review[]>([]);
 const reviewsLoading = ref<boolean>(true);
 const reviewsError = ref<string | null>(null);
+
+const { user } = useAuth();
+const isAdmin = computed(() => user.value?.permissions.includes('admin'));
 
 // Compute Ratings
 const ratings = computed(() => [
@@ -53,20 +58,34 @@ const features = computed(() => [
 
 // Fetch tournaments on mount
 const route = useRoute();
+const router = useRouter();
 onMounted(async () => {
   loading.value = true;
   try {
-    const response = await axiosInstance.get(`/tournaments/${route.params.tournamentId}`);
+    const response = await axiosInstance.get(`/tournaments/${route.params.id}`);
     const { success, message, data } = response.data;
     if (!success) throw new Error(message);
     tournament.value = data;
-    await fetchReviews(route.params.tournamentId as string);
+    await fetchReviews(route.params.id as string);
+    await fetchSubmittedByUser(data.submitted_by);
   } catch (err) {
     error.value = "Error loading tournaments.";
   } finally {
     loading.value = false;
   }
 });
+
+// Method to fetch user details
+const fetchSubmittedByUser = async (userId: string) => {
+  try {
+    const response = await axiosInstance.get(`/users/${userId}`);
+    const { success, message, data } = response.data;
+    if (!success) throw new Error(message);
+    submittedByUser.value = data;
+  } catch (err) {
+    console.error("Error fetching user details:", err);
+  }
+};
 
 // Method to toggle details visibility
 const toggleDetails = () => {
@@ -115,6 +134,15 @@ const fetchReviews = async (tournamentId: string) => {
       <!-- Display tournament -->
       <div v-else-if="tournament">
 
+        <!-- Visibility -->
+        <div class="flex gap-2 mt-4 items-center justify-end">
+          <div v-if="tournament.visible.state=='pending'" class="bg-yellow-500 text-white px-2 w-fit rounded-full shadow-md">Pending Approval</div>
+          <div v-if="tournament.visible.state=='rejected'" class="bg-red-500 text-white px-2 w-fit rounded-full shadow-md">Rejected</div>
+          <RouterLink v-if="isAdmin" :to="{ name: 'tournament-update', params: { id: tournament._id } }">
+            <div class="hover:bg-gray-700 bg-gray-500 text-white px-2 w-fit rounded-full shadow-md">Update <i class="text-xs fa-solid fa-pencil"></i></div>
+          </RouterLink>
+        </div>
+
         <!-- Location and rating-->
         <div class="mt-4 pb-2 flex justify-between items-center font-semibold">
           <div><i class="fa-solid fa-location-dot"></i> {{ tournament.location.city }}, {{
@@ -148,6 +176,8 @@ const fetchReviews = async (tournamentId: string) => {
           <div class="w-fit bg-black text-xs text-white flex items-center rounded-full py-1 px-2"
             v-html="getGenderIcon(tournament.gender)"></div>
         </div>
+
+        <div class="text-sm italic text-gray-500 mt-2">Submitted by: @{{ submittedByUser?.username }}</div>
 
         <!-- Tournament Features (Icons Grid) -->
         <div class="font-semibold mt-4  flex items-center gap-1">

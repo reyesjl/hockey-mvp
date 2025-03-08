@@ -15,11 +15,11 @@
     For inquiries regarding licensing or permissions, please contact Jose Reyes.
 -->
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { axiosInstance } from "@/config/apiConfig";
 import BaseButton from "@/lib/ui/BaseButton.vue";
 import useAuth from "@/composables/useAuth";
-import { useRouter } from "vue-router";
 
 // State variables
 const tournamentName = ref<string>("");
@@ -35,6 +35,8 @@ const hardware = ref<{ first_place: string, second_place: string }>({ first_plac
 const discounts = ref<{ multi_team: boolean, early_bird: string, other: string }>({ multi_team: false, early_bird: "", other: "" });
 const companyName = ref<string>("");
 const companyEmail = ref<string>("");
+const visibilityState = ref<string>("pending");
+const visibilityReason = ref<string>("");
 
 const success = ref<string | null>(null);
 const loading = ref<boolean>(false);
@@ -42,8 +44,38 @@ const error = ref<string | null>(null);
 const formErrors = ref<Record<string, string[]>>({});
 
 const { user } = useAuth();
-
+const route = useRoute();
 const router = useRouter();
+
+const tournamentId = route.params.id;
+
+const fetchTournament = async () => {
+    try {
+        const response = await axiosInstance.get(`/tournaments/${tournamentId}`);
+        const tournament = response.data.data;
+        tournamentName.value = tournament.name;
+        tournamentDates.value = tournament.dates.map((date: string) => new Date(date));
+        tournamentLocation.value = tournament.location;
+        tournamentDescription.value = tournament.description;
+        minimumGames.value = tournament.minimum_games;
+        levelOfPlay.value = tournament.level_of_play;
+        ageGroups.value = tournament.age_groups;
+        details.value = tournament.details;
+        gender.value = tournament.gender;
+        hardware.value = tournament.hardware;
+        discounts.value = tournament.discounts;
+        companyName.value = tournament.company.name;
+        companyEmail.value = tournament.company.email;
+        visibilityState.value = tournament.visible.state;
+        visibilityReason.value = tournament.visible.reason;
+    } catch (err: any) {
+        error.value = err.response?.data?.message || 'An error occurred';
+    }
+};
+
+onMounted(() => {
+    fetchTournament();
+});
 
 const addDate = (event: Event) => {
     const input = event.target as HTMLInputElement;
@@ -61,16 +93,15 @@ const removeDate = (date: Date) => {
     tournamentDates.value = tournamentDates.value.filter(d => d.getTime() !== date.getTime());
 };
 
-const createTournament = async () => {
+const updateTournament = async () => {
     loading.value = true;
     error.value = null;
 
     try {
-        const response = await axiosInstance.post('/tournaments', {
+        const response = await axiosInstance.patch(`/tournaments/${tournamentId}`, {
             name: tournamentName.value,
             location: tournamentLocation.value,
             company: { name: companyName?.value, email: companyEmail.value },
-            submitted_by: user.value?._id || null,
             description: tournamentDescription.value,
             dates: tournamentDates.value,
             minimum_games: minimumGames.value,
@@ -80,9 +111,13 @@ const createTournament = async () => {
             gender: gender.value,
             hardware: hardware.value,
             discounts: discounts.value,
+            visible: {
+                state: visibilityState.value,
+                reason: visibilityReason.value
+            }
         });
-        // Handle successful creation
-        router.push({ name: 'TournamentDetails', params: { id: response.data._id } });
+        router.push({ name: 'tournament', params: { id: tournamentId } });
+        success.value = 'Tournament updated successfully';
     } catch (err: any) {
         error.value = err.response?.data?.message || 'An error occurred';
     } finally {
@@ -94,16 +129,16 @@ const createTournament = async () => {
 <template>
     <main class="pt-[3.125rem]">
         <!-- Full background -->
-        <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100">
+        <div class="w-full bg-fixed min-h-screen overflow-auto bg-gradient-to-b from-blue-200 to-blue-100 pb-20">
             <!-- Invisible form wrapper -->
             <div class="container max-w-4xl">
                 <div class="mt-10 md:mt-16 mb-5">
-                    <div class="text-3xl text-black font-semibold">New Tournament</div>
+                    <div class="text-3xl text-black font-semibold">Update Tournament</div>
                     <div class="text-sm text-gray-500">submitted by @{{ user?.username }}</div>
                 </div>
                 <!-- Tournament form -->
-                <form @submit.prevent="createTournament"
-                    class="bg-gradient-to-b from-sky-200 to-sky-100 shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4">
+                <form @submit.prevent="updateTournament"
+                    class="bg-gradient-to-b from-sky-200 to-sky-100 shadow-xl rounded-lg px-8 pt-6 pb-8">
                     <!-- Tournament name -->
                     <div class="mb-4">
                         <label for="tournamentName" class="block text-sm font-semibold text-gray-700">Tournament
@@ -222,6 +257,31 @@ const createTournament = async () => {
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
                     </div>
 
+                    <!-- Visibility State -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-semibold text-gray-700">Visibility State</label>
+                        <div class="mt-2">
+                            <div class="flex items-center">
+                                <input type="radio" id="pending" value="pending" v-model="visibilityState" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <label for="pending" class="ml-2 block text-sm text-gray-700">Pending</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="approved" value="approved" v-model="visibilityState" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <label for="approved" class="ml-2 block text-sm text-gray-700">Approved</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="rejected" value="rejected" v-model="visibilityState" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                <label for="rejected" class="ml-2 block text-sm text-gray-700">Rejected</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Visibility Reason -->
+                    <div class="mb-4" v-if="visibilityState === 'rejected'">
+                        <label for="visibilityReason" class="block text-sm font-semibold text-gray-700">Reason for Rejection</label>
+                        <textarea v-model="visibilityReason" id="visibilityReason" name="visibilityReason" rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                    </div>
+
                     <!-- Tournament dates -->
                     <div class="mb-4">
                         <label for="tournamentDates" class="block text-sm font-semibold text-gray-700">Dates</label>
@@ -266,7 +326,7 @@ const createTournament = async () => {
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             <option value="both">Both</option>
                             <option value="boys">Boys</option>
-                            <option value="girls">Girls</option>
+                            <option value="girls">Girls</option> 
                         </select>
                     </div>
 
@@ -335,7 +395,7 @@ const createTournament = async () => {
                         <BaseButton
                         type="submit"
                         :disabled="loading"
-                        label="Submit"
+                        label="Update"
                         class="w-fit px-10 shadow-xl"
                         />
                     </div>

@@ -21,6 +21,7 @@ import submissionRoutes from './submissionRoutes'
 import tournamentRoutes from './tournamentRoutes'
 import authRoutes from './authRoutes'
 import infoRoutes from './infoRoutes'
+import userRoutes from './userRoutes'
 
 const Home = () => import('@/views/HomeView.vue')
 const About = () => import('@/views/AboutView.vue')
@@ -54,6 +55,7 @@ const routes: Array<RouteRecordRaw> = [
   ...submissionRoutes,
   ...authRoutes,
   ...infoRoutes,
+  ...userRoutes,
   {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',

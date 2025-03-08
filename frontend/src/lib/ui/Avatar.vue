@@ -34,7 +34,7 @@ const sizeClass = computed(() => {
     case 'small':
       return 'w-8 h-8'
     case 'medium':
-      return 'w-16 h-16'
+      return 'w-32 h-32'
     case 'large':
       return 'w-60 h-60'
     default:

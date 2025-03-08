@@ -71,7 +71,16 @@ export const index = async (req, res, next) => {
 // Get a user by UUID
 export const show = async (req, res, next) => {
     try {
-        const user = await User.findOne({ uuid: req.params.id });
+        const { id } = req.params;
+        const { firebase } = req.query;
+
+        let user;
+        if (firebase) {
+            user = await User.findOne({ uuid: req.params.id });
+        } else {
+            user = await User.findById(id);
+        }
+
         if (!user) {
             return sendResponse(res, 404, 'User not found.', null);
         }

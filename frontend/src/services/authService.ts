@@ -130,7 +130,7 @@ const createUserRef = async (uuid: string, email: string, username: string) => {
 // Fetch user data from the database
 const fetchUserFromDatabase = async (uuid: string) => {
     try {
-        const response = await axiosInstance.get(`/users/${uuid}`);
+        const response = await axiosInstance.get(`/users/${uuid}?firebase=true`);
         const { success, message, data } = response.data;
         return data;
     } catch (error) {

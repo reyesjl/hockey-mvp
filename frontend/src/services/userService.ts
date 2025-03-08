@@ -52,3 +52,36 @@ export const resetUserAvatar = async (userId: string, defaultAvatarPath: string)
         throw new Error('Error resetting user avatar.');
     }
 };
+
+// Handle saving the user's new avatar
+export const saveUserAvatar = async (userId: string, newAvatarPath: string) => {
+    try {
+        // Update the user's avatar in the database
+        const response = await axiosInstance.patch(`/users/${userId}`, { avatar: newAvatarPath });
+        const { success, message, data } = response.data;
+        console.log('Save user avatar response:', response.data);
+
+        if (!success) {
+            throw new Error(message);
+        }
+
+        // Sync the updated avatar with Firebase
+        const firebaseUser = auth.currentUser;
+        if (firebaseUser) {
+            await updateProfile(firebaseUser, { photoURL: newAvatarPath });
+        }
+
+        // Update the user in the store
+        const authStore = useAuthStore();
+        authStore.setUser(data);
+
+        // Update the user in localStorage
+        localStorage.setItem('user', JSON.stringify(data));
+        console.log('User avatar saved successfully:', data);
+
+        return data;
+    } catch (error) {
+        console.error('Error saving user avatar:', error);
+        throw new Error('Error saving user avatar.');
+    }
+};

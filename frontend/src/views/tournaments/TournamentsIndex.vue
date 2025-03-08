@@ -61,7 +61,7 @@ onMounted(async () => {
 
             <!-- Display Tournaments -->
             <ul v-else-if="tournaments.length > 0" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
-            <li v-for="tournament in tournaments" :key="tournament._id" class="mb-2 p-1 border rounded-lg">
+            <li v-for="tournament in tournaments" :key="tournament._id" class="mb-2 p-1 border border-gray-300 rounded-lg shadow-md">
                 <div class="bg-gradient-to-b from-sky-300 to-sky-100 rounded-lg p-2">
                     <div class="font-semibold text-sm">{{ tournament.company.name }}</div>
                     <h2 class="text-xl uppercase">{{ tournament.name }}</h2>
