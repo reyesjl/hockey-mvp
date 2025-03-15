@@ -4,7 +4,7 @@
       class="mt-10 md:mt-16 grid grid-cols-12 justify-items-center text-center"
     >
       <div class="col-span-12">
-        <p class="font-semibold text-xs">YHT REVIEWS BETA v1.0</p>
+        <p class="font-semibold text-xs">YHT REVIEWS BETA v1.2.1</p>
         <h1 class="text-4xl md:text-6xl font-semibold">
           Plan. Play. <br />Review & Connect.
         </h1>
