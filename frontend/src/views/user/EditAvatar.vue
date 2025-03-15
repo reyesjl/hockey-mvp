@@ -67,7 +67,7 @@ const handleSaveAvatar = async () => {
                 </div>
                 <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
                     <div v-for="avatar in avatars" :key="avatar" class="cursor-pointer flex justify-center" @click="selectAvatar(avatar)">
-                        <img :src="`/src/assets/avatars/${avatar}`" :alt="avatar"
+                        <img :src="`/assets/avatars/${avatar}`" :alt="avatar"
                             :class="{ 'opacity-50': selectedAvatar !== avatar, 'opacity-100': selectedAvatar === avatar }"
                             class="shadow-xl h-[100px] w-[100px] rounded-full object-cover" />
                     </div>

@@ -26,7 +26,7 @@ interface Props {
 const props = defineProps<Props>()
 
 const fullPath = computed(() => {
-  return props.path ? `/src/assets/avatars/${props.path}` : '/src/assets/avatars/default_avatar.webp'
+  return props.path ? `/assets/avatars/${props.path}` : '/assets/avatars/default_avatar.webp'
 })
 
 const sizeClass = computed(() => {
