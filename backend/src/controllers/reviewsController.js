@@ -24,12 +24,21 @@ export async function create(req, res, next) {
     const { tournament, reviewer, ratings, subject, comment } = req.body;
 
     // Basic check for required fields
-    if (!tournament || !reviewer || !ratings || !ratings.overall || !subject || !comment) {
+    if (!tournament || !reviewer || !reviewer.id || !reviewer.username || !ratings || !ratings.overall || !subject || !comment) {
         return next(new ValidationError('Please provide all required fields.'));
     }
 
     try {
-        const review = new Review(req.body);
+        const review = new Review({
+            tournament,
+            reviewer: {
+                id: reviewer.id,
+                username: reviewer.username
+            },
+            ratings,
+            subject,
+            comment
+        });
         await review.save();
         return sendResponse(res, 201, 'Review created successfully', review);
     } catch (error) {

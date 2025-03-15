@@ -15,17 +15,12 @@
  * For inquiries regarding licensing or permissions, please contact Jose Reyes.
  */
 
-import type { RouteRecordRaw } from 'vue-router'
-const CreateSubmission = () =>
-  import('@/views/submissions/CreateSubmission.vue')
+import { Router } from 'express';
+import { login, refreshToken } from '../controllers/authController.js';
 
-const submissionRoutes: Array<RouteRecordRaw> = [
-  {
-    path: '/submissions/create',
-    name: 'createTournamentSubmission',
-    component: CreateSubmission,
-    meta: { requiresAuth: true },
-  },
-]
+const router = Router();
 
-export default submissionRoutes
+router.post('/login', login);
+router.post('/refresh-token', refreshToken);
+
+export default router;

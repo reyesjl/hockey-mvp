@@ -1,14 +1,11 @@
 import admin from 'firebase-admin';
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const serviceAccount = require('../config/serviceFile.json');
 
 // Initalize Firebase Admin SDK
 admin.initializeApp({
-  credential: admin.credential.cert('file_path_idiot.json'),
+  credential: admin.credential.cert(serviceAccount),
 })
 
-// Set custom 'admin' claim for a user
-const setAdminClaim = async (uid) => {
-  await admin.auth().setCustomUserClaims(uid, { admin: true });
-  console.log(`Custom claim set for user ${uid}`);
-};
-
-setAdminClaim('uuid').then(() => process.exit());
+export default admin;

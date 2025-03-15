@@ -38,13 +38,20 @@ export const resetUserAvatar = async (userId: string, defaultAvatarPath: string)
             await updateProfile(firebaseUser, { photoURL: defaultAvatarPath });
         }
 
+        // Call the refreshToken endpoint to get a new token with updated user data
+        const token = localStorage.getItem('token');
+        const refreshResponse = await axiosInstance.post('/auth/refresh-token', { token });
+        const { user, newToken } = refreshResponse.data.data;
+
         // Update the user in the store
         const authStore = useAuthStore();
-        authStore.setUser(data);
+        authStore.setUser(user);
 
-        // Update the user in localStorage
-        localStorage.setItem('user', JSON.stringify(data));
-        console.log('User avatar reset successfully:', data);
+        // Update the user and token in localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+        //localStorage.setItem('token', newToken);
+        
+        console.log('User avatar saved and token refreshed successfully:', user);
 
         return data;
     } catch (error) {
@@ -71,13 +78,20 @@ export const saveUserAvatar = async (userId: string, newAvatarPath: string) => {
             await updateProfile(firebaseUser, { photoURL: newAvatarPath });
         }
 
+        // Call the refreshToken endpoint to get a new token with updated user data
+        const token = localStorage.getItem('token');
+        const refreshResponse = await axiosInstance.post('/auth/refresh-token', { token });
+        const { user, newToken } = refreshResponse.data.data;
+
         // Update the user in the store
         const authStore = useAuthStore();
-        authStore.setUser(data);
+        authStore.setUser(user);
 
-        // Update the user in localStorage
-        localStorage.setItem('user', JSON.stringify(data));
-        console.log('User avatar saved successfully:', data);
+        // Update the user and token in localStorage
+        localStorage.setItem('user', JSON.stringify(user));
+        //localStorage.setItem('token', newToken);
+
+        console.log('User avatar saved and token refreshed successfully:', user);
 
         return data;
     } catch (error) {

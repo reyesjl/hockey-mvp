@@ -15,23 +15,27 @@
   For inquiries regarding licensing or permissions, please contact Jose Reyes.
 -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import * as yup from 'yup';
 import BaseButton from '@/lib/ui/BaseButton.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { login } from '@/services/authService'
 import { CustomError } from '@/utils/CustomError'
 import { loginSchema } from '@/utils/schemas/loginSchema'
+import useAuth from '@/composables/useAuth';
+
+const { user } = useAuth();
 
 const email = ref('')
 const password = ref('')
 const error = ref('')
 const success = ref('')
 const loading = ref(false)
-const errors = ref<{ [key: string]: string }>({})
+const errors = ref<{ [key: string]: string }>({}) // Form validation errors
 
 // Router instance for navigation
 const router = useRouter()
+const route = useRoute()
 
 const handleLogin = async () => {
   error.value = '';
@@ -40,12 +44,27 @@ const handleLogin = async () => {
 
   loading.value = true;
 
+  // try, validate, login, catch errors
   try {
     await loginSchema.validate({ email: email.value, password: password.value }, { abortEarly: false });
-    await login(email.value, password.value);
+    const { message, data} = await login(email.value, password.value);
+    const user = data.user;
     success.value = 'Logged in successfully.';
-    router.push({ name: 'dashboard' });
+    
+    // Determine the next route
+    let nextRoute;
+    if (route.query.next) {
+      nextRoute = { path: route.query.next as string };
+    } else if (user.roles.includes('admin')) {
+      nextRoute = { name: 'admin-dashboard' };
+    } else {
+      nextRoute = { name: 'dashboard' };
+    }
+
+    router.push(nextRoute);
+
   } catch (err: any) {
+    console.error(err);
     if (err instanceof yup.ValidationError) {
       err.inner.forEach((validationError: yup.ValidationError) => {
         if (validationError.path) {
@@ -61,6 +80,12 @@ const handleLogin = async () => {
     loading.value = false;
   }
 }
+
+onMounted(async () => {
+  if (user.value) {
+    router.push({ name: 'dashboard' });
+  }
+});
 </script> 
 
 <template>
@@ -158,7 +183,7 @@ const handleLogin = async () => {
               class="w-full shadow-xl"
             />
             <RouterLink
-              :to="{ name: 'signup' }"
+              :to="{ name: 'signup', query: { next: route.query.next } }"
               class="text-center text-xs text-gray-500 underline"
               >Don't have an account? Create one!</RouterLink
             >

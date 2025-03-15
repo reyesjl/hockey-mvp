@@ -72,7 +72,10 @@ type Tournament = {
 type Review = {
   _id: string
   tournament: string
-  reviewer: string
+  reviewer: {
+    id: string
+    username: string
+  }
   ratings: {
     overall: number
     referee: number

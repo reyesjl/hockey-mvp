@@ -39,8 +39,13 @@ export async function create(req, res, next) {
 
 // Get all tournaments
 export async function index(req, res, next) {
-    const { search, city, companyName, startDate, endDate, page = 1, limit = 12 } = req.query;
+    const { search, city, company_name, start_date, end_date, submitted_by, visible, page = 1, limit = 12 } = req.query;
     let query = {};
+
+    // Filter by visibility
+    if (visible) {
+        query['visible.state'] = visible;
+    }
 
     // Use text search if a search term is provided
     if (search) {
@@ -59,16 +64,21 @@ export async function index(req, res, next) {
     }
 
     // Filter by company name
-    if (companyName) {
-        query['company.name'] = companyName;
+    if (company_name) {
+        query['company.name'] = company_name;
     }
 
     // Filter by date range
-    if (startDate && endDate) {
+    if (start_date && end_date) {
         query.dates = {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate)
+            $gte: new Date(start_date),
+            $lte: new Date(end_date)
         };
+    }
+
+    // Filter by submitted by
+    if (submitted_by) {
+        query.submitted_by = submitted_by;
     }
 
     const options = {
@@ -78,10 +88,11 @@ export async function index(req, res, next) {
     };
 
     try {
-        const totalTournaments = await Tournament.countDocuments();
+        
         const tournaments = await Tournament.find(query)
             .skip(options.skip)
             .limit(options.limit);
+        const totalTournaments = tournaments.length;
         return sendResponse(res, 200, 'Tournaments fetched successfully', { tournaments, totalTournaments});
     } catch (error) {
         return next(error);

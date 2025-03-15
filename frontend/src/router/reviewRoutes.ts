@@ -14,25 +14,17 @@
  * 
  * For inquiries regarding licensing or permissions, please contact Jose Reyes.
  */
+import type { RouteRecordRaw } from 'vue-router'
 
-import { defineStore } from 'pinia';
-import type { User } from '@/types';
-import { set } from 'lodash';
+const reviewCreate = () => import('@/views/reviews/ReviewCreate.vue')
 
-export const useAuthStore = defineStore('auth', {
-    state: () => ({
-        user: null as User | null,
-        isLoading: false
-    }),
-    actions: {
-        setUser(user: User) {
-            this.user = user;
-        },
-        clearUser() {
-            this.user = null;
-        },
-        setLoading(isLoading: boolean) {
-            this.isLoading = isLoading;
-        }
-    }
-});
+const reviewRoutes: Array<RouteRecordRaw> = [
+  {
+    path: '/reviews/tournament/:tournamentId/create',
+    name: 'review-create',
+    component: reviewCreate,
+    meta: { requiresAuth: true },
+  },
+]
+
+export default reviewRoutes

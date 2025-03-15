@@ -34,16 +34,16 @@ const authRoutes: Array<RouteRecordRaw> = [
     component: Login,
   },
   {
+    path: '/admin/dashboard',
+    name: 'admin-dashboard',
+    component: AdminDashboard,
+    meta: { requiresAuth: true, requiresAdmin: true },
+  },
+  {
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
     meta: { requiresAuth: true },
-  },
-  {
-    path: '/dashboard/admin/',
-    name: 'admin-dashboard',
-    component: AdminDashboard,
-    meta: { requiresAuth: true, requiresAdmin: true },
   },
 ]
 

@@ -23,7 +23,8 @@ import Avatar from '@/lib/ui/Avatar.vue'
 import { resetUserAvatar } from '@/services/userService'
 import { ref, onMounted } from "vue";
 import { axiosInstance } from "@/config/apiConfig";
-import type { Tournament } from "@/types";
+import type { Tournament, User } from "@/types";
+import { RouterLink } from 'vue-router';
 
 // Get router object
 const router = useRouter()
@@ -55,6 +56,10 @@ async function handleResetAvatar() {
 // Fetch user tournaments on mount
 onMounted(async () => {
     loadingTournaments.value = true;
+    if (user.value?.roles.includes('admin')) {
+        router.push({ name: 'admin-dashboard' });
+        return;
+    }
     try {
         const response = await axiosInstance.get(`/tournaments?submitted_by=${user.value?._id}`);
         const { success, message, data } = response.data;
@@ -126,8 +131,8 @@ const calculateDaysAgo = (dateString: string) => {
                 </div>
 
                 <!-- User Tournaments -->
-                <div class="mt-10 ">
-                    <h2 class="text-2xl font-semibold">Your Tournaments</h2>
+                <div class="mt-10">
+                    <h2 class="text-2xl font-semibold">My Tournaments</h2>
                     <p class="text-sm text-gray-500 italic mb-4"><span class="text-yellow-500">Yellow</span> means pending, <span class="text-green-500">green</span> means approved, and <span class="text-red-500">red</span> means rejected.</p>
                     <div v-if="loadingTournaments" class="text-gray-500">Loading tournaments...</div>
                     <div v-else-if="errorTournaments" class="text-red-500">{{ errorTournaments }}</div>
@@ -137,11 +142,25 @@ const calculateDaysAgo = (dateString: string) => {
                                 <div class="text-sm text-gray-500">{{ tournament.createdAt ? calculateDaysAgo(tournament.createdAt) : 'N/A' }} days ago</div>
                                 <span :class="`w-3 h-3 rounded-full ${getStatusColor(tournament.visible.state)}`"></span>
                             </div>
-                            <h3 class="font-semibold">{{ tournament.name }}</h3>
-                            <div class="text-sm text-gray-900">{{ tournament.visible.reason }}</div>
+                            <RouterLink :to="{ name: 'tournament', params: { id: tournament._id } }">
+                                <h3 class="font-semibold text-sky-500 hover:text-sky-700 underline">{{ tournament.name }}</h3>
+                            </RouterLink>
+                            <div v-if="tournament.visible.state == 'rejected'" class="text-sm text-gray-900">{{ tournament.visible.reason }}</div>
                         </li>
                     </ul>
-                    <div v-else class="text-gray-500">No tournaments available.</div>
+                    <div v-else class="text-gray-500">Did not find any tournaments submitted by you. Visit this
+                        <RouterLink :to="{ name: 'tournament-create'}" class="text-sky-500 underline">page</RouterLink> to submit one.</div>
+                </div>
+
+                <div class="mt-10">
+                    <h2 class="text-2xl font-semibold">My Trips</h2>
+                    <p class="text-gray-500">Learn more about future updates and upcoming features in our <a class="text-sky-500 underline" href="/info/upcoming-releases">release notes</a>.</p>
+                    <ul class="list-disc ml-5 mt-2 text-gray-500">
+                        <li>Will allow you to create, save, and share your trip with others.</li>
+                        <li>Use AI help maximize your time, and let it create an itinerary for you.</li>
+                        <li>Will calculate and display travel times between all rinks and restaurant, hotel, etc.</li>
+                        <li>Ability to save a trip with multiple locations related to the tournament you will be attending.</li>
+                    </ul>
                 </div>
             </div>
         </div>

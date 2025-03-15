@@ -36,7 +36,7 @@ const reviewsLoading = ref<boolean>(true);
 const reviewsError = ref<string | null>(null);
 
 const { user } = useAuth();
-const isAdmin = computed(() => user.value?.permissions.includes('admin'));
+const isAdmin = computed(() => user.value?.roles.includes('admin'));
 
 // Compute Ratings
 const ratings = computed(() => [
@@ -136,10 +136,13 @@ const fetchReviews = async (tournamentId: string) => {
 
         <!-- Visibility -->
         <div class="flex gap-2 mt-4 items-center justify-end">
-          <div v-if="tournament.visible.state=='pending'" class="bg-yellow-500 text-white px-2 w-fit rounded-full shadow-md">Pending Approval</div>
-          <div v-if="tournament.visible.state=='rejected'" class="bg-red-500 text-white px-2 w-fit rounded-full shadow-md">Rejected</div>
+          <div v-if="tournament.visible.state == 'pending'"
+            class="bg-yellow-500 text-white px-2 w-fit rounded-full shadow-md">Pending Approval</div>
+          <div v-if="tournament.visible.state == 'rejected'"
+            class="bg-red-500 text-white px-2 w-fit rounded-full shadow-md">Rejected</div>
           <RouterLink v-if="isAdmin" :to="{ name: 'tournament-update', params: { id: tournament._id } }">
-            <div class="hover:bg-gray-700 bg-gray-500 text-white px-2 w-fit rounded-full shadow-md">Update <i class="text-xs fa-solid fa-pencil"></i></div>
+            <div class="hover:bg-gray-700 bg-gray-500 text-white px-2 w-fit rounded-full shadow-md">Update <i
+                class="text-xs fa-solid fa-pencil"></i></div>
           </RouterLink>
         </div>
 
@@ -186,7 +189,7 @@ const fetchReviews = async (tournamentId: string) => {
         </div>
         <div class="mb-2 text-sm text-gray-600 italic">These icons give a quick overview—blue means available, gray
           means not.</div>
-        
+
         <!-- Features Grid -->
         <div
           class="flex overflow-x-auto space-x-4 md:space-x-0 md:px-0 px-2 pb-2 md:grid md:grid-cols-4 md:gap-4 text-center">
@@ -210,7 +213,7 @@ const fetchReviews = async (tournamentId: string) => {
           <div class="font-semibold mt-4  flex items-center gap-1">
             <h3 class="font-semibold">Details</h3>
             <span class="text-xs text-sky-500 cursor-pointer" @click="toggleDetails">[{{ showDetails ? 'hide' : 'show'
-              }}]</span>
+            }}]</span>
           </div>
           <p class="text-sm text-gray-600 italic">Discounts and hardware notes can be found here if they exist.</p>
           <ul v-if="showDetails" class="list-disc list-inside">
@@ -259,10 +262,12 @@ const fetchReviews = async (tournamentId: string) => {
         <!-- Tournament Ratings -->
         <div class="mt-4">
           <h3 class="font-semibold">Ratings</h3>
-          <div class="mb-2 text-sm text-gray-600 italic">This section displays ratings for the tournament's director of communication, facility
+          <div class="mb-2 text-sm text-gray-600 italic">This section displays ratings for the tournament's director of
+            communication, facility
             quality, and referee performance in the tournament.</div>
           <div class="flex justify-evenly items-center">
-            <div v-for="rating in ratings" :key="rating.label" class="flex flex-col items-center gap-2 p-2 shadow-md rounded-lg border border-gray-200">
+            <div v-for="rating in ratings" :key="rating.label"
+              class="flex flex-col items-center gap-2 p-2 shadow-md rounded-lg border border-gray-200">
               <div class="text-xl font-semibold">{{ rating.value }}</div>
               <div><i :class="['fa-solid', rating.icon, 'text-xs']"></i> {{ rating.label }}</div>
             </div>
@@ -272,7 +277,16 @@ const fetchReviews = async (tournamentId: string) => {
         <!-- Reviews -->
         <hr class="mt-5">
         <div class="mb-20">
-          <h2 class="font-semibold text-xl">{{ reviews.length }} Reviews</h2>
+
+          <div class="mt-2 flex gap-2 items-center justify-between md:justify-normal mb-4">
+            <h2 class="text-xl font-bold">{{ reviews.length }} Reviews</h2>
+            <RouterLink
+              class="text-white bg-black hover:bg-gray-400 hover:shadow-none duration-200 rounded-full shadow-lg p-1 px-2"
+              :to="{ name: 'review-create', params: { tournamentId: tournament._id } }">
+              Create
+            </RouterLink>
+          </div>
+
 
           <!-- Loading reviews-->
           <div v-if="reviewsLoading" class="text-gray-500">Loading reviews...</div>
@@ -288,7 +302,7 @@ const fetchReviews = async (tournamentId: string) => {
                 <div class="font-semibold text-sm">{{ review.subject }}</div>
                 <div>{{ review.ratings.overall }} <i class="fa fa-star" aria-hidden="true"></i></div>
               </div>
-              <div class="text-sm text-gray-500 italic">@{{ review.reviewer }}</div>
+              <div class="text-sm text-gray-500 italic">@{{ review.reviewer.username }}</div>
               <div class="text-sm">{{ review.comment }}</div>
             </div>
           </div>
@@ -304,7 +318,7 @@ const fetchReviews = async (tournamentId: string) => {
         </div>
         <div class="p-4 overflow-y-auto max-h-96">
           <p class="italic text-sm text-red-800">These icons give a quick overview—blue means available, gray means not.
-          Scroll to 'details' for more.</p>
+            Scroll to 'details' for more.</p>
           <ul class="mt-4">
             <li v-for="feature in features" :key="feature.label" class="mb-2">
               <strong>{{ feature.label }}:</strong> {{ feature.description }}

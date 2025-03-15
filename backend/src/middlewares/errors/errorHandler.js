@@ -33,9 +33,11 @@ const errorHandler = (err, req, res, next) => {
 
     // Handle Mongoose duplicate key errors
     if (err.code === 11000) {
+        const field = Object.keys(err.keyValue)[0];
         return res.status(400).json({
             errorCode: 'DUPLICATE_KEY_ERROR',
-            message: `This object has been failed to save due to a duplicate key error.`,
+            message: `Duplicate value for field: ${field}`,
+            details: err.keyValue
         });
     }
 

@@ -58,23 +58,25 @@ export const login = async (email: string, password: string) => {
     try {
         const userCredentials = await signInWithEmailAndPassword(auth, email, password);
         const firebaseUser = userCredentials.user;
+        const firebaseToken = await firebaseUser.getIdToken();
 
         // Check if email is verified
         if (!firebaseUser.emailVerified) {
             throw new CustomError('Email not verified. Please check your inbox.', 'auth/email-not-verified');
         }
 
-        // Fetch user from database
-        const localUser = await fetchUserFromDatabase(firebaseUser.uid);
+        // Send Firebase token to the backend
+        const response = await axiosInstance.post('/auth/login', { firebaseToken });
+        const { user, token } = response.data.data;
 
-        await syncUserData(firebaseUser, localUser);
-
-        // Store user data locally
+        // Sync and store
+        // await syncUserData(firebaseUser, user);
         const authStore = useAuthStore();
-        authStore.setUser(localUser);
-        localStorage.setItem('user', JSON.stringify(localUser));
+        authStore.setUser(user);
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', token);
 
-        return { success: true, message: "User logged in!", firebaseUser, localUser };
+        return { success: true, message: "User logged in!", data: { user, token } };
     } catch (error: any) {
         if (error.code === 'auth/user-not-found') {
             throw new CustomError('No user found with this email.', 'user-not-found');
@@ -98,6 +100,7 @@ export const logout = async () => {
         const authStore = useAuthStore();
         authStore.clearUser();
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
     }
     catch (error) {
         throw new CustomError('Error logging out.', 'logout-error');
@@ -154,6 +157,7 @@ const syncUserData = async (firebaseUser: any, localUser: any) => {
             await updateProfile(firebaseUser, updates);
         }
     } catch (error) {
-        throw new CustomError('Error syncing user data.', 'user-sync-error');
+        console.log(error);
+        throw new CustomError('Error syncing user data.', 'user-sync-error', error);
     }
 };

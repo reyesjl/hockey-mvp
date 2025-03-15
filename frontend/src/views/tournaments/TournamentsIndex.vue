@@ -30,7 +30,7 @@ const error = ref<string | null>(null);
 onMounted(async () => {
   loading.value = true;
   try {
-    const response = await axiosInstance.get('/tournaments');
+    const response = await axiosInstance.get('/tournaments', { params: { visible: 'approved' }});
     const { success, message, data } = response.data;
     if (!success) throw new Error(message);
     tournaments.value = data.tournaments;

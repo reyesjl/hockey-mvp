@@ -1,20 +1,18 @@
 <template>
   <main class="max-w-screen-sm mx-auto p-4">
     <div class="justify-center mt-10 md:mt-16">
-      <h3 class="text-3xl font-semibold">
-        This page went wide of the goal. Maybe try skating back to the homepage?
-      </h3>
-    </div>
-    <div class="flex justify-end">
-      <h1 class="text-sky-500 md:text-[10em] text-[8em] font-semibold">
-        404.
+      <h1 class="mb-5 text-sky-500 text-4xl font-semibold">
+        [404] Not Found
       </h1>
+      <h3 class="text-3xl font-semibold mb-5 ">
+        This page went wide of the goal. Try skating back home?
+      </h3>
     </div>
     <div class="flex max-w-96">
       <p>
-        Seems like we couldn't find this page, here's your way back to the
+        Seems this page doesn't exist, here's your way back 
         <router-link :to="{ name: 'home' }" class="underline hover:no-underline"
-          >homepage.</router-link
+          >home.</router-link
         >
       </p>
     </div>

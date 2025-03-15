@@ -15,24 +15,28 @@
   For inquiries regarding licensing or permissions, please contact Jose Reyes.
 -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import * as yup from 'yup'
 import BaseButton from '@/lib/ui/BaseButton.vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { signup } from '@/services/authService'
 import { signupSchema } from '@/utils/schemas/signupSchema'
 import { CustomError } from '@/utils/CustomError'
+import useAuth from '@/composables/useAuth'
 
-const displayName = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const error = ref('')
-const success = ref('')
-const loading = ref(false)
-const errors = ref<{ [key: string]: string }>({})
+const { user } = useAuth();
+
+const displayName = ref('');
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const error = ref('');
+const success = ref('');
+const loading = ref(false);
+const errors = ref<{ [key: string]: string }>({});
 
 const router = useRouter()
+const route = useRoute()
 
 const handleSignUp = async () => {
   error.value = '';
@@ -50,7 +54,10 @@ const handleSignUp = async () => {
     await signupSchema.validate({ displayName: displayName.value, email: email.value, password: password.value, confirmPassword: confirmPassword.value }, { abortEarly: false });
     await signup(email.value, password.value, displayName.value);
     success.value = 'Account created successfully. Please check your email to verify your account.';
-    router.push({ name: 'login' });
+    
+    // Check for the next query parameter and redirect accordingly
+    const nextRoute = route.query.next ? { path: route.query.next as string } : { name: 'login' };
+    router.push(nextRoute);
   } catch (err: any) {
     if (err instanceof yup.ValidationError) {
       err.inner.forEach((validationError: yup.ValidationError) => {
@@ -67,6 +74,13 @@ const handleSignUp = async () => {
     loading.value = false;
   }
 }
+
+onMounted(async () => {
+  if (user.value) {
+    router.push({ name: 'dashboard' });
+  }
+});
+
 </script>
 
 <template>
@@ -147,7 +161,7 @@ const handleSignUp = async () => {
           </div>
           <div class="flex flex-col gap-4">
             <BaseButton type="submit" :disabled="loading" label="Get Started" class="w-full shadow-xl" />
-            <RouterLink :to="{ name: 'login' }" class="text-center text-xs text-gray-500 underline">Already have an
+            <RouterLink :to="{ name: 'login', query: { next: route.query.next } }" class="text-center text-xs text-gray-500 underline">Already have an
               account? Login.</RouterLink>
           </div>
           <p v-if="error" class="text-red-500 text-sm mt-4">{{ error }}</p>

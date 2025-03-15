@@ -15,17 +15,20 @@
     For inquiries regarding licensing or permissions, please contact Jose Reyes.
 -->
 <script setup lang="ts">
+import * as yup from 'yup';
 import { ref } from "vue";
-import { axiosInstance } from "@/config/apiConfig";
-import BaseButton from "@/lib/ui/BaseButton.vue";
-import useAuth from "@/composables/useAuth";
 import { useRouter } from "vue-router";
+import useAuth from "@/composables/useAuth";
+import BaseButton from "@/lib/ui/BaseButton.vue";
+import { CustomError } from '@/utils/CustomError'
+import { axiosInstance } from "@/config/apiConfig";
+import { tournamentSchema } from "@/utils/schemas/tournamentSchema";
 
 // State variables
-const tournamentName = ref<string>("");
-const tournamentDates = ref<Date[]>([]);
-const tournamentLocation = ref<{ city: string, state: string }>({ city: "", state: "" });
-const tournamentDescription = ref<string>("");
+const name = ref<string>("");
+const dates = ref<Date[]>([]);
+const location = ref<{ city: string, state: string }>({ city: "", state: "" });
+const description = ref<string>("");
 const minimumGames = ref<number>(1);
 const levelOfPlay = ref<string[]>([]);
 const ageGroups = ref<string[]>([]);
@@ -38,8 +41,8 @@ const companyEmail = ref<string>("");
 
 const success = ref<string | null>(null);
 const loading = ref<boolean>(false);
-const error = ref<string | null>(null);
-const formErrors = ref<Record<string, string[]>>({});
+const error = ref<string | null>(null); // General error message
+const errors = ref<{ [key: string]: string }>({})   // Form validation errors
 
 const { user } = useAuth();
 
@@ -50,41 +53,57 @@ const addDate = (event: Event) => {
     if (input.value) {
         const date = new Date(input.value);
         date.setMinutes(date.getMinutes() + date.getTimezoneOffset()); // Adjust for timezone offset
-        if (date > new Date() && !tournamentDates.value.some(d => d.getTime() === date.getTime())) {
-            tournamentDates.value.push(date);
+        if (date > new Date() && !dates.value.some(d => d.getTime() === date.getTime())) {
+            dates.value.push(date);
         }
         input.value = "";
     }
 };
 
 const removeDate = (date: Date) => {
-    tournamentDates.value = tournamentDates.value.filter(d => d.getTime() !== date.getTime());
+    dates.value = dates.value.filter(d => d.getTime() !== date.getTime());
 };
 
 const createTournament = async () => {
     loading.value = true;
     error.value = null;
+    errors.value = {};
+
+    const tournamentData = {
+        name: name.value,
+        location: location.value,
+        company: { name: companyName?.value, email: companyEmail.value },
+        submitted_by: user.value?._id || null,
+        description: description.value,
+        dates: dates.value,
+        minimum_games: minimumGames.value,
+        level_of_play: levelOfPlay.value,
+        age_groups: ageGroups.value,
+        details: details.value,
+        gender: gender.value,
+        hardware: hardware.value,
+        discounts: discounts.value,
+    };
 
     try {
-        const response = await axiosInstance.post('/tournaments', {
-            name: tournamentName.value,
-            location: tournamentLocation.value,
-            company: { name: companyName?.value, email: companyEmail.value },
-            submitted_by: user.value?._id || null,
-            description: tournamentDescription.value,
-            dates: tournamentDates.value,
-            minimum_games: minimumGames.value,
-            level_of_play: levelOfPlay.value,
-            age_groups: ageGroups.value,
-            details: details.value,
-            gender: gender.value,
-            hardware: hardware.value,
-            discounts: discounts.value,
-        });
+        await tournamentSchema.validate(tournamentData, { abortEarly: false });
+        const response = await axiosInstance.post('/tournaments', tournamentData);
+        const { success, message, data } = response.data;
         // Handle successful creation
-        router.push({ name: 'TournamentDetails', params: { id: response.data._id } });
+        router.push({ name: 'tournament', params: { id: data._id } });
     } catch (err: any) {
-        error.value = err.response?.data?.message || 'An error occurred';
+        if (err instanceof yup.ValidationError) {
+            err.inner.forEach((validationError: yup.ValidationError) => {
+                if (validationError.path) {
+                    errors.value[validationError.path] = validationError.message;
+                }
+            });
+        } else if (err instanceof CustomError) {
+            error.value = err.message;
+        } else {
+            console.log(err);
+            error.value = 'An unexpected error occurred.';
+        }
     } finally {
         loading.value = false;
     }
@@ -106,10 +125,11 @@ const createTournament = async () => {
                     class="bg-gradient-to-b from-sky-200 to-sky-100 shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4">
                     <!-- Tournament name -->
                     <div class="mb-4">
-                        <label for="tournamentName" class="block text-sm font-semibold text-gray-700">Tournament
+                        <label for="name" class="block text-sm font-semibold text-gray-700">Tournament
                             Name</label>
-                        <input v-model="tournamentName" type="text" id="tournamentName" name="tournamentName"
+                        <input autocomplete=true v-model="name" type="text" id="name" name="name"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        <p v-if="errors.name" class="text-red-500 text-sm mt-1 mb-1">{{ errors.name }}</p>
                     </div>
 
                     <!-- City, State -->
@@ -117,13 +137,14 @@ const createTournament = async () => {
                         <!-- City -->
                         <div class="mb-4">
                             <label for="city" class="block text-sm font-semibold text-gray-700">City</label>
-                            <input v-model="tournamentLocation.city" type="text" id="city" name="city"
+                            <input v-model="location.city" type="text" id="city" name="city"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                            <p v-if="errors['location.city']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['location.city'] }}</p>
                         </div>
                         <!-- State -->
                         <div class="mb-4">
                             <label for="state" class="block text-sm font-semibold text-gray-700">State</label>
-                            <select v-model="tournamentLocation.state" id="state" name="state"
+                            <select v-model="location.state" id="state" name="state"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 <option value="">Select a state</option>
                                 <!-- US States -->
@@ -193,6 +214,7 @@ const createTournament = async () => {
                                 <option value="Nunavut">Nunavut</option>
                                 <option value="Yukon">Yukon</option>
                             </select>
+                            <p v-if="errors['location.state']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['location.state'] }}</p>
                         </div>
                     </div>
 
@@ -203,6 +225,7 @@ const createTournament = async () => {
                             <label for="companyName" class="block text-sm font-semibold text-gray-700">Tournament Company Name</label>
                             <input v-model="companyName" type="text" id="companyName" name="companyName" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
                         " />
+                            <p v-if="errors['company.name']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['company.name'] }}</p>
                         </div>
 
                         <!-- Company email -->
@@ -210,31 +233,34 @@ const createTournament = async () => {
                             <label for="companyEmail" class="block text-sm font-semibold text-gray-700">Tournament Company Email</label>
                             <input v-model="companyEmail" type="email" id="companyEmail" name="companyEmail" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
                         " />
+                            <p v-if="errors['company.email']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['company.email'] }}</p>
                         </div>
                     </div>
 
                     <!-- Tournament description -->
                     <div class="mb-4">
-                        <label for="tournamentDescription"
+                        <label for="description"
                             class="block text-sm font-semibold text-gray-700">Description</label>
-                        <textarea v-model="tournamentDescription" id="tournamentDescription"
-                            name="tournamentDescription" rows="3"
+                        <textarea v-model="description" id="description"
+                            name="description" rows="3"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                        <p v-if="errors.description" class="text-red-500 text-sm mt-1 mb-1">{{ errors.description }}</p>
                     </div>
 
                     <!-- Tournament dates -->
                     <div class="mb-4">
-                        <label for="tournamentDates" class="block text-sm font-semibold text-gray-700">Dates</label>
-                        <input @change="addDate" type="date" id="tournamentDates" name="tournamentDates"
+                        <label for="dates" class="block text-sm font-semibold text-gray-700">Dates</label>
+                        <input @change="addDate" type="date" id="dates" name="dates"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
                         <div class="mt-2 flex flex-wrap">
-                            <span v-for="date in tournamentDates" :key="date.getTime()" class="text-sm italic font-semibold bg-gray-200 text-gray-500 px-2 rounded-full mr-2 mb-2 flex items-center">
+                            <span v-for="date in dates" :key="date.getTime()" class="text-sm italic font-semibold bg-gray-200 text-gray-500 px-2 rounded-full mr-2 mb-2 flex items-center">
                                 {{ date.toLocaleDateString() }}
                                 <button @click.prevent="removeDate(date)" class="ml-2 text-red-500 hover:text-red-700 focus:outline-none">
                                     &times;
                                 </button>
                             </span>
                         </div>
+                        <p v-if="errors.dates" class="text-red-500 text-sm mt-1 mb-1">{{ errors.dates }}</p>
                     </div>
 
                     <!-- Level of Play -->
@@ -242,10 +268,11 @@ const createTournament = async () => {
                         <label class="block text-sm font-semibold text-gray-700">Level of Play</label>
                         <div class="mt-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             <div v-for="level in ['AAA', 'AA', 'A', 'B', 'C/Rec/House']" :key="level" class="flex items-center">
-                                <input type="checkbox" :value="level" v-model="levelOfPlay" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                <input :id="level" type="checkbox" :value="level" v-model="levelOfPlay" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                                 <label :for="level" class="ml-2 block text-sm text-gray-700">{{ level }}</label>
                             </div>
                         </div>
+                        <p v-if="errors.level_of_play" class="text-red-500 text-sm mt-1 mb-1">{{ errors.level_of_play }}</p>
                     </div>
 
                     <!-- Age Groups -->
@@ -253,10 +280,11 @@ const createTournament = async () => {
                         <label class="block text-sm font-semibold text-gray-700">Age Groups</label>
                         <div class="mt-2 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             <div v-for="ageGroup in ['8U', '10U', '12U', '14U', '16U', '18U', 'Midget', 'Junior', 'Varsity', 'Adult/Rec']" :key="ageGroup" class="flex items-center">
-                                <input type="checkbox" :value="ageGroup" v-model="ageGroups" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                <input :id="ageGroup" type="checkbox" :value="ageGroup" v-model="ageGroups" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                                 <label :for="ageGroup" class="ml-2 block text-sm text-gray-700">{{ ageGroup }}</label>
                             </div>
                         </div>
+                        <p v-if="errors.age_groups" class="text-red-500 text-sm mt-1 mb-1">{{ errors.age_groups }}</p>
                     </div>
 
                     <!-- Gender -->
@@ -268,6 +296,15 @@ const createTournament = async () => {
                             <option value="boys">Boys</option>
                             <option value="girls">Girls</option>
                         </select>
+                        <p v-if="errors.gender" class="text-red-500 text-sm mt-1 mb-1">{{ errors.gender }}</p>
+                    </div>
+
+                    <!-- Minimum Games -->
+                    <div class="mb-4">
+                        <label for="minimumGames" class="block text-sm font-semibold text-gray-700">Minimum Games</label>
+                        <input v-model="minimumGames" type="number" id="minimumGames" name="minimumGames"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                        <p v-if="errors.minimum_games" class="text-red-500 text-sm mt-1 mb-1">{{ errors.minimum_games }}</p>
                     </div>
 
                     <!-- Hardware -->
@@ -278,11 +315,13 @@ const createTournament = async () => {
                                 <label for="firstPlace" class="block text-sm font-medium text-gray-700">First Place</label>
                                 <input v-model="hardware.first_place" type="text" id="firstPlace" name="firstPlace"
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                <p v-if="errors['hardware.first_place']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['hardware.first_place'] }}</p>
                             </div>
                             <div>
                                 <label for="secondPlace" class="block text-sm font-medium text-gray-700">Second Place</label>
                                 <input v-model="hardware.second_place" type="text" id="secondPlace" name="secondPlace"
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                <p v-if="errors['hardware.second_place']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['hardware.second_place'] }}</p>
                             </div>
                         </div>
                     </div>
@@ -300,11 +339,13 @@ const createTournament = async () => {
                                 <label for="earlyBird" class="block text-sm font-medium text-gray-700">Early Bird Discount</label>
                                 <input v-model="discounts.early_bird" type="text" id="earlyBird" name="earlyBird"
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                <p v-if="errors['discounts.early_bird']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['discounts.early_bird'] }}</p>
                             </div>
                             <div>
                                 <label for="otherDiscount" class="block text-sm font-medium text-gray-700">Other Discount</label>
                                 <input v-model="discounts.other" type="text" id="otherDiscount" name="otherDiscount"
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                <p v-if="errors['discounts.other']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['discounts.other'] }}</p>
                             </div>
                         </div>
                     </div>

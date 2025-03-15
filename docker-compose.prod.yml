@@ -3,6 +3,7 @@ services:
     image: reyesjl/yhtreviews-backend:latest
     environment:
       DB_URI: ${DB_URI}
+      JWT_SECRET: ${JWT_SECRET}
     ports:
       - "5000:5000"
     networks:

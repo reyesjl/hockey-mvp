@@ -15,19 +15,23 @@
  * For inquiries regarding licensing or permissions, please contact Jose Reyes.
  */
 
-import { createRouter, createWebHistory } from 'vue-router'
-import type { RouteRecordRaw } from 'vue-router'
-import submissionRoutes from './submissionRoutes'
-import tournamentRoutes from './tournamentRoutes'
 import authRoutes from './authRoutes'
 import infoRoutes from './infoRoutes'
 import userRoutes from './userRoutes'
+import { jwtDecode } from 'jwt-decode'
+import reviewRoutes from './reviewRoutes'
+import { logout } from '@/services/authService'
+import type { RouteRecordRaw } from 'vue-router'
+import tournamentRoutes from './tournamentRoutes'
+import { useAuthStore } from '@/stores/authStore'
+import { createRouter, createWebHistory } from 'vue-router'
 
 const Home = () => import('@/views/HomeView.vue')
 const About = () => import('@/views/AboutView.vue')
 const Community = () => import('@/views/CommunityView.vue')
 const Support = () => import('@/views/SupportView.vue')
 const NotFound = () => import('@/views/NotFoundView.vue')
+const NotAuthorized = () => import('@/views/NotAuthorizedView.vue')
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -51,8 +55,13 @@ const routes: Array<RouteRecordRaw> = [
     name: 'support',
     component: Support,
   },
+  {
+    path: '/not-authorized',
+    name: 'not-authorized',
+    component: NotAuthorized,
+  },
   ...tournamentRoutes,
-  ...submissionRoutes,
+  ... reviewRoutes,
   ...authRoutes,
   ...infoRoutes,
   ...userRoutes,
@@ -70,5 +79,36 @@ const router = createRouter({
     return { top: 0 }
   },
 })
+
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore();
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const requiresAdmin = to.matched.some(record => record.meta.requiresAdmin);
+
+  const token = localStorage.getItem('token');
+  if (token) {
+    try {
+      const decodedToken = jwtDecode(token) as any;
+      // temporary fix for avatar
+      decodedToken.avatar = authStore.user?.avatar;
+      authStore.setUser(decodedToken);
+      localStorage.setItem('user', JSON.stringify(decodedToken));
+    } catch (error) {
+      console.error('Error decoding token:', error);
+      authStore.clearUser();
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+      logout();
+    }
+  }
+
+  if (requiresAuth && !authStore.user) {
+    next({ name: 'login' , query: { next: to.fullPath} });
+  } else if (requiresAdmin && !authStore.user?.roles.includes('admin')) {
+    next({ name: 'not-authorized' });
+  } else {
+    next();
+  }
+});
 
 export default router
