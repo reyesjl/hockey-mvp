@@ -17,9 +17,21 @@
 
 import type { RouteRecordRaw } from 'vue-router'
 
+const UserIndex = () => import('@/views/user/UserIndex.vue')
+const UserShow = () => import('@/views/user/UserShow.vue')
 const EditAvatar = () => import('@/views/user/EditAvatar.vue')
 
 const userRoutes: Array<RouteRecordRaw> = [
+    {
+        path: '/users',
+        name: 'users',
+        component: UserIndex,
+    },
+    {
+        path: '/users/:username',
+        name: 'user',
+        component: UserShow,
+    },
     {
         path: '/user/edit-avatar',
         name: 'edit-avatar',

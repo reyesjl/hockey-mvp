@@ -180,7 +180,9 @@ const fetchReviews = async (tournamentId: string) => {
             v-html="getGenderIcon(tournament.gender)"></div>
         </div>
 
-        <div class="text-sm italic text-gray-500 mt-2">Submitted by: @{{ submittedByUser?.username }}</div>
+        <div class="text-sm italic text-gray-500 mt-2">Submitted by: 
+          <RouterLink :to="{ name: 'user', params: { username:submittedByUser?.username }}" class="underline underline-offset-2">@{{ submittedByUser?.username }}</RouterLink>
+        </div>
 
         <!-- Tournament Features (Icons Grid) -->
         <div class="font-semibold mt-4  flex items-center gap-1">
@@ -189,6 +191,10 @@ const fetchReviews = async (tournamentId: string) => {
         </div>
         <div class="mb-2 text-sm text-gray-600 italic">These icons give a quick overview—blue means available, gray
           means not.</div>
+          <div class="flex md:hidden justify-end items-center gap-2 text-gray-500 italic text-sm">
+            <i class="fa-solid fa-left-right"></i> 
+            Scroll right
+          </div>
 
         <!-- Features Grid -->
         <div
@@ -302,7 +308,7 @@ const fetchReviews = async (tournamentId: string) => {
                 <div class="font-semibold text-sm">{{ review.subject }}</div>
                 <div>{{ review.ratings.overall }} <i class="fa fa-star" aria-hidden="true"></i></div>
               </div>
-              <div class="text-sm text-gray-500 italic">@{{ review.reviewer.username }}</div>
+              <RouterLink :to="{ name: 'user', params: { username:review.reviewer?.username }}" class="text-sm text-gray-500 italic w-fit underline underline-offset-2">@{{ review.reviewer?.username }}</RouterLink>
               <div class="text-sm">{{ review.comment }}</div>
             </div>
           </div>

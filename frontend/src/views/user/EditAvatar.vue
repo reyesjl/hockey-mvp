@@ -21,8 +21,10 @@ import Avatar from '@/lib/ui/Avatar.vue'
 import BaseButton from '@/lib/ui/BaseButton.vue'
 import { saveUserAvatar } from '@/services/userService'
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { user } = useAuth()
+const router = useRouter();
 
 const avatars = [
     'teams_v1/Anaheim_Ducks.webp', 'teams_v1/Arizona_Coyotes.webp', 'teams_v1/Boston_Bruins.webp', 'teams_v1/Buffalo_Sabres.webp',
@@ -58,6 +60,12 @@ const handleSaveAvatar = async () => {
     <main class="pt-[3.125rem]">
         <div class="mt-10 md:mt-16">
             <div class="container mb-20 max-w-4xl">
+                <!-- Back Button -->
+                <div class="mb-5">
+                    <button @click="router.back()" class="text-sm text-blue-500 hover:underline">
+                        &larr; Back
+                    </button>
+                </div>
                 <div class="flex justify-center mb-5">
                     <Avatar :path="selectedAvatar" alt="User Avatar" size="medium"
                         class="border-2 border-solid border-sky-500" />
