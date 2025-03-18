@@ -241,9 +241,13 @@ const createTournament = async () => {
                     <div class="mb-4">
                         <label for="description"
                             class="block text-sm font-semibold text-gray-700">Description</label>
-                        <textarea v-model="description" id="description"
-                            name="description" rows="3"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                        <div class="relative">
+                            <textarea v-model="description" id="description"
+                                name="description" rows="3"
+                                class="relative mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            </textarea>
+                            <div class="absolute bottom-2 right-2 text-sm text-gray-500 italic">500 chars max</div>
+                        </div>
                         <p v-if="errors.description" class="text-red-500 text-sm mt-1 mb-1">{{ errors.description }}</p>
                     </div>
 
