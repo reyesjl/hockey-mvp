@@ -16,6 +16,8 @@
  */
 
 import User from '../models/User.js';
+import Review from '../models/Review.js';
+import Tournament from '../models/Tournament.js';
 import { sendResponse } from '../utils/responses/responseHandler.js';
 
 // Check if username is unique
@@ -48,23 +50,40 @@ export const create = async (req, res, next) => {
 
 // Get all users
 export const index = async (req, res, next) => {
-    const { username } = req.query;
     let query = {};
-
-    if (username) {
-        query = { username: username };
-    }
 
     try {
         const users = await User.find(query);
-        if (username) {
-            const isUnique = users.length === 0;
-            return sendResponse(res, 200, { isUnique });
-        } else {
-            sendResponse(res, 200, 'Users fetched successfully.', users);
-        }
+        sendResponse(res, 200, 'Users fetched successfully.', users);
     } catch (error) {
         next(error);
+    }
+};
+
+export const userProfile = async (req, res, next) => {
+    try {
+        const { username } = req.params;
+
+        // Fetch the user
+        const user = await User.findOne({ username });
+        if (!user) {
+            return sendResponse(res, 404, 'Username not found.', null);
+        }
+
+        // Fetch the user's tournaments
+        const tournaments = await Tournament.find({ submitted_by: user._id });
+
+        // Fetch the user's reviews
+        const reviews = await Review.find({ 'reviewer.id': user._id });
+
+        // Send the response with user, tournaments, and reviews
+        sendResponse(res, 200, 'User fetched successfully.', {
+            user,
+            tournaments,
+            reviews,
+        });
+    } catch (err) {
+        next(err);
     }
 };
 

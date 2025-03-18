@@ -16,12 +16,13 @@
  */
 
 import { Router } from 'express';
-import { create, index, show, syncUser, update, destroy, uniqueUsername } from '../controllers/userController.js';
+import { create, index, show, syncUser, update, destroy, uniqueUsername, userProfile } from '../controllers/userController.js';
 
 const router = Router();
 
 router.get('/', index);
 router.post('/', create);
+router.get('/username/:username/', userProfile);
 router.get('/check-username/:username', uniqueUsername);
 router.get('/:id', show);
 router.patch('/sync', syncUser);
