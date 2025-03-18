@@ -104,38 +104,50 @@ const createReview = async () => {
                 </div>
                 <!-- Review form -->
                 <form @submit.prevent="createReview"
-                    class="bg-gradient-to-b from-sky-200 to-sky-100 shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4">
+                    class="max-w-1/4 bg-gradient-to-b from-sky-200 to-sky-100 shadow-xl rounded-lg px-8 pt-6 pb-8 mb-4">
                     <!-- Ratings -->
                     <div class="mb-4">
                         <label for="overall" class="block text-sm font-semibold text-gray-700">Overall Rating</label>
                         <p class="text-gray-500 text-sm">Overall how would you rate your tournament experience?</p>
-                        <input v-model="ratings.overall" type="range" id="overall" name="overall" min="1" max="5" step="0.1"
-                            class="mt-1 block w-full" />
-                        <p class="text-sm mt-1 mb-1">{{ ratings.overall }}</p>
+                        
+                        <div class="flex flex-col gap-2 items-center">
+                            <p class="text-2xl font-semibold mt-1 mb-1">{{ ratings.overall }}</p>
+                            <input v-model="ratings.overall" type="range" id="overall" name="overall" min="1" max="5" step="0.1"
+                                class="mt-1 block w-full" />
+                        </div>
                         <p v-if="errors['ratings.overall']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['ratings.overall'] }}</p>
                     </div>
                     <div class="mb-4">
                         <label for="referee" class="block text-sm font-semibold text-gray-700">Referee Rating</label>
                         <p class="text-gray-500 text-sm">How would you rate the referee quality?</p>
-                        <input v-model="ratings.referee" type="range" id="referee" name="referee" min="1" max="5" step="0.1"
-                            class="mt-1 block w-full" />
-                        <p class="text-sm mt-1 mb-1">{{ ratings.referee }}</p>
+                        
+                        <div class="flex flex-col gap-2 items-center">
+                            <p class="text-2xl font-semibold mt-1 mb-1">{{ ratings.referee }}</p>
+                            <input v-model="ratings.referee" type="range" id="referee" name="referee" min="1" max="5" step="0.1"
+                                class="mt-1 block w-full" />
+                        </div>
                         <p v-if="errors['ratings.referee']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['ratings.referee'] }}</p>
                     </div>
                     <div class="mb-4">
                         <label for="communication" class="block text-sm font-semibold text-gray-700">Communication Rating</label>
                         <p class="text-gray-500 text-sm">How well did the director of communications facilitate updates and changes effectively?</p>
-                        <input v-model="ratings.communication" type="range" id="communication" name="communication" min="1" max="5" step="0.1"
-                            class="mt-1 block w-full" />
-                        <p class="text-sm mt-1 mb-1">{{ ratings.communication }}</p>
+                        
+                        <div class="flex flex-col gap-2 items-center">
+                            <p class="text-2xl font-semibold mt-1 mb-1">{{ ratings.communication }}</p>
+                            <input v-model="ratings.communication" type="range" id="communication" name="communication" min="1" max="5" step="0.1"
+                                class="mt-1 block w-full" />
+                        </div>
                         <p v-if="errors['ratings.communication']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['ratings.communication'] }}</p>
                     </div>
                     <div class="mb-4">
                         <label for="facilities" class="block text-sm font-semibold text-gray-700">Facilities Rating</label>
                         <p class="text-gray-500 text-sm">How would you rate the facilities you visited?</p>
-                        <input v-model="ratings.facilities" type="range" id="facilities" name="facilities" min="1" max="5" step="0.1"
-                            class="mt-1 block w-full" />
-                        <p class="text-sm mt-1 mb-1">{{ ratings.facilities }}</p>
+                        
+                        <div class="flex flex-col gap-2 items-center">
+                            <p class="text-2xl font-semibold mt-1 mb-1">{{ ratings.facilities }}</p>
+                            <input v-model="ratings.facilities" type="range" id="facilities" name="facilities" min="1" max="5" step="0.1"
+                                class="mt-1 block w-full" />
+                        </div>
                         <p v-if="errors['ratings.facilities']" class="text-red-500 text-sm mt-1 mb-1">{{ errors['ratings.facilities'] }}</p>
                     </div>
 
@@ -150,8 +162,11 @@ const createReview = async () => {
                     <!-- Comment -->
                     <div class="mb-4">
                         <label for="comment" class="block text-sm font-semibold text-gray-700">Comment</label>
-                        <textarea v-model="comment" id="comment" name="comment" rows="4"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                        <div class="relative">
+                            <textarea v-model="comment" id="comment" name="comment" rows="4"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                            <div class="absolute bottom-2 right-2 text-sm text-gray-500 italic">1000 chars max</div>
+                        </div>
                         <p v-if="errors.comment" class="text-red-500 text-sm mt-1 mb-1">{{ errors.comment }}</p>
                     </div>
 
