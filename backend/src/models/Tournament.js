@@ -202,4 +202,7 @@ tournamentSchema.index({ 'location.city': 1 });
 tournamentSchema.index({ 'location.state': 1 });
 tournamentSchema.index({ 'dates': 1 });
 
+// Text index for full-text search
+tournamentSchema.index({ name: 'text', 'location.city': 'text', 'location.state': 'text' });
+
 export default model('Tournament', tournamentSchema, 'tournaments');
