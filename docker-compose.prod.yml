@@ -32,8 +32,8 @@ services:
     networks:
       - webnet
     volumes:
-      - ./ssl/nginx.crt:/etc/nginx/ssl/nginx.crt:ro
-      - ./ssl/nginx.key:/etc/nginx/ssl/nginx.key:ro
+      - /etc/letsencrypt/live/yhtreviews.com/fullchain.pem:/etc/nginx/ssl/nginx.crt:ro
+      - /etc/letsencrypt/live/yhtreviews.com/privkey.pem:/etc/nginx/ssl/nginx.key:ro
 
 networks:
   webnet:
